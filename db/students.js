@@ -48,10 +48,33 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     }
     catch(e){
         console.log(`St db error : ${e.message}`);
-    }
-    
+    }  
  }
 
+ async function findStudent(email , passwd){
+    try{
+        const student = await students.findOne({email});
+        if(student){
+            const found = await bcrypt.compare(passwd , student.password);
+            if(found){
+                console.log(`Student found ..`);
+                return student;
+            }
+            else{
+                return false;
+            }
+        }  
+    }
+
+    catch(findError){
+        console.log(findError.message);
+        return false;
+    }
+ }
+
+
+ 
 module.exports = {
-    saveStudent
+    saveStudent,
+    findStudent
 }

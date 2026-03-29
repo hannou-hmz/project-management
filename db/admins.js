@@ -4,10 +4,10 @@ const saltCount = 8;
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
- .then(()=>{console.log('St connected to db..')})
+ .then(()=>{console.log('Admin connected to db..')})
  .catch((dbError) => {console.log(dbError.message)});
 
- const studentSchema = mongoose.Schema({
+ const adminSchema = mongoose.Schema({
     email : {
         type: String,
         required : true,
@@ -20,13 +20,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     }
  });
 
- const students = mongoose.model('student' , studentSchema);
+ const admins = mongoose.model('admin' , adminSchema);
 
  async function saveAdmin(email , passwd){
 
     const hashedPasswd = await bcrypt.hash(passwd , saltCount);
     try{
-        const st = await students.insertOne({
+        const admin = await admins.insertOne({
                 email : email,
                 password : hashedPasswd
             });
@@ -35,11 +35,30 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
         return true;
     }
     catch(e){
-        console.log(`St db error : ${e.message}`);
+        console.log(`Admin db error : ${e.message}`);
     }
     
  }
 
+ async function findAdmin(email , password){
+     try{
+        const admin = await admins.findOne({email , password});
+        if(admin){
+                console.log(`admin found ..`);
+                return admin;
+         }         
+        else{
+            return false;
+        }
+    }  
+ 
+     catch(findError){
+         console.log(findError.message);
+         return false;
+     }
+  }
+
 module.exports = {
-    saveAdmin
+    saveAdmin,
+    findAdmin
 }

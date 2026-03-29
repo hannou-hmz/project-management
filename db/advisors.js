@@ -4,10 +4,10 @@ const saltCount = 8;
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
- .then(()=>{console.log('St connected to db..')})
+ .then(()=>{console.log('Advisor connected to db..')})
  .catch((dbError) => {console.log(dbError.message)});
 
- const studentSchema = mongoose.Schema({
+ const advisorSchema = mongoose.Schema({
     fullName : {
         type: String,
         required : true,
@@ -30,7 +30,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     }
  });
 
- const students = mongoose.model('student' , studentSchema);
+ const advisors = mongoose.model('advisor' , advisorSchema);
 
  async function saveAdvisor(stName , email , department , passwd){
 
@@ -47,11 +47,36 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
         return true;
     }
     catch(e){
-        console.log(`St db error : ${e.message}`);
+        console.log(`Admin db error : ${e.message}`);
     }
     
  }
 
+async function findAdvisor(email , passwd){
+    try{
+        const advisor = await advisors.findOne({email});
+        if(advisor){
+            const found = await bcrypt.compare(passwd , advisor.password);
+            if(found){
+                console.log(`Advisor found ..`);
+                return advisor;
+            }
+            else{
+                return false;
+            }
+        }  
+    }
+
+    catch(findError){
+        console.log(findError.message);
+        return false;
+    }
+ }
+
+
+
+
 module.exports = {
-    saveAdvisor
+    saveAdvisor,
+    findAdvisor
 }

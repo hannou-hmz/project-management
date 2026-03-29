@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+
 const path = require('path');
 const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
 const router = require('./webRoutes/routes');
@@ -8,9 +9,9 @@ const router = require('./webRoutes/routes');
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(path.join(filePath, 'public')));
-// app.use(session({
+app.use(session({
 
-// }));
+}));
 
 app.get('/admin/dashboard' , router);
 app.post('/admin/dashboard' , router);
