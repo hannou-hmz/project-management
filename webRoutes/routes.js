@@ -20,10 +20,26 @@ router.post('/admin/dashboard' , async(req , res)=>{
 
     return res.status(404).send(`<h1>Not found</h1>`);
 })
-
-router.get('/' , (req , res)=>{
-    return res.send('<h1>Welcome Student/Advisor</h1>');
+ // homepage
+router.get('/' , (req , res , next)=>{
+    if(!req.session.userID){
+        return res.redirect('/student/login');
+    }
+    return res.sendFile(path.join(filePath , 'homepage.html'));
+    
 });
+
+router.get('/logout' , (req , res) =>{
+    req.session.destroy((error)=>{
+        if(error){
+            console.log(error.message);
+            return res.status(500).send(`<h1>Logout failed!</h1>`);
+        }
+
+        req.clearCookie("connect.sid");
+        return res.redirect('/student/login');
+    });
+})
 
 router.get('/student/login' , (req , res)=>{
    return res.sendFile(path.join(filePath , 'student-login.html'));
@@ -33,7 +49,8 @@ router.post('/student/login' , async (req , res)=>{
     const {email , password} = req.body;
     const student = await findStudent(email , password);
     if(student){
-        return res.status(200).redirect('/');
+        req.session.userID = student._id;
+        return res.redirect('/');
     }
 
     return res.status(404).send("<h3>User not found</h3>");

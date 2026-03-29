@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-
+const {MongoStore} = require('connect-mongo');
 const path = require('path');
 const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
 const router = require('./webRoutes/routes');
@@ -10,7 +10,17 @@ app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(path.join(filePath, 'public')));
 app.use(session({
-
+    secret : "ne5e3Guess!t)",
+    resave : false,
+    saveUninitialized : false,
+    store : MongoStore.create({
+        mongoUrl : "mongodb://127.0.0.1:27017/teamPlatform"
+    }),
+    cookie : {
+        secure : false,
+        httpOnly : true,
+        maxAge : 1000 * 60 * 60
+    }
 }));
 
 app.get('/admin/dashboard' , router);
