@@ -28,17 +28,13 @@ app.post('/admin/dashboard' , router);
 
 app.get('/' , router);
 
-app.get('/student/login' , router);
-app.post('/student/login' , router);
+app.get('/login' , router);
+app.post('/login' , router);
 
-app.get('/student/signup' , router);
-app.post('/student/signup' , router);
+app.get('/signup' , router);
+app.post('/signup' , router);
 
-app.get('/advisor/login' , router);
-app.post('/advisor/login' ,router);
-
-app.get('/advisor/signup' , router);
-app.post('/advisor/signup' , router);
+app.get('/logout' , router);
 
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');

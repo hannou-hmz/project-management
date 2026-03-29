@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>/</title>
 </head>
-<body style="background-color: bisque;">
+<body style="background-color: bisque; font-size: 1.5em;">
     <h1 style="font-family: Arial, Helvetica, sans-serif; font-weight: bold;">Homepage</h1>
-    <p style="color: blueviolet;">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste blanditiis qui earum quis est sapiente magnam. Atque assumenda, ducimus quia ex quas pariatur vero corrupti numquam. Odit vitae nisi soluta, velit dicta, consequuntur expedita aut mollitia nulla, tenetur illum ratione quidem consequatur. Quibusdam sed tempora asperiores odit. Ex eveniet alias vel quibusdam porro quas sed vitae molestiae ducimus magnam. Exercitationem amet vel laudantium iure magnam distinctio voluptates dolores neque sit sint deleniti laborum labore, minus est ipsa repellendus vero officia dolorem. Modi, similique enim nobis eligendi voluptate cum eum dolores voluptas, consectetur explicabo esse? Labore a qui aliquid ratione eaque.</p>
+    <button style="padding: 7px 10px;cursor: pointer;" type="submit" id="logout-btn">Logout</button>
+
+    <section>
+        <p style="color: blueviolet;">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste blanditiis qui earum quis est sapiente magnam. Atque assumenda, ducimus quia ex quas pariatur vero corrupti numquam. Odit vitae nisi soluta, velit dicta, consequuntur expedita aut mollitia nulla, tenetur illum ratione quidem consequatur. Quibusdam sed tempora asperiores odit. Ex eveniet alias vel quibusdam porro quas sed vitae molestiae ducimus magnam. Exercitationem amet vel laudantium iure magnam distinctio voluptates dolores neque sit sint deleniti laborum labore, minus est ipsa repellendus vero officia dolorem. Modi, similique enim nobis eligendi voluptate cum eum dolores voluptas, consectetur explicabo esse? Labore a qui aliquid ratione eaque.</p>
+    </section>
+
     <footer>
         <a href="">Facebook</a>
         <a href="">Whatsapp</a>
@@ -15,7 +20,14 @@
         <a href="">LinkedIn</a>
     </footer>
 
+<script>
+    const logout = document.getElementById('logout-btn');
+    logout.addEventListener("click" , (event)=>{
+        event.preventDefault();
+        window.location.href = '/logout';
+    });
 
+</script>
 
 </body>
 </html>

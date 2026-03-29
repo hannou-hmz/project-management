@@ -4,10 +4,15 @@ const saltCount = 8;
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
- .then(()=>{console.log('Advisor connected to db..')})
+ .then(()=>{console.log('User connected to db..')})
  .catch((dbError) => {console.log(dbError.message)});
 
- const advisorSchema = mongoose.Schema({
+ const userSchema = mongoose.Schema({
+    role : {
+        type: String,
+        required : true,
+    },
+
     fullName : {
         type: String,
         required : true,
@@ -30,36 +35,35 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     }
  });
 
- const advisors = mongoose.model('advisor' , advisorSchema);
+ const users = mongoose.model('user' , userSchema);
 
- async function saveAdvisor(stName , email , department , passwd){
+ async function saveUser(userame , email , department , passwd){
 
     const hashedPasswd = await bcrypt.hash(passwd , saltCount);
     try{
-        const st = await students.insertOne({
-                fullName : stName,
+        const user = await users.insertOne({
+                fullName : userame,
                 email : email,
                 department : department,
                 password : hashedPasswd
             });
 
-        console.log('Advisor registered ..');
+        console.log('User registered ..');
         return true;
     }
     catch(e){
-        console.log(`Admin db error : ${e.message}`);
-    }
-    
+        console.log(`User db error : ${e.message}`);
+    }  
  }
 
-async function findAdvisor(email , passwd){
+ async function findUser(email , passwd){
     try{
-        const advisor = await advisors.findOne({email});
-        if(advisor){
-            const found = await bcrypt.compare(passwd , advisor.password);
+        const user = await users.findOne({email});
+        if(user){
+            const found = await bcrypt.compare(passwd , user.password);
             if(found){
-                console.log(`Advisor found ..`);
-                return advisor;
+                console.log(`User found ..`);
+                return user;
             }
             else{
                 return false;
@@ -74,9 +78,8 @@ async function findAdvisor(email , passwd){
  }
 
 
-
-
+ 
 module.exports = {
-    saveAdvisor,
-    findAdvisor
+    saveUser,
+    findUser
 }
