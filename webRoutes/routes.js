@@ -4,10 +4,9 @@ const app = express();
 const router = express.Router();
 const {saveUser , findUser} = require('../db/users');
 const {saveAdmin , findAdmin} = require('../db/admins');
-const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
 
 router.get('/admin/dashboard' , (req , res)=>{
-    return res.sendFile(path.join(filePath , 'admin.html'));
+    return res.sendFile(path.join(__dirname , '../public/admin.html'));
 });
 
 router.post('/admin/dashboard' , async(req , res)=>{
@@ -24,7 +23,15 @@ router.get('/' , (req , res , next)=>{
     if(!req.session.userID){
         return res.redirect('/login');
     }
-    return res.sendFile(path.join(filePath , 'homepage.html'));
+    return res.sendFile(path.join(__dirname ,'../public/homepage.html'));
+});
+
+router.get('/student/homepage' , (req , res)=>{
+    return res.sendFile(path.join(__dirname ,'../public/student-home.html'));
+});
+
+router.get('/advisor/homepage' , (req , res)=>{
+    return res.sendFile(path.join(__dirname ,'../public/advisor-home.html'));
 });
 
 router.get('/logout' , (req , res) =>{
@@ -40,7 +47,7 @@ router.get('/logout' , (req , res) =>{
 })
 
 router.get('/login' , (req , res)=>{
-   return res.sendFile(path.join(filePath , 'login.html'));
+   return res.sendFile(path.join(__dirname , '../public/login.html'));
 });
 
 router.post('/login' , async (req , res)=>{
@@ -55,17 +62,25 @@ router.post('/login' , async (req , res)=>{
 });
 
 router.get('/signup' , (req , res)=>{
-   return res.sendFile(path.join(filePath , 'sign.html'));
+   return res.sendFile(path.join(__dirname , '../public/signup.html'));
 });
 
 router.post('/signup' , async (req , res)=>{
     const {role , username , email , department , password} = req.body;
     const user = await saveUser(role , username , email , department , password);
-    if(!user){
+
+    if(user && role === 'student'){
+        req.session.userID = user._id;
+        return res.status(200).redirect('/student/homepage');
+    }
+    else if(user && role === 'instructor'){
+        req.session.userID = user._id;
+        return res.status(200).redirect('/advisor/homepage');
+    }
+    else{
         return res.status(422).send("Validation failed!");
     }
-
-    return res.status(200).redirect('/');    
+        
 });
 
 module.exports = router;

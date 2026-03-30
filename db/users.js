@@ -42,14 +42,15 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     const hashedPasswd = await bcrypt.hash(passwd , saltCount);
     try{
         const user = await users.insertOne({
-                fullName : userame,
-                email : email,
-                department : department,
-                password : hashedPasswd
-            });
+            role : role,
+            fullName : userame,
+            email : email,
+            department : department,
+            password : hashedPasswd
+        });
 
         console.log('User registered ..');
-        return true;
+        return user;
     }
     catch(e){
         console.log(`User db error : ${e.message}`);

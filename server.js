@@ -8,7 +8,7 @@ const router = require('./webRoutes/routes');
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.use(express.static(path.join(filePath, 'public')));
+app.use(express.static(path.join(__dirname , 'public')));
 app.use(session({
     secret : "ne5e3Guess!t)",
     resave : false,
@@ -27,6 +27,8 @@ app.get('/admin/dashboard' , router);
 app.post('/admin/dashboard' , router);
 
 app.get('/' , router);
+app.get('/student/homepage' ,router);
+app.get('/advisor/homepage' ,router);
 
 app.get('/login' , router);
 app.post('/login' , router);
