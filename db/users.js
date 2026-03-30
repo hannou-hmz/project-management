@@ -10,7 +10,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
  const userSchema = mongoose.Schema({
     role : {
         type: String,
-        required : true,
+        required : true
     },
 
     fullName : {
@@ -37,7 +37,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
 
  const users = mongoose.model('user' , userSchema);
 
- async function saveUser(userame , email , department , passwd){
+ async function saveUser(role , userame , email , department , passwd){
 
     const hashedPasswd = await bcrypt.hash(passwd , saltCount);
     try{

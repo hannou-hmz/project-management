@@ -22,7 +22,7 @@ router.post('/admin/dashboard' , async(req , res)=>{
  // homepage
 router.get('/' , (req , res , next)=>{
     if(!req.session.userID){
-        return res.redirect('login');
+        return res.redirect('/login');
     }
     return res.sendFile(path.join(filePath , 'homepage.html'));
 });
@@ -34,8 +34,8 @@ router.get('/logout' , (req , res) =>{
             return res.status(500).send(`<h1>Logout failed!</h1>`);
         }
 
-        res.clearCookie("connect.sid");
-        return res.redirect('login');
+        res.clearCookie('connect.sid');
+        return res.redirect('/login');
     });
 })
 
@@ -55,12 +55,12 @@ router.post('/login' , async (req , res)=>{
 });
 
 router.get('/signup' , (req , res)=>{
-   return res.sendFile(path.join(filePath , 'signup.html'));
+   return res.sendFile(path.join(filePath , 'sign.html'));
 });
 
 router.post('/signup' , async (req , res)=>{
-    const {username , email , department , password} = req.body;
-    const user = await saveUser(username , email , department , password);
+    const {role , username , email , department , password} = req.body;
+    const user = await saveUser(role , username , email , department , password);
     if(!user){
         return res.status(422).send("Validation failed!");
     }
