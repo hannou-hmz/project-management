@@ -20,17 +20,22 @@ router.post('/admin/dashboard' , async(req , res)=>{
 })
  // homepage
 router.get('/' , (req , res , next)=>{
-    if(!req.session.userID){
-        return res.redirect('/login');
-    }
     return res.sendFile(path.join(__dirname ,'../public/homepage.html'));
 });
 
 router.get('/student/homepage' , (req , res)=>{
+    if(!req.session.userID){
+        return res.redirect('/login');
+    }
+    
     return res.sendFile(path.join(__dirname ,'../public/student-home.html'));
 });
 
 router.get('/advisor/homepage' , (req , res)=>{
+    if(!req.session.userID){
+        return res.redirect('/login');
+    }
+
     return res.sendFile(path.join(__dirname ,'../public/advisor-home.html'));
 });
 

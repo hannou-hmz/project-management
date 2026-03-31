@@ -35,7 +35,7 @@
       </form>
 
       <p class="signup-text">
-        Don't have an account? <a href="#">Sign up</a>
+        Don't have an account? <a id="createAccount">Sign up</a>
       </p>
 
       <div class="admin-box">
@@ -62,6 +62,12 @@
         // add active to clicked one
         div.classList.add('active');
       });
+    });
+
+    const signup = document.getElementById('createAccount');
+    signup.addEventListener("click" , (event)=>{
+      event.preventDefault();
+      window.location.href = '/signup';
     });
 
   </script>
