@@ -57,9 +57,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     }  
  }
 
- async function findUser(email , passwd){
+ async function findUser(role , email , passwd){
     try{
-        const user = await users.findOne({email});
+        const user = await users.findOne({role , email});
         if(user){
             const found = await bcrypt.compare(passwd , user.password);
             if(found){

@@ -1,0 +1,106 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+.back-btn {
+  margin-bottom: 20px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.card {
+  width: 420px;
+  margin: auto;
+  background: #f9fafb;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.subtitle {
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.role-toggle {
+  display: flex;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.role {
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.role.active {
+  background: #0f172a;
+  color: white;
+}
+
+form {
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.signin-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.signup-text {
+  margin: 15px 0;
+}
+
+.admin-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #eef2ff;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.admin-btn {
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}

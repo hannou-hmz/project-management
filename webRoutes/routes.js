@@ -51,14 +51,23 @@ router.get('/login' , (req , res)=>{
 });
 
 router.post('/login' , async (req , res)=>{
-    const {email , password} = req.body;
-    const user = await findUser(email , password);
-    if(user){
+    const {role , email , password} = req.body;
+    const user = await findUser(role , email , password);
+
+    if(user && role === 'student'){
         req.session.userID = user._id;
-        return res.redirect('/');
+        return res.redirect('/student/homepage');
+    }
+    else if(user && role === 'instructor'){
+        req.session.userID = user._id;
+        return res.redirect('/advisor/homepage');
+    }
+    else{
+        console.log('Wrong credentials');
+        return res.redirect('/login');
     }
 
-    return res.redirect('/login');
+    
 });
 
 router.get('/signup' , (req , res)=>{

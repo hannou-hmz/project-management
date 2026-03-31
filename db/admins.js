@@ -8,6 +8,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
  .catch((dbError) => {console.log(dbError.message)});
 
  const adminSchema = mongoose.Schema({
+    role : {
+        type: String,
+        required : true,
+    },
+
     email : {
         type: String,
         required : true,
@@ -22,14 +27,15 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
 
  const admins = mongoose.model('admin' , adminSchema);
 
- async function saveAdmin(email , passwd){
+ async function saveAdmin(role , email , passwd){
 
     const hashedPasswd = await bcrypt.hash(passwd , saltCount);
     try{
         const admin = await admins.insertOne({
-                email : email,
-                password : hashedPasswd
-            });
+            role : role,
+            email : email,
+            password : hashedPasswd
+        });
 
         console.log('Admin registered ..');
         return true;
@@ -40,12 +46,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/teamPlatform')
     
  }
 
- async function findAdmin(email , password){
+ async function findAdmin(role , email , password){
      try{
-        const admin = await admins.findOne({email , password});
+        const admin = await admins.findOne({role , email , password});
         if(admin){
-                console.log(`admin found ..`);
-                return admin;
+            console.log(`admin found ..`);
+            return admin;
          }         
         else{
             return false;
