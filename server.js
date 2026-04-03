@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const {MongoStore} = require('connect-mongo');
+const {pool , testConnection} = require('./mysql/users');
 const path = require('path');
 const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
 const router = require('./webRoutes/routes');
@@ -42,5 +43,19 @@ app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT , ()=>{console.log(`Server running on port ${PORT}`)});
+async function startServer(){
+    const PORT = process.env.PORT || 4000;
+    const CONNECTED = await testConnection();
+    if(!CONNECTED){
+        console.log('❌ NO Connection found..');
+    }
+    else{
+        app.listen(PORT , ()=>{ 
+            console.log(`Server running on port ${PORT}`)
+        });
+    }
+}
+
+startServer();
+
+
