@@ -6,7 +6,7 @@ const {saveUser , findUser} = require('../db/users');
 const {saveAdmin , findAdmin} = require('../db/admins');
 
 router.get('/admin/dashboard' , (req , res)=>{
-    return res.sendFile(path.join(__dirname , '../public/admin.html'));
+    return res.sendFile(path.join(__dirname , '../public/views/admin.html'));
 });
 
 router.post('/admin/dashboard' , async(req , res)=>{
@@ -20,7 +20,7 @@ router.post('/admin/dashboard' , async(req , res)=>{
 })
  // homepage
 router.get('/' , (req , res , next)=>{
-    return res.sendFile(path.join(__dirname ,'../public/homepage.html'));
+    return res.sendFile(path.join(__dirname ,'../public/views/homepage.html'));
 });
 
 router.get('/student/homepage' , (req , res)=>{
@@ -28,7 +28,7 @@ router.get('/student/homepage' , (req , res)=>{
         return res.redirect('/login');
     }
     
-    return res.sendFile(path.join(__dirname ,'../public/student-home.html'));
+    return res.sendFile(path.join(__dirname ,'../public/views/student-home.html'));
 });
 
 router.get('/advisor/homepage' , (req , res)=>{
@@ -36,7 +36,7 @@ router.get('/advisor/homepage' , (req , res)=>{
         return res.redirect('/login');
     }
 
-    return res.sendFile(path.join(__dirname ,'../public/advisor-home.html'));
+    return res.sendFile(path.join(__dirname ,'../public/views/advisor-home.html'));
 });
 
 router.get('/logout' , (req , res) =>{
@@ -52,7 +52,7 @@ router.get('/logout' , (req , res) =>{
 })
 
 router.get('/login' , (req , res)=>{
-   return res.sendFile(path.join(__dirname , '../public/login.html'));
+   return res.sendFile(path.join(__dirname , '../public/views/login.html'));
 });
 
 router.post('/login' , async (req , res)=>{
@@ -76,7 +76,7 @@ router.post('/login' , async (req , res)=>{
 });
 
 router.get('/signup' , (req , res)=>{
-   return res.sendFile(path.join(__dirname , '../public/signup.html'));
+   return res.sendFile(path.join(__dirname , '../public/views/signup.html'));
 });
 
 router.post('/signup' , async (req , res)=>{

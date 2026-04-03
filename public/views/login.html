@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>ProjectHub Login</title>
-  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="../login.css">
+  <link rel="icon" href="fav.png">
 </head>
 <body>
 
   <div class="container">
     <h1 class="title">ProjectHub</h1>
 
-    <button class="back-btn">🏠 Back to Home</button>
+    <button class="back-btn" onclick="goHome()">🏠 Back to Home</button>
 
     <div class="card">
       <h2>Welcome Back</h2>
@@ -69,6 +70,10 @@
       event.preventDefault();
       window.location.href = '/signup';
     });
+
+  function goHome(){
+   window.location.href = '/';
+  }
 
   </script>
 
