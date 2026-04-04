@@ -3,8 +3,6 @@ const path = require('path');
 const app = express();
 const router = express.Router();
 const {createUser , getUser} = require('../mysql/users');
-const {saveUser , findUser} = require('../db/users');
-const {saveAdmin , findAdmin} = require('../db/admins');
 
 router.get('/admin/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../public/views/admin.html'));

@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
-// const {MongoStore} = require('connect-mongo');
 const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
 const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
