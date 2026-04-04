@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const router = express.Router();
+const {createUser , getUser} = require('../mysql/users');
 const {saveUser , findUser} = require('../db/users');
 const {saveAdmin , findAdmin} = require('../db/admins');
 
@@ -24,7 +25,8 @@ router.get('/' , (req , res , next)=>{
 });
 
 router.get('/student/homepage' , (req , res)=>{
-    if(!req.session.userID){
+    if(!req.session.userId){
+        console.log('NO session . back to login ...');
         return res.redirect('/login');
     }
     
@@ -32,7 +34,8 @@ router.get('/student/homepage' , (req , res)=>{
 });
 
 router.get('/advisor/homepage' , (req , res)=>{
-    if(!req.session.userID){
+    if(!req.session.userId){
+        console.log('NO session . back to login ...');
         return res.redirect('/login');
     }
 
@@ -57,21 +60,19 @@ router.get('/login' , (req , res)=>{
 
 router.post('/login' , async (req , res)=>{
     const {role , email , password} = req.body;
-    const user = await findUser(role , email , password);
-
+    const user = await getUser(role , email , password);
     if(user && role === 'student'){
-        req.session.userID = user._id;
+        req.session.userId = user.id;
         return res.redirect('/student/homepage');
     }
-    else if(user && role === 'instructor'){
-        req.session.userID = user._id;
+    else if(user && role === 'advisor'){
+        req.session.userId = user.id;
         return res.redirect('/advisor/homepage');
     }
     else{
         console.log('Wrong credentials');
         return res.redirect('/login');
     }
-
     
 });
 
@@ -80,15 +81,15 @@ router.get('/signup' , (req , res)=>{
 });
 
 router.post('/signup' , async (req , res)=>{
-    const {role , username , email , department , password} = req.body;
-    const user = await saveUser(role , username , email , department , password);
+    const {role , username , age , email , department , password} = req.body;
 
+    const user = await createUser(role , username , age ,email , department , password);
     if(user && role === 'student'){
-        req.session.userID = user._id;
+        req.session.userId = user._id;
         return res.status(200).redirect('/student/homepage');
     }
-    else if(user && role === 'instructor'){
-        req.session.userID = user._id;
+    else if(user && role === 'advisor'){
+        req.session.userId = user._id;
         return res.status(200).redirect('/advisor/homepage');
     }
     else{

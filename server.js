@@ -1,22 +1,28 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const {MongoStore} = require('connect-mongo');
-const {pool , testConnection} = require('./mysql/users');
+const MySQLStore = require('express-mysql-session')(session);
+// const {MongoStore} = require('connect-mongo');
+const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
 const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
 const router = require('./webRoutes/routes');
+const sessionStore = new MySQLStore({
+  host: 'localhost',
+  user: 'root',
+  password: 'root,locked',
+  database: 'project_hub'
+});
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(path.join(__dirname , 'public')));
+app.use(express.static(path.join(__dirname , 'public/views')));
 app.use(session({
     secret : "ne5e3Guess!t)",
     resave : false,
     saveUninitialized : false,
-    store : MongoStore.create({
-        mongoUrl : "mongodb://127.0.0.1:27017/teamPlatform"
-    }),
+    store : sessionStore,
     cookie : {
         secure : false,
         httpOnly : true,
