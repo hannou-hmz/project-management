@@ -15,6 +15,31 @@ async function createUser(role , full_name , age , email , department , password
     }
 }
 
+async function getAdmin(email , password){
+    try{
+        const sql = "SELECT * FROM admins WHERE email = ?";
+        const [result] = await database.pool.execute(sql , [email]);
+        
+        if(result.length > 0){
+            const passwd = await bcrypt.compare(password , result[0].password); 
+            if(passwd){
+                console.log('Admin found ..');
+                return result[0];
+            }
+           else{
+                console.log("NO admin found ..");
+                return null;
+            }
+        }
+        
+    }
+    catch(e){
+        console.log(`Not an admin : ${e.message}`);
+        return false;
+    }
+    
+}
+
 async function getUser(role , email , password){
     
     try{
@@ -41,10 +66,23 @@ async function getUser(role , email , password){
     }
 }
 
-
+async function addAnnouncment(title , description , isUrgent){
+    try{
+        const sql = "INSERT INTO announcements (title , description , is_urgent) VALUES(? , ? , ?)";
+        const [result] = await database.pool.execute(sql , [title , description , isUrgent ? 1 : 0]);
+        console.log('Announcement stored in db✅');
+        return true;
+    }
+    catch(e){
+        console.log(`Announmcment error: ${e.message}`);
+        return false;
+    }
+}
 
 
 module.exports = {
     createUser,
-    getUser
+    getAdmin,
+    getUser,
+    addAnnouncment
 }

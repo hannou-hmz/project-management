@@ -38,11 +38,13 @@ app.get('/advisor/homepage' ,router);
 
 app.get('/login' , router);
 app.post('/login' , router);
+app.get('/logout' , router);
 
 app.get('/signup' , router);
 app.post('/signup' , router);
 
-app.get('/logout' , router);
+app.get('/announcments' , router)
+app.post('/announcments' , router);
 
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');

@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const router = express.Router();
-const {createUser , getUser} = require('../mysql/users');
+const {createUser , getAdmin , getUser , addAnnouncment} = require('../mysql/users');
 
 router.get('/admin/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../public/views/admin.html'));
@@ -10,7 +10,7 @@ router.get('/admin/dashboard' , (req , res)=>{
 
 router.post('/admin/dashboard' , async(req , res)=>{
     const {email , password} = req.body;
-    const admin = await findAdmin(email , password);
+    const admin = await getAdmin(email , password);
     if(admin){
         return res.send(`<h1>Admin panel</h1>`);
     }
@@ -92,8 +92,30 @@ router.post('/signup' , async (req , res)=>{
     }
     else{
         return res.status(422).send("Validation failed!");
-    }
-        
+    }     
 });
+
+router.get('/announcments' , async (req , res)=>{
+    if(!req.session.userId){
+        console.log(`NO session found , redirect ..`);
+        return res.redirect('/announcments');
+    }
+
+    return res.sendFile(path.join(__dirname , '../public/views/announcement.html'));
+});
+
+router.post('/announcments' , async (req , res)=>{
+    const {title , description , isUrgent} = req.body;
+
+    const announcment = await addAnnouncment(title , description , isUrgent);
+    if(!announcment){
+        return res.status(500).send(`Internal problems ..`);
+    }
+
+    return res.redirect('/');
+});
+
+
+
 
 module.exports = router;
