@@ -11,8 +11,14 @@
   <div class="container">
     <h1>🔔 Announcements</h1>
 
-    <form action="/announcments" method="POST">
+    <form action="/announcements/api" method="POST">
         <div class="card">
+        <select name="category">
+          <option value="">Select your category</option>
+          <option value="1">TUBITAK</option>
+          <option value="3">COURSE PROJECT</option>
+          <option value="2">Teknofest</option>
+        </select>
         <input id="title" name="title" placeholder="Title" />
         <textarea id="desc" name="description" placeholder="Description"></textarea>
 
@@ -31,44 +37,14 @@
     
   </div>
 
-  <script>
+<script>
+  // const addButton = document.getElementById('add-btn');
+  // addButton.addEventListener("click" , (event)=>{
+  //   event.preventDefault();
+  //   window.location.href = '/student/homepage';
+  // });
+</script>
 
-    // const add = document.getElementById('add-btn');
-    // add.addEventListener("click" , (event)=>{
-    //     event.preventDefault();
-    //     window.location.href = '/';
-    // });
 
-
-    // function addAnnouncement() {
-    //   const title = document.getElementById("title").value;
-    //   const desc = document.getElementById("desc").value;
-    //   const isUrgent = document.getElementById("urgentCheck").checked;
-
-    //   if (!title || !desc) return;
-
-    //   const date = new Date().toLocaleString();
-
-    //   const div = document.createElement("div");
-    //   div.className = "card";
-
-    //   div.innerHTML = `
-    //     <div style="display:flex; justify-content:space-between;">
-    //       <div>
-    //         <strong>${title}</strong>
-    //         <div class="date">Created at: ${date}</div>
-    //       </div>
-    //       ${isUrgent ? "<span class='urgent-icon'>⚠️ Urgent</span>" : ""}
-    //     </div>
-    //     <p>${desc}</p>
-    //   `;
-
-    //   document.getElementById("list").prepend(div);
-
-    //   document.getElementById("title").value = "";
-    //   document.getElementById("desc").value = "";
-    //   document.getElementById("urgentCheck").checked = false;
-    // }
-  </script>
 </body>
 </html>

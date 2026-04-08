@@ -66,12 +66,18 @@ async function getUser(role , email , password){
     }
 }
 
-async function addAnnouncment(title , description , isUrgent){
+async function getAnnouncements(){
+    const sql = "SELECT * FROM announcements"
+    const [result] = await database.pool.execute(sql);
+    return result;
+}
+
+async function addAnnouncement(category , title , description , isUrgent){
     try{
-        const sql = "INSERT INTO announcements (title , description , is_urgent) VALUES(? , ? , ?)";
-        const [result] = await database.pool.execute(sql , [title , description , isUrgent ? 1 : 0]);
+        const sql = "INSERT INTO announcements (category , title , description , is_urgent) VALUES(? , ? , ? , ?)";
+        const [result] = await database.pool.execute(sql , [category , title , description , isUrgent ? 1 : 0]);
         console.log('Announcement stored in db✅');
-        return true;
+        return result.affectedRows;
     }
     catch(e){
         console.log(`Announmcment error: ${e.message}`);
@@ -84,5 +90,6 @@ module.exports = {
     createUser,
     getAdmin,
     getUser,
-    addAnnouncment
+    addAnnouncement,
+    getAnnouncements
 }

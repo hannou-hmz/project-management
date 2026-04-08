@@ -25,7 +25,7 @@ app.use(session({
     cookie : {
         secure : false,
         httpOnly : true,
-        maxAge : 1000 * 60 * 60
+        maxAge : 1000 * 60 * 60 * 2
     }
 }));
 
@@ -43,8 +43,9 @@ app.get('/logout' , router);
 app.get('/signup' , router);
 app.post('/signup' , router);
 
-app.get('/announcments' , router)
-app.post('/announcments' , router);
+app.get('/announcements' , router);
+app.get('/announcements/api' , router);
+app.post('/announcements/api' , router);
 
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');

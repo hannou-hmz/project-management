@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const router = express.Router();
-const {createUser , getAdmin , getUser , addAnnouncment} = require('../mysql/users');
+const {createUser , getAdmin , getUser , addAnnouncement , getAnnouncements} = require('../mysql/users');
 
 router.get('/admin/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../public/views/admin.html'));
@@ -95,24 +95,33 @@ router.post('/signup' , async (req , res)=>{
     }     
 });
 
-router.get('/announcments' , async (req , res)=>{
+router.get('/announcements' , async(req , res)=>{
     if(!req.session.userId){
         console.log(`NO session found , redirect ..`);
-        return res.redirect('/announcments');
+        return res.redirect('/login');
+    }
+
+    const announcements = await getAnnouncements();
+    return res.send(announcements);
+});
+
+router.get('/announcements/api' , async (req , res)=>{
+    if(!req.session.userId){
+        console.log(`NO session found , redirect ..`);
+        return res.redirect('/login');
     }
 
     return res.sendFile(path.join(__dirname , '../public/views/announcement.html'));
 });
 
-router.post('/announcments' , async (req , res)=>{
-    const {title , description , isUrgent} = req.body;
-
-    const announcment = await addAnnouncment(title , description , isUrgent);
-    if(!announcment){
+router.post('/announcements/api' , async (req , res)=>{
+    const {category , title , description , isUrgent} = req.body;
+    const announcement = await addAnnouncement(category , title , description , isUrgent);
+    if(!announcement){
         return res.status(500).send(`Internal problems ..`);
     }
 
-    return res.redirect('/');
+    return res.redirect('/student/homepage');
 });
 
 

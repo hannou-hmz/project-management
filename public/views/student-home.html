@@ -26,7 +26,7 @@
 <!-- CLICKABLE NAVIGATION BELOW -->
 <div class="tabs">
   <div class="tab">Overview</div>
-  <div class="tab">Announcements <span class="badge">3</span></div>
+  <div class="tab" id="announcements">Announcements <span class="badge">3</span></div>
   <div class="tab active">Projects</div>
   <div class="tab">Applications <span class="badge">1</span></div>
   <div class="tab">Applicants <span class="badge">2</span></div>
@@ -73,6 +73,15 @@
 
   </div>
 </section>
+
+
+<script>
+  const announce = document.getElementById('announcements');
+  announce.addEventListener("click" , (event)=>{
+    event.preventDefault();
+    window.location.href = "/announcements";
+  });
+</script>
 
 </body>
 </html>
