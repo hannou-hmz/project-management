@@ -47,6 +47,10 @@ app.get('/announcements' , router);
 app.get('/announcements/api' , router);
 app.post('/announcements/api' , router);
 
+app.get('/student/projects' , router);
+app.post('/student/projects' , router);
+
+
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');
 });

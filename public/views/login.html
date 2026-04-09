@@ -20,12 +20,12 @@
       <p>I am a</p>
 
       <div class="role-toggle">
-        <div class="role active" data-role="student">Student</div>
-        <div class="role" data-role="instructor">Instructor</div>
+        <div class="role active" data-role="3">Student</div>
+        <div class="role" data-role="2">Instructor</div>
       </div>
 
       <form method="POST" action="/login">
-        <input type="hidden" name="role" id="role" value="student">
+        <input type="hidden" name="role" id="role" value="3">
         <label>Email Address</label>
         <input type="email" name="email" placeholder="you@example.com">
 
@@ -41,7 +41,7 @@
 
       <div class="admin-box">
         <span>🔐 Are you an admin?</span>
-        <button class="admin-btn">Admin Login</button>
+        <button class="admin-btn" id="admin-click" type="submit">Admin Login</button>
       </div>
     </div>
   </div>
@@ -74,6 +74,12 @@
   function goHome(){
    window.location.href = '/';
   }
+
+  const admin = document.getElementById('admin-click');
+  admin.addEventListener("click" , (event)=>{
+    event.preventDefault();
+    window.location.href = '/admin/dashboard';
+  });
 
   </script>
 

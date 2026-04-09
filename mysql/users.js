@@ -7,7 +7,10 @@ async function createUser(role , full_name , age , email , department , password
     try{
         const sql = "INSERT INTO users(role , full_name , age , email , department , password) VALUES(?,?,?,?,?,?)";
         const [result] = await database.pool.execute(sql , [role , full_name , age , email , department , encPassword]);
-        return result.affectedRows; 
+        if(result.affectedRows){
+            console.log(`User created ✅`);
+            return result;
+        } 
     }
     catch(e){
         console.log(`Storing user error : ${e.message}`);
@@ -45,19 +48,19 @@ async function getUser(role , email , password){
     try{
         const sql = "SELECT * FROM users WHERE role = ? AND email = ?";
         const [rows] = await database.pool.execute(sql, [role , email]);
-        if (rows.length > 0) {
-            const unhashPassword = await bcrypt.compare(password , rows[0].password);
-            if(unhashPassword){
-                console.log('User found in database.')
-                return rows[0];
-            }
-            else{
-                console.log('User is not in database!!!')
-                return false;
-            }
-        } else {
+        if(rows.length === 0){
+            return null
+        }
+
+        const unhashPassword = await bcrypt.compare(password , rows[0].password);
+        if(!unhashPassword){
+           console.log('User is not in database!!!')
             return null;
         }
+        
+        console.log('User found in database.')
+        return rows[0];
+ 
     }
     
     catch (e) {
@@ -66,30 +69,9 @@ async function getUser(role , email , password){
     }
 }
 
-async function getAnnouncements(){
-    const sql = "SELECT * FROM announcements"
-    const [result] = await database.pool.execute(sql);
-    return result;
-}
-
-async function addAnnouncement(category , title , description , isUrgent){
-    try{
-        const sql = "INSERT INTO announcements (category , title , description , is_urgent) VALUES(? , ? , ? , ?)";
-        const [result] = await database.pool.execute(sql , [category , title , description , isUrgent ? 1 : 0]);
-        console.log('Announcement stored in db✅');
-        return result.affectedRows;
-    }
-    catch(e){
-        console.log(`Announmcment error: ${e.message}`);
-        return false;
-    }
-}
-
 
 module.exports = {
     createUser,
-    getAdmin,
     getUser,
-    addAnnouncement,
-    getAnnouncements
+    getAdmin
 }

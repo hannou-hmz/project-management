@@ -1,87 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ProjectHub</title>
-<link rel="stylesheet" href="../student.css">
-<link rel="icon" href="./img/fav.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../student-home.css">
+
 </head>
 <body>
 
-<header class="navbar">
-  <div class="logo">ProjectHub</div>
-  <div class="nav-right">
-    <button class="create-btn">+ Create Project</button>
-    <div class="avatar">A</div>
-    <a href="/logout">Logout</a>
-  </div>
-</header>
+    <!-- Navbar -->
+    <nav>
+        <a href="/student/projects">Create Project</a>
+        <a href="/announcements">Announcements</a>
+        <a href="/announcements/api">Create announcement</a>
+        <a href="/projects">Projects</a>
+        <a href="/applications">Applications</a>
+        <a href="/advisor">Advisor</a>
+        <a href="/applicants">Applicants</a>
+        <a href="/logout" style="margin-left:auto; background-color:#e74c3c;">Logout</a>
+    </nav>
 
-<section class="hero">
-  <h1>Welcome back!</h1>
-  <p>Manage your projects, applications, and find advisors</p>
-</section>
-
-<!-- CLICKABLE NAVIGATION BELOW -->
-<div class="tabs">
-  <div class="tab">Overview</div>
-  <div class="tab" id="announcements">Announcements <span class="badge">3</span></div>
-  <div class="tab active">Projects</div>
-  <div class="tab">Applications <span class="badge">1</span></div>
-  <div class="tab">Applicants <span class="badge">2</span></div>
-  <div class="tab">Find Advisor</div>
-</div>
-
-<section class="projects">
-  <h2>My Projects</h2>
-
-  <div class="card-container">
-
-    <div class="card">
-      <div class="tag green">TÜBİTAK</div>
-      <div class="tag gray">Creator</div>
-
-      <h3>AI-Powered Student Assistant Chatbot</h3>
-      <p>Helping students with course selection and planning.</p>
-
-      <p class="creator">Created by Abdallah Zubairu</p>
-
-      <div class="card-footer">
-        <span>4/6 members</span>
-        <span>2026-03-01</span>
-      </div>
-
-      <button>View Project</button>
+    <!-- Content -->
+    <div class="container">
+        <h2>Welcome to Dashboard</h2>
+        <p>Select an option from the navigation bar.</p>
     </div>
-
-    <div class="card">
-      <div class="tag blue">Course Project</div>
-
-      <h3>E-Commerce Platform Development</h3>
-      <p>Full-stack e-commerce system with authentication.</p>
-
-      <p class="creator">Created by Omar Ashtewi</p>
-
-      <div class="card-footer">
-        <span>4/4 members</span>
-        <span>2026-02-28</span>
-      </div>
-
-      <button>View Project</button>
-    </div>
-
-  </div>
-</section>
-
-
-<script>
-  const announce = document.getElementById('announcements');
-  announce.addEventListener("click" , (event)=>{
-    event.preventDefault();
-    window.location.href = "/announcements";
-  });
-</script>
 
 </body>
 </html>

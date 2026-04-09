@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const router = express.Router();
-const {createUser , getAdmin , getUser , addAnnouncement , getAnnouncements} = require('../mysql/users');
+const {createUser , getAdmin , getUser} = require('../mysql/users');
+const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
+const {createProjects} = require('../mysql/projects');
 
 router.get('/admin/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../public/views/admin.html'));
@@ -12,9 +14,11 @@ router.post('/admin/dashboard' , async(req , res)=>{
     const {email , password} = req.body;
     const admin = await getAdmin(email , password);
     if(admin){
+        console.log(`Admin ✅`);
         return res.send(`<h1>Admin panel</h1>`);
     }
-
+    
+    console.log(`Not admin ❌`);
     return res.status(404).send(`<h1>Not found</h1>`);
 })
  // homepage
@@ -58,13 +62,15 @@ router.get('/login' , (req , res)=>{
 
 router.post('/login' , async (req , res)=>{
     const {role , email , password} = req.body;
-    const user = await getUser(role , email , password);
-    if(user && role === 'student'){
-        req.session.userId = user.id;
+    const userRole = Number(role);
+    const user = await getUser(userRole , email , password);
+
+    if(user && userRole === 3){
+        req.session.userId = user.user_id;
         return res.redirect('/student/homepage');
     }
-    else if(user && role === 'advisor'){
-        req.session.userId = user.id;
+    else if(user && userRole === 2){
+        req.session.userId = user.user_id;
         return res.redirect('/advisor/homepage');
     }
     else{
@@ -80,14 +86,14 @@ router.get('/signup' , (req , res)=>{
 
 router.post('/signup' , async (req , res)=>{
     const {role , username , age , email , department , password} = req.body;
-
+    console.log(role);
     const user = await createUser(role , username , age ,email , department , password);
-    if(user && role === 'student'){
-        req.session.userId = user._id;
+    if(user && role === '3'){
+        req.session.userId = user.user_id;
         return res.status(200).redirect('/student/homepage');
     }
-    else if(user && role === 'advisor'){
-        req.session.userId = user._id;
+    else if(user && role === '2'){
+        req.session.userId = user.user_id;
         return res.status(200).redirect('/advisor/homepage');
     }
     else{
@@ -110,13 +116,13 @@ router.get('/announcements/api' , async (req , res)=>{
         console.log(`NO session found , redirect ..`);
         return res.redirect('/login');
     }
-
     return res.sendFile(path.join(__dirname , '../public/views/announcement.html'));
 });
 
 router.post('/announcements/api' , async (req , res)=>{
     const {category , title , description , isUrgent} = req.body;
-    const announcement = await addAnnouncement(category , title , description , isUrgent);
+    const announcementCategory = Number(category);
+    const announcement = await addAnnouncement(announcementCategory , title , description , isUrgent);
     if(!announcement){
         return res.status(500).send(`Internal problems ..`);
     }
@@ -124,6 +130,29 @@ router.post('/announcements/api' , async (req , res)=>{
     return res.redirect('/student/homepage');
 });
 
+router.get('/student/projects' , (req , res)=>{
+    if(!req.session.userId){
+        console.log('No session found .. redirect');
+        return res.redirect('/login');
+    }
+
+    return res.sendFile(path.join(__dirname , '../public/views/project.html'));
+});
+
+router.post('/student/projects' , async (req , res)=>{
+
+    const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
+    const createdBy = req.session.userId;
+
+    try{
+        const project = await createProjects(title , category , description , budget , skills , teamSize , reqAdvisor , createdBy);
+        console.log(project);
+        return res.redirect('/student/homepage');    
+    } 
+    catch(e){
+        res.status(500).send(`Inernal error ...`);
+    }
+})
 
 
 

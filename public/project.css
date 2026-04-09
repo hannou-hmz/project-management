@@ -1,0 +1,26 @@
+body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            padding: 8px;
+            width: 300px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .team-size-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        button {
+            padding: 5px 10px;
+        }
