@@ -47,8 +47,12 @@ app.get('/announcements' , router);
 app.get('/announcements/api' , router);
 app.post('/announcements/api' , router);
 
+app.get('/projects' , router);
+app.get('/myprojects' , router);
 app.get('/student/projects' , router);
 app.post('/student/projects' , router);
+
+
 
 
 app.use((req , res)=>{

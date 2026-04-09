@@ -10,10 +10,47 @@ async function createProjects(title , type , description , budget , skills , tea
     catch(e){
         console.log(`Project not successefuly created : ${e.message}`);
         return false;
+    } 
+}
+
+async function getProjects(){
+    try{
+        const sql = "SELECT * FROM projects";
+        const [rows] = await database.pool.execute(sql);
+        return rows;
+    }
+    catch(e){
+        console.log(`Fetching projects : ${e.message}`);
+        return false;
     }
     
 }
 
+async function myProjects(createdBy){
+
+    try{
+        const sql = "SELECT * FROM projects WHERE created_by = ?";
+        const [result] = await database.pool.execute(sql , [createdBy]);
+
+        if(result.length > 0){
+            console.log(`Serving my projects ..`);
+            return result;
+        }
+        else{
+            console.log('Nothing to serve.');
+            return null;
+        }
+    }
+    catch(e){
+        console.log(`My projects error :${e.message}`);
+        return false;
+    };
+
+}
+
+
 module.exports = {
-    createProjects
+    createProjects,
+    getProjects,
+    myProjects
 }

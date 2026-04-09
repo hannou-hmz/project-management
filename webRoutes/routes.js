@@ -4,7 +4,7 @@ const app = express();
 const router = express.Router();
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
-const {createProjects} = require('../mysql/projects');
+const {createProjects , getProjects , myProjects} = require('../mysql/projects');
 
 router.get('/admin/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../public/views/admin.html'));
@@ -153,6 +153,32 @@ router.post('/student/projects' , async (req , res)=>{
         res.status(500).send(`Inernal error ...`);
     }
 })
+
+router.get('/projects' , async (req , res)=>{
+    const project = await getProjects();
+    if(!project){
+        return res.status(500).send('Internal issues ..');
+    }
+
+    return res.status(200).json(project);
+});
+
+router.get('/myprojects' , async(req , res)=>{
+
+    if(!req.session.userId){
+        console.log(`No session found ... redirecting ..`);
+        res.redirect('/login');
+    }
+
+    const createdBy = req.session.userId;
+    const myproject = await myProjects(createdBy);
+
+    if(!myProjects){
+        return res.status(500).send(`Internal issues ...`);
+    }
+
+    return res.send(myproject);
+});
 
 
 
