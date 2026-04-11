@@ -33,6 +33,7 @@ app.use(session({
 
 app.get('/admin/homepage' , router);
 app.get('/categories' , router);
+app.post('/categories' , router);
 app.get('/admin/dashboard' , router);
 app.post('/admin/dashboard' , router);
 

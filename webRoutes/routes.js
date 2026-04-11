@@ -6,7 +6,7 @@ const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {createAdvisorProfile , updateAdvisorProfile} = require('../mysql/advisors');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
-const {getCategories} = require('../mysql/categories');
+const {getCategories, addCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects} = require('../mysql/projects');
 
@@ -44,8 +44,32 @@ router.get('/categories' , async(req , res)=>{
         return res.redirect('/admin/dashboard');
     }
 
-    const category = await getCategories();
-    return res.send(category);
+    const categories = await getCategories();
+    const projects = categories.map(cat => ({
+        id: cat.category_id,
+        name: cat.category_name,
+        description: cat.category_description
+    }));
+
+    return res.render('admin-categories' , {projects});
+
+});
+
+router.post('/categories' , async(req , res)=>{
+
+    if(!req.session.adminId){
+        console.log('No admin session .. ');
+        return res.redirect('/admin/dashboard');
+    }
+    const {categoryName , description} = req.body;
+    const createCategory = await addCategory(categoryName , description);
+
+    if(!createCategory){
+        console.log('Category failed..');
+       return res.send('Internal issues'); 
+    }
+
+    return res.redirect('/admin/homepage');
 
 });
 
