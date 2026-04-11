@@ -31,6 +31,8 @@ app.use(session({
     }
 }));
 
+app.get('/admin/homepage' , router);
+app.get('/categories' , router);
 app.get('/admin/dashboard' , router);
 app.post('/admin/dashboard' , router);
 
@@ -54,8 +56,7 @@ app.get('/myprojects' , router);
 app.get('/student/projects' , router);
 app.post('/student/projects' , router);
 
-app.get('/profile' , router);
-app.post('/profile' , router);
+
 
 
 
