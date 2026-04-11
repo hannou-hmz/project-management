@@ -13,10 +13,12 @@ const sessionStore = new MySQLStore({
   database: 'project_hub'
 });
 
+app.set("view engine" , "ejs");
+
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.use(express.static(path.join(__dirname , 'public')));
-app.use(express.static(path.join(__dirname , 'public/views')));
+app.use(express.static(path.join(__dirname , 'static-files')));
+app.use(express.static(path.join(__dirname , 'static-files/html-files')));
 app.use(session({
     secret : "ne5e3Guess!t)",
     resave : false,
@@ -52,6 +54,8 @@ app.get('/myprojects' , router);
 app.get('/student/projects' , router);
 app.post('/student/projects' , router);
 
+app.get('/profile' , router);
+app.post('/profile' , router);
 
 
 

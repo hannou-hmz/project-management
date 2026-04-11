@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Profile</h1>
+
+<!-- 🔒 NON-EDITABLE SECTION -->
+<div class="profile-info">
+
+  <img id="preview"
+       src="../static-files//profile-photos/default.jpg user.profile_photo || 'default.jpg' %>"
+       alt="Profile Photo"
+       width="150">
+
+  <p><strong>Full Name:</strong> <%= user.full_name %></p>
+  <p><strong>Email:</strong> <%= user.email %></p>
+  <p><strong>Department:</strong> <%= user.department %></p>
+
+</div>
+
+<hr>
+
+<!-- ✏️ EDITABLE SECTION -->
+<form action="/advisor/profile" method="POST">
+
+  <div>
+    <label>Areas of Expertise:</label>
+    <input type="text" name="expertise" value="<%= user.expertise %>">
+  </div>
+
+  <div>
+    <label>Researches:</label>
+    <textarea name="researches"><%= user.researches %></textarea>
+  </div>
+
+  <div>
+    <label>Academic Title:</label>
+    <input type="text" name="academic_title" value="<%= user.academic_title %>">
+  </div>
+
+  <div>
+    <label>
+      <input type="checkbox" name="available" <%= user.available ? 'checked' : '' %>>
+      Available for advising
+    </label>
+  </div>
+
+  <button type="submit">Save Changes</button>
+
+</form>
+
+</body>
+</html>

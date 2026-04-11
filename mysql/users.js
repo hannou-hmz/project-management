@@ -69,7 +69,6 @@ async function getUser(role , email , password){
     }
 }
 
-
 module.exports = {
     createUser,
     getUser,
