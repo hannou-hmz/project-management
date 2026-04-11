@@ -21,9 +21,9 @@
         <% projects.forEach(project => { %>
             <div>
                 <span><strong><%= project.name %></strong> - <%= project.description %></span>
-                <form action="/categories" method="POST" style="display: inline;">
+                <form action="/categories/delete/api" method="POST" style="display: inline;">
                     <input type="hidden" name="projectId" value="<%= project.id %>">
-                    <button type="submit">Delete</button>
+                    <a href="/admin/homepage" type="submit">Delete</a>
                 </form>
             </div>
         <% }) %>

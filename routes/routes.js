@@ -6,7 +6,7 @@ const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {createAdvisorProfile , updateAdvisorProfile} = require('../mysql/advisors');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
-const {getCategories, addCategory} = require('../mysql/categories');
+const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects} = require('../mysql/projects');
 
@@ -35,6 +35,30 @@ router.get('/admin/homepage' , (req , res)=>{
     }
 
     return res.sendFile(path.join(__dirname , "../static-files/html-files/admin-homepage.html"));
+});
+
+router.get('/admin/projects' , async (req , res)=>{
+    if(!req.session.adminId){
+        console.log(`NO admin session found , redirect ..`);
+        return res.redirect('/login');  
+    }
+
+    const project = await getProjects();
+    if(!project){
+        return res.status(500).send('Internal issues ..');
+    }
+
+    return res.status(200).json(project);
+});
+
+router.get('/admin/announcements' , async(req , res)=>{
+    if(!req.session.adminId){
+        console.log(`NO session found , redirect ..`);
+        return res.redirect('/login');
+    }
+
+    const announcements = await getAnnouncements();
+    return res.send(announcements);
 });
     
 router.get('/categories' , async(req , res)=>{
@@ -71,6 +95,19 @@ router.post('/categories' , async(req , res)=>{
 
     return res.redirect('/admin/homepage');
 
+});
+
+router.post('/categories/delete/api' , async(req , res)=>{
+
+    const {projectId} = req.body;
+    console.log('ID : ',projectId);
+    const removeCategory = await deleteCategory(projectId);
+
+    if(!removeCategory){
+        return res.send('Internal issues..');
+    }
+
+    return res.redirect('/admin/homepage');
 });
 
 
@@ -195,7 +232,7 @@ router.get('/student/projects' , (req , res)=>{
 router.post('/student/projects' , async (req , res)=>{
 
     const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
-    const createdBy = req.session.userId;
+    const createdBy = req.session.studentId;
 
     try{
         const project = await createProjects(title , category , description , budget , skills , teamSize , reqAdvisor , createdBy);
@@ -228,7 +265,7 @@ router.get('/myprojects' , async(req , res)=>{
         res.redirect('/login');
     }
 
-    const createdBy = req.session.userId;
+    const createdBy = req.session.studentId;
     const myproject = await myProjects(createdBy);
 
     if(!myProjects){

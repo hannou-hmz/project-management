@@ -60,5 +60,6 @@ async function addCategory(name, description){
 
 module.exports = {
     getCategories,
-    addCategory
+    addCategory,
+    deleteCategory
 }

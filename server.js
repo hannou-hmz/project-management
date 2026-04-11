@@ -4,8 +4,8 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
-const filePath = 'C:\\Users\\USER\\Desktop\\project-management\\public';
-const router = require('./webRoutes/routes');
+const filePath = path.join(__dirname, 'public');
+const router = require('./routes/routes');
 const sessionStore = new MySQLStore({
   host: 'localhost',
   user: 'root',
@@ -17,8 +17,9 @@ app.set("view engine" , "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
+// app.use(express.static(path.join(__dirname , 'static-files')));
+// app.use(express.static(path.join(__dirname , 'static-files/html-files')));
 app.use(express.static(path.join(__dirname , 'static-files')));
-app.use(express.static(path.join(__dirname , 'static-files/html-files')));
 app.use(session({
     secret : "ne5e3Guess!t)",
     resave : false,
@@ -31,35 +32,7 @@ app.use(session({
     }
 }));
 
-app.get('/admin/homepage' , router);
-app.get('/categories' , router);
-app.post('/categories' , router);
-app.get('/admin/dashboard' , router);
-app.post('/admin/dashboard' , router);
-
-app.get('/' , router);
-app.get('/student/homepage' ,router);
-app.get('/advisor/homepage' ,router);
-
-app.get('/login' , router);
-app.post('/login' , router);
-app.get('/logout' , router);
-
-app.get('/signup' , router);
-app.post('/signup' , router);
-
-app.get('/announcements' , router);
-app.get('/announcements/api' , router);
-app.post('/announcements/api' , router);
-
-app.get('/projects' , router);
-app.get('/myprojects' , router);
-app.get('/student/projects' , router);
-app.post('/student/projects' , router);
-
-
-
-
+app.use('/', router);
 
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');
