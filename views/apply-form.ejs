@@ -1,0 +1,24 @@
+<h1>Apply for Project</h1>
+
+<form action="/student/project/application/submit" method="POST">
+
+    <!-- hidden project id -->
+    <input type="hidden" name="projectId" value="<%= projectId %>">
+
+    <label>Email address:</label><br>
+    <input name="email" required></input>
+
+    <br><br>
+
+    <label>MESSAGE (inculde your github):</label><br>
+    <textarea rows="10" cols="60" type="text" name="message"></textarea>
+
+    <br><br>
+
+    <label>Skills:</label><br>
+    <input type="text" name="skills">
+
+    <br><br>
+
+    <button type="submit">Submit</button>
+</form>

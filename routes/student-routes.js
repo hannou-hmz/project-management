@@ -6,7 +6,7 @@ const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
-const {createProjects , getProjects , myProjects} = require('../mysql/projects');
+const {createProjects , getProjects , myProjects ,applyForProject , myProjectApplications} = require('../mysql/projects');
 
 
 function isStudent(req, res, next){
@@ -47,13 +47,14 @@ studentRoutes.get('/create/projects' , isStudent ,(req , res)=>{
     return res.sendFile(path.join(__dirname , '../static-files/html-files/project.html'));
 });
 
-studentRoutes.post('create/projects' , async (req , res)=>{
+studentRoutes.post('/create/projects' , async (req , res)=>{
 
     const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
     const createdBy = req.session.studentId;
+    const announcementCategory = Number(category);
 
     try{
-        const project = await createProjects(title , category , description , budget , skills , teamSize , reqAdvisor , createdBy);
+        const project = await createProjects(title , announcementCategory , description , budget , skills , teamSize , reqAdvisor , createdBy);
         console.log(project);
         return res.redirect('/student/homepage');    
     } 
@@ -64,12 +65,15 @@ studentRoutes.post('create/projects' , async (req , res)=>{
 
 studentRoutes.get('/projects' , isStudent , async (req , res)=>{
 
-    const project = await getProjects();
-    if(!project){
+    const projects = await getProjects();
+    if(!projects){
         return res.status(500).send('Internal issues ..');
     }
 
-    return res.status(200).json(project);
+    return res.render("projects" , {
+        projects : projects
+    });
+
 });
 
 studentRoutes.get('/myprojects' , isStudent , async(req , res)=>{
@@ -82,6 +86,44 @@ studentRoutes.get('/myprojects' , isStudent , async(req , res)=>{
     }
 
     return res.send(myproject);
+});
+
+studentRoutes.get('/project/application/:id/apply' , isStudent , async(req , res)=>{
+    
+    const projectId = req.params.id;
+
+    return res.render("apply-form" , {
+         projectId: projectId
+    });
+});
+
+studentRoutes.post('/project/application/submit'  , async(req , res)=>{
+
+    const id = req.session.studentId;
+    const {projectId , email , message , skills}  = req.body;
+    console.log(projectId)
+    const application = await applyForProject(id , projectId , email , message , skills);
+    if(!application){
+        return res.send("internal issues");
+    }
+    console.log(application);
+    return res.redirect('/projects');
+
+});
+
+studentRoutes.get('/myapplications' , isStudent , async(req , res)=>{
+
+
+    const id = req.session.studentId;
+    const myApplications = await myProjectApplications(id);
+    if(!myApplications || myApplications === null){
+        return null;
+    }
+
+    console.log(myApplications);
+    return res.render("myapplications" , {
+        myApplications : myApplications
+    });
 });
 
 module.exports = studentRoutes;

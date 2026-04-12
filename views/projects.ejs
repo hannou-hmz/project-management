@@ -1,0 +1,16 @@
+<h1>Projects</h1>
+
+<% projects.forEach(project => { %>
+    <div>
+        <h3><%= project.project_title %></h3>
+        <p>Type: <%= project.category_name %></p>
+        <p><%= project.project_description %></p>
+        <p>Budget: <%= project.budget %></p>
+        <p>Skills: <%= project.required_skills %></p>
+        <p>Created at: <%= project.created_at %></p>
+
+        <a style="background-color: rgb(102, 102, 225); color: white; padding: 8px;" href="/student/project/application/<%= project.project_id %>/apply">Apply</a>
+        <input type="hidden" name="projectId">
+    </div>
+    <hr>
+<% }) %>

@@ -39,7 +39,7 @@ app.use('/student' , studentRoutes);
 app.use('/advisor' ,advisorRouters);
 
 app.use((req , res)=>{
-    return res.status(404).send('<h1>Page Not Found</h1>');
+    return res.sendFile(path.join(__dirname , "static-files/html-files/404.html"));
 });
 
 async function startServer(){
