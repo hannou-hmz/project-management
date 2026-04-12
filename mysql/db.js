@@ -1,10 +1,12 @@
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 
+
 const pool = mysql.createPool({
-    host : 'localhost',
-    user : 'root',
-    password : 'root,locked',
-    database : 'project_hub',
+    host : process.env.DB_HOST,
+    user : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME,
     waitForConnections : true, 
     connectionLimit : 10, // max of connection a pool can handle at the same time.
     queueLimit : 0 //Maximum number of requests allowed to wait in the queue for a free connection.

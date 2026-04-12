@@ -3,10 +3,21 @@ const path = require('path');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
+const {getProjects} = require('../mysql/projects');
 
 
 authRoutes.get('/' , (req , res , next)=>{
     return res.sendFile(path.join(__dirname ,'../static-files/html-files/homepage.html'));
+});
+
+authRoutes.get('/projects' , async (req , res)=>{
+
+    const project = await getProjects();
+    if(!project){
+        return res.status(500).send('Internal issues ..');
+    }
+
+    return res.status(200).json(project);
 });
 
 authRoutes.get('/login' , (req , res)=>{

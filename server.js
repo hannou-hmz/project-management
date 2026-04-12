@@ -1,10 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
-const filePath = path.join(__dirname, 'public');
 const adminRouters = require('./routes/admin');
 const studentRoutes = require('./routes/student-routes');
 const advisorRouters = require('./routes/advisor-routes');
@@ -20,10 +20,9 @@ app.set("view engine" , "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.use(express.static(path.join(__dirname , 'static-files')));
-app.use(express.static(path.join(__dirname , 'static-files/html-files')));
+app.use(express.static(path.join(__dirname, 'static-files')));
 app.use(session({
-    secret : "ne5e3Guess!t)",
+    secret : process.env.SESSION_SECRET,
     resave : false,
     saveUninitialized : false,
     store : sessionStore,
