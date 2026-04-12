@@ -1,7 +1,7 @@
 const database = require('./db');
 
 async function getAnnouncements(){
-    const sql = "SELECT * FROM announcements"
+    const sql = "SELECT c.category_name , a.announcement_id , a.title , a.description , a.created_at , a.is_urgent FROM announcements AS a INNER JOIN categories AS c ON a.category = c.category_id;"
     const [result] = await database.pool.execute(sql);
     return result;
 }
@@ -19,8 +19,28 @@ async function addAnnouncement(category , title , description , isUrgent){
     }
 }
 
+async function deleteAnnouncement(id){
+
+    try{
+        const sql = "DELETE FROM announcements WHERE announcement_id = ?";
+        const [result] = await database.pool.execute(sql , [id]);
+        
+        if(result.affectedRows <= 0){
+            console.log('Deletion failed ..');
+            return false;
+        }
+
+        console.log('Successefully deleted..');
+        return true;
+    }
+
+    catch(e){
+        return e.message;
+    }
+}
 
 module.exports = {
     addAnnouncement,
-    getAnnouncements
+    getAnnouncements,
+    deleteAnnouncement
 }

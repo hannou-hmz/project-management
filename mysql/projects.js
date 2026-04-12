@@ -31,10 +31,28 @@ async function getProjects(){
     
 }
 
+async function deleteProjects(projectId){
+
+    try{
+        const sql = "DELETE FROM projects WHERE project_id = ?";
+        const [result] = await database.pool.execute(sql , [projectId]);
+        if(result.affectedRows <= 0){
+            console.log('DELETION failed ..');
+            return null;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        return e.message;
+    }
+}
+
 async function myProjects(createdBy){
 
     try{
-        const sql = "SELECT * FROM projects WHERE created_by = ?";
+        const sql = "SELECT p.project_id , p.project_title , u.full_name , c.category_name , p.project_description ,p.budget , p.required_skills , p.team_size , p.require_advisor , p.created_at FROM projects AS p INNER JOIN users AS u INNER JOIN categories AS c ON p.created_by = user_id AND p.project_type = c.category_id WHERE created_by = ?";
         const [result] = await database.pool.execute(sql , [createdBy]);
 
         if(result.length > 0){
@@ -76,7 +94,7 @@ async function applyForProject(userId , projectId , email , message , skills){
 async function myProjectApplications(userId){
 
     try{
-        const sql = "SELECT pa.request_id , p.project_title , c.category_name , p.project_type , c.category_name , pa .request_date, pa.request_message  FROM project_applications AS pa INNER JOIN projects AS p INNER JOIN categories AS c ON pa.project_id = p.project_id AND p.project_type = category_id  WHERE pa.user_id = ?;";
+        const sql = "SELECT pa.request_id , p.project_title , c.category_name , c.category_name , pa .request_date, pa.request_message  FROM project_applications AS pa INNER JOIN projects AS p INNER JOIN categories AS c ON pa.project_id = p.project_id AND p.project_type = category_id  WHERE pa.user_id = ?;";
         const [rows] = await database.pool.execute(sql , [userId]);
         if(rows.length <= 0){
             console.log('No applications ..');
@@ -95,6 +113,7 @@ async function myProjectApplications(userId){
 module.exports = {
     createProjects,
     getProjects,
+    deleteProjects,
     myProjects,
     applyForProject,
     myProjectApplications

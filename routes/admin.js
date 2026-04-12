@@ -5,7 +5,7 @@ const adminRouters = express.Router();
 const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
-const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
+const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects} = require('../mysql/projects');
 
 
@@ -32,7 +32,7 @@ adminRouters.post('/dashboard' , async(req , res)=>{
     }
     
     console.log(`Not admin ❌`);
-    return res.status(404).send(`<h1>Not found</h1>`);
+    return res.redirect('/admin/dashboard');
 })
 
 adminRouters.get('/homepage' , isAdmin ,(req , res)=>{
@@ -51,9 +51,20 @@ adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
 adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
 
     const announcements = await getAnnouncements();
-    return res.send(announcements);
+    console.log(announcements);
+    return res.render("admin-announcements" , {
+        announcements : announcements
+    });
 });
-    
+
+adminRouters.get('/announcements/:id/delete' , async (req , res)=>{
+
+    const announcementId = req.params.id;
+    const removeAnnoucements = await deleteAnnouncement(announcementId);
+
+    return res.redirect('/admin/announcements');
+});
+
 adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
 
     const categories = await getCategories();

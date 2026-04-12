@@ -1,0 +1,35 @@
+<h1>Announcements</h1>
+
+<% if (announcements && announcements.length > 0) { %>
+
+    <% announcements.forEach(ann => { %>
+
+        <div style="margin-bottom: 20px;">
+
+            <h3><%= ann.title %></h3>
+
+            <!-- <p><strong>ID:</strong> <%= ann.announcement_id %></p> -->
+
+            <p><strong>Category:</strong> <%= ann.category_name %></p>
+
+            <p><strong>Description:</strong> <%= ann.description %></p>
+
+            <p><strong>Created At:</strong> 
+                <%= ann.created_at %>
+            </p>
+
+            <p><strong>Urgent:</strong> 
+                <%= ann.is_urgent ? "Yes 🔴" : "No" %>
+            </p>
+
+        </div>
+
+        <hr>
+
+    <% }) %>
+
+<% } else { %>
+
+    <p>No announcements found.</p>
+
+<% } %>

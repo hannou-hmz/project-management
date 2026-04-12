@@ -5,8 +5,8 @@ const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
-const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
-const {createProjects , getProjects , myProjects ,applyForProject , myProjectApplications} = require('../mysql/projects');
+const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
+const {createProjects , getProjects , deleteProjects, myProjects ,applyForProject , myProjectApplications} = require('../mysql/projects');
 
 
 function isStudent(req, res, next){
@@ -24,7 +24,10 @@ studentRoutes.get('/homepage' , isStudent , (req , res)=>{
 studentRoutes.get('/announcements' , isStudent , async(req , res)=>{
 
     const announcements = await getAnnouncements();
-    return res.send(announcements);
+    console.log(announcements);
+    return res.render("announcements" , {
+        announcements : announcements
+    });
 });
 
 studentRoutes.get('/announcements/api' , isStudent ,async (req , res)=>{
@@ -70,7 +73,7 @@ studentRoutes.get('/projects' , isStudent , async (req , res)=>{
         return res.status(500).send('Internal issues ..');
     }
 
-    return res.render("projects" , {
+    return res.render("show-projects" , {
         projects : projects
     });
 
@@ -85,14 +88,27 @@ studentRoutes.get('/myprojects' , isStudent , async(req , res)=>{
         return res.status(500).send(`Internal issues ...`);
     }
 
-    return res.send(myproject);
+    return res.render("my-projects" , {
+        projects : myproject 
+    });
+});
+
+studentRoutes.get('/:id/delete' ,async (req ,res)=>{
+
+    const projectId = req.params.id;
+    const deleteProject = await deleteProjects(projectId);
+    if(deleteProject === null){
+        return res.status(500).send('Internal issues ..');
+    }
+
+    return res.redirect('/student/myprojects');
 });
 
 studentRoutes.get('/project/application/:id/apply' , isStudent , async(req , res)=>{
     
     const projectId = req.params.id;
 
-    return res.render("apply-form" , {
+    return res.render("submit-application" , {
          projectId: projectId
     });
 });
@@ -101,13 +117,12 @@ studentRoutes.post('/project/application/submit'  , async(req , res)=>{
 
     const id = req.session.studentId;
     const {projectId , email , message , skills}  = req.body;
-    console.log(projectId)
+
     const application = await applyForProject(id , projectId , email , message , skills);
     if(!application){
         return res.send("internal issues");
     }
-    console.log(application);
-    return res.redirect('/projects');
+    return res.redirect('/student/projects');
 
 });
 
@@ -115,9 +130,6 @@ studentRoutes.get('/applications' , isStudent , async(req , res)=>{
 
     const id = req.session.studentId;
     const applications = await myProjectApplications(id);
-    if(!applications || applications === null){
-        return null;
-    }
 
     return res.render("myapplications" , {
         applications : applications
