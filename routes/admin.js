@@ -6,7 +6,7 @@ const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
-const {createProjects , getProjects , myProjects} = require('../mysql/projects');
+const {createProjects , getProjects , myProjects , deleteProjects} = require('../mysql/projects');
 
 
 function isAdmin(req, res, next){
@@ -40,12 +40,23 @@ adminRouters.get('/homepage' , isAdmin ,(req , res)=>{
 });
 
 adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
-    const project = await getProjects();
-    if(!project){
+    const projects = await getProjects();
+    if(!projects){
         return res.status(500).send('Internal issues ..');
     }
 
-    return res.status(200).json(project);
+    return res.render("admin-projects" ,{
+        projects : projects
+    });
+});
+
+adminRouters.get('/projects/:id/delete', async(req , res)=>{
+
+    const projectId = req.params.id;
+    const removeProject = await deleteProjects(projectId);
+    
+    return res.redirect('/admin/projects');
+    
 });
 
 adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
@@ -68,29 +79,25 @@ adminRouters.get('/announcements/:id/delete' , async (req , res)=>{
 adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
 
     const categories = await getCategories();
-    const projects = categories.map(cat => ({
-        id: cat.category_id,
-        name: cat.category_name,
-        description: cat.category_description
-    }));
-
-    return res.render('admin-categories' , {projects});
+    return res.render('admin-categories' , {
+        categories : categories
+    });
 
 });
 
-adminRouters.post('/categories' , isAdmin , async(req , res)=>{
+// adminRouters.post('/categories' , isAdmin , async(req , res)=>{
 
-    const {categoryName , description} = req.body;
-    const createCategory = await addCategory(categoryName , description);
+//     const {categoryName , description} = req.body;
+//     const createCategory = await addCategory(categoryName , description);
 
-    if(!createCategory){
-        console.log('Category failed..');
-       return res.send('Internal issues'); 
-    }
+//     if(!createCategory){
+//         console.log('Category failed..');
+//        return res.send('Internal issues'); 
+//     }
 
-    return res.redirect('/admin/homepage');
+//     return res.redirect('/admin/categories');
 
-});
+// });
 
 adminRouters.post('/categories/delete' , async(req , res)=>{
 
@@ -104,10 +111,6 @@ adminRouters.post('/categories/delete' , async(req , res)=>{
 
     return res.redirect('/admin/homepage');
 });
-
-
-
-
 
 
 

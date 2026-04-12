@@ -1,36 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Projects</title>
-</head>
-<body>
-    <h1>Projects</h1>
+<h1>Categories</h1>
 
-    <!-- ADD FORM -->
-    <form action="/categories" method="POST">
-        <input type="text" name="categoryName" placeholder="Project Name" required>
-        <input type="text" name="description" placeholder="Description" required>
-        <button id="add-btn" type="submit">Add Project</button>
-    </form>
+<% if (categories && categories.length > 0) { %>
 
-    <hr>
+    <% categories.forEach(cat => { %>
 
-    <!-- PROJECT LIST -->
-    <% if (projects && projects.length > 0) { %>
-        <% projects.forEach(project => { %>
-            <div>
-                <span><strong><%= project.name %></strong> - <%= project.description %></span>
-                <form action="/categories/delete/api" method="POST" style="display: inline;">
-                    <input type="hidden" name="projectId" value="<%= project.id %>">
-                    <a href="/admin/homepage" type="submit">Delete</a>
-                </form>
-            </div>
-        <% }) %>
-    <% } else { %>
-        <p>No projects found.</p>
-    <% } %>
-</body>
+        <div style="margin-bottom: 20px;">
 
+            <h3><%= cat.category_name %></h3>
 
-</html>
+            <p><strong>Description:</strong> <%= cat.category_description %></p>
+
+            <p><strong>Created At:</strong> 
+                <%= cat.created_at %>
+            </p>
+
+        </div>
+
+        <hr>
+
+    <% }) %>
+
+<% } else { %>
+
+    <p>No categories found.</p>
+
+<% } %>

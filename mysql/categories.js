@@ -3,7 +3,7 @@ const database = require('./db');
 async function getCategories(){
 
     try{
-        const sql = "SELECT category_id, category_name , category_description FROM categories";
+        const sql = "SELECT category_id, category_name , category_description , created_at FROM categories";
         const [result] = await database.pool.execute(sql);
         if(result.length <= 0){
             console.log('No categorires ..');
