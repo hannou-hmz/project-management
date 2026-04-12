@@ -42,12 +42,12 @@ studentRoutes.post('/announcements/api' , async (req , res)=>{
     return res.redirect('/student/homepage');
 });
 
-studentRoutes.get('projects' , isStudent ,(req , res)=>{
+studentRoutes.get('/create/projects' , isStudent ,(req , res)=>{
 
     return res.sendFile(path.join(__dirname , '../static-files/html-files/project.html'));
 });
 
-studentRoutes.post('projects' , async (req , res)=>{
+studentRoutes.post('create/projects' , async (req , res)=>{
 
     const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
     const createdBy = req.session.studentId;
@@ -62,7 +62,7 @@ studentRoutes.post('projects' , async (req , res)=>{
     }
 })
 
-studentRoutes.get('/display-projects' , isStudent , async (req , res)=>{
+studentRoutes.get('/projects' , isStudent , async (req , res)=>{
 
     const project = await getProjects();
     if(!project){

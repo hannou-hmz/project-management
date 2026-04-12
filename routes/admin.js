@@ -1,11 +1,9 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const router = express.Router();
+const adminRouters = express.Router();
 const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
-const {createAdvisorProfile , updateAdvisorProfile} = require('../mysql/advisors');
-const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects} = require('../mysql/projects');
@@ -19,19 +17,12 @@ function isAdmin(req, res, next){
     next();
 }
 
-function isAdvisor(req, res, next){
-    if(!req.session.advisorId){
-        console.log('No advisor session .. redirecting ..');
-        return res.redirect('/login');
-    }
-    next();
-}
 
-router.get('/admin/dashboard' , (req , res)=>{
+adminRouters.get('/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../static-files/html-files/admin-login.html'));
 });
 
-router.post('/admin/dashboard' , async(req , res)=>{
+adminRouters.post('/dashboard' , async(req , res)=>{
     const {email , password} = req.body;
     const admin = await getAdmin(email , password);
     if(admin){
@@ -44,11 +35,11 @@ router.post('/admin/dashboard' , async(req , res)=>{
     return res.status(404).send(`<h1>Not found</h1>`);
 })
 
-router.get('/admin/homepage' , isAdmin ,(req , res)=>{
+adminRouters.get('/homepage' , isAdmin ,(req , res)=>{
     return res.sendFile(path.join(__dirname , "../static-files/html-files/admin-homepage.html"));
 });
 
-router.get('/admin/projects' , isAdmin ,async (req , res)=>{
+adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
     const project = await getProjects();
     if(!project){
         return res.status(500).send('Internal issues ..');
@@ -57,13 +48,13 @@ router.get('/admin/projects' , isAdmin ,async (req , res)=>{
     return res.status(200).json(project);
 });
 
-router.get('/admin/announcements' , isAdmin , async(req , res)=>{
+adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
 
     const announcements = await getAnnouncements();
     return res.send(announcements);
 });
     
-router.get('/categories' , isAdmin ,async(req , res)=>{
+adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
 
     const categories = await getCategories();
     const projects = categories.map(cat => ({
@@ -76,7 +67,7 @@ router.get('/categories' , isAdmin ,async(req , res)=>{
 
 });
 
-router.post('/categories' , isAdmin , async(req , res)=>{
+adminRouters.post('/categories' , isAdmin , async(req , res)=>{
 
     const {categoryName , description} = req.body;
     const createCategory = await addCategory(categoryName , description);
@@ -90,7 +81,7 @@ router.post('/categories' , isAdmin , async(req , res)=>{
 
 });
 
-router.post('/categories/delete/api' , async(req , res)=>{
+adminRouters.post('/categories/delete' , async(req , res)=>{
 
     const {projectId} = req.body;
     console.log('ID : ',projectId);
@@ -103,16 +94,10 @@ router.post('/categories/delete/api' , async(req , res)=>{
     return res.redirect('/admin/homepage');
 });
 
-router.get('/' , (req , res , next)=>{
-    return res.sendFile(path.join(__dirname ,'../static-files/html-files/homepage.html'));
-});
-
-router.get('/advisor/homepage' , isAdvisor, (req , res)=>{
-
-    return res.sendFile(path.join(__dirname ,'../static-files/html-files/advisor-home.html'));
-});
 
 
 
 
-module.exports = router;
+
+
+module.exports = adminRouters;

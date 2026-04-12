@@ -5,17 +5,9 @@ const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 
 
-authRoutes.get('/logout' , (req , res) =>{
-    req.session.destroy((error)=>{
-        if(error){
-            console.log(error.message);
-            return res.status(500).send(`<h1>Logout failed!</h1>`);
-        }
-
-        res.clearCookie('connect.sid');
-        return res.redirect('/login');
-    });
-})
+authRoutes.get('/' , (req , res , next)=>{
+    return res.sendFile(path.join(__dirname ,'../static-files/html-files/homepage.html'));
+});
 
 authRoutes.get('/login' , (req , res)=>{
    return res.sendFile(path.join(__dirname , '../static-files/html-files/login.html'));
@@ -61,5 +53,19 @@ authRoutes.post('/signup' , async (req , res)=>{
         return res.status(422).send("Validation failed!");
     }     
 });
+
+authRoutes.get('/logout' , (req , res) =>{
+    req.session.destroy((error)=>{
+        if(error){
+            console.log(error.message);
+            return res.status(500).send(`<h1>Logout failed!</h1>`);
+        }
+
+        res.clearCookie('connect.sid');
+        return res.redirect('/login');
+    });
+})
+
+
 
 module.exports = authRoutes;

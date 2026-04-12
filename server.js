@@ -5,8 +5,9 @@ const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
 const filePath = path.join(__dirname, 'public');
-const router = require('./routes/routes');
+const adminRouters = require('./routes/admin');
 const studentRoutes = require('./routes/student-routes');
+const advisorRouters = require('./routes/advisor-routes');
 const authRoutes = require('./routes/auth');
 const sessionStore = new MySQLStore({
   host: 'localhost',
@@ -33,9 +34,10 @@ app.use(session({
     }
 }));
 
-// app.use('/', router);
 app.use('/' , authRoutes)
+app.use('/admin' , adminRouters);
 app.use('/student' , studentRoutes);
+app.use('/advisor' ,advisorRouters);
 
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');
