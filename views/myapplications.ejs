@@ -5,16 +5,16 @@
     <% applications.forEach(app => { %>
         <div style="margin-bottom: 20px;">
 
-            <h3>Project: <%= app.title %></h3>
+            <h3><%= app.project_title %></h3>
 
-            <p><strong>Type:</strong> <%= app.type %></p>
+            <p><strong>Type:</strong> <%= app.category_name %></p>
 
             <p><strong>Applied At:</strong> 
-                <%= new Date(app.created_at).toLocaleString() %>
+                <%= app.request_date %>
             </p>
 
             <p><strong>Message:</strong></p>
-            <p><%= app.message %></p>
+            <p><%= app.request_message %></p>
 
         </div>
 

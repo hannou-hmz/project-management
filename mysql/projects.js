@@ -76,7 +76,7 @@ async function applyForProject(userId , projectId , email , message , skills){
 async function myProjectApplications(userId){
 
     try{
-        const sql = "SELECT pa.request_id p.project_title , p.project_type , c.category_name , pa .request_date, pa.request_message  FROM project_applications AS pa INNER JOIN projects AS p INNER JOIN categories AS c ON pa.project_id = p.project_id AND p.project_type = category_id  WHERE user pa.user_id = ?;";
+        const sql = "SELECT pa.request_id , p.project_title , c.category_name , p.project_type , c.category_name , pa .request_date, pa.request_message  FROM project_applications AS pa INNER JOIN projects AS p INNER JOIN categories AS c ON pa.project_id = p.project_id AND p.project_type = category_id  WHERE pa.user_id = ?;";
         const [rows] = await database.pool.execute(sql , [userId]);
         if(rows.length <= 0){
             console.log('No applications ..');

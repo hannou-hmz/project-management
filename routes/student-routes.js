@@ -111,18 +111,16 @@ studentRoutes.post('/project/application/submit'  , async(req , res)=>{
 
 });
 
-studentRoutes.get('/myapplications' , isStudent , async(req , res)=>{
-
+studentRoutes.get('/applications' , isStudent , async(req , res)=>{
 
     const id = req.session.studentId;
-    const myApplications = await myProjectApplications(id);
-    if(!myApplications || myApplications === null){
+    const applications = await myProjectApplications(id);
+    if(!applications || applications === null){
         return null;
     }
 
-    console.log(myApplications);
     return res.render("myapplications" , {
-        myApplications : myApplications
+        applications : applications
     });
 });
 
