@@ -6,6 +6,8 @@ const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
 const filePath = path.join(__dirname, 'public');
 const router = require('./routes/routes');
+const studentRoutes = require('./routes/student-routes');
+const authRoutes = require('./routes/auth');
 const sessionStore = new MySQLStore({
   host: 'localhost',
   user: 'root',
@@ -17,9 +19,8 @@ app.set("view engine" , "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-// app.use(express.static(path.join(__dirname , 'static-files')));
-// app.use(express.static(path.join(__dirname , 'static-files/html-files')));
 app.use(express.static(path.join(__dirname , 'static-files')));
+app.use(express.static(path.join(__dirname , 'static-files/html-files')));
 app.use(session({
     secret : "ne5e3Guess!t)",
     resave : false,
@@ -32,7 +33,9 @@ app.use(session({
     }
 }));
 
-app.use('/', router);
+// app.use('/', router);
+app.use('/' , authRoutes)
+app.use('/student' , studentRoutes);
 
 app.use((req , res)=>{
     return res.status(404).send('<h1>Page Not Found</h1>');

@@ -10,6 +10,23 @@ const {getCategories ,addCategory, deleteCategory} = require('../mysql/categorie
 const {addAnnouncement , getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects} = require('../mysql/projects');
 
+
+function isAdmin(req, res, next){
+    if(!req.session.adminId){
+        console.log('No admin session .. redirecting ..');
+        return res.redirect('/admin/dashboard');
+    }
+    next();
+}
+
+function isAdvisor(req, res, next){
+    if(!req.session.advisorId){
+        console.log('No advisor session .. redirecting ..');
+        return res.redirect('/login');
+    }
+    next();
+}
+
 router.get('/admin/dashboard' , (req , res)=>{
     return res.sendFile(path.join(__dirname , '../static-files/html-files/admin-login.html'));
 });
@@ -27,22 +44,11 @@ router.post('/admin/dashboard' , async(req , res)=>{
     return res.status(404).send(`<h1>Not found</h1>`);
 })
 
-router.get('/admin/homepage' , (req , res)=>{
-
-    if(!req.session.adminId){
-        console.log('No admin session .. ');
-        return res.redirect('/admin/dashboard');
-    }
-
+router.get('/admin/homepage' , isAdmin ,(req , res)=>{
     return res.sendFile(path.join(__dirname , "../static-files/html-files/admin-homepage.html"));
 });
 
-router.get('/admin/projects' , async (req , res)=>{
-    if(!req.session.adminId){
-        console.log(`NO admin session found , redirect ..`);
-        return res.redirect('/login');  
-    }
-
+router.get('/admin/projects' , isAdmin ,async (req , res)=>{
     const project = await getProjects();
     if(!project){
         return res.status(500).send('Internal issues ..');
@@ -51,22 +57,13 @@ router.get('/admin/projects' , async (req , res)=>{
     return res.status(200).json(project);
 });
 
-router.get('/admin/announcements' , async(req , res)=>{
-    if(!req.session.adminId){
-        console.log(`NO session found , redirect ..`);
-        return res.redirect('/login');
-    }
+router.get('/admin/announcements' , isAdmin , async(req , res)=>{
 
     const announcements = await getAnnouncements();
     return res.send(announcements);
 });
     
-router.get('/categories' , async(req , res)=>{
-
-    if(!req.session.adminId){
-        console.log('No admin session .. ');
-        return res.redirect('/admin/dashboard');
-    }
+router.get('/categories' , isAdmin ,async(req , res)=>{
 
     const categories = await getCategories();
     const projects = categories.map(cat => ({
@@ -79,12 +76,8 @@ router.get('/categories' , async(req , res)=>{
 
 });
 
-router.post('/categories' , async(req , res)=>{
+router.post('/categories' , isAdmin , async(req , res)=>{
 
-    if(!req.session.adminId){
-        console.log('No admin session .. ');
-        return res.redirect('/admin/dashboard');
-    }
     const {categoryName , description} = req.body;
     const createCategory = await addCategory(categoryName , description);
 
@@ -110,170 +103,15 @@ router.post('/categories/delete/api' , async(req , res)=>{
     return res.redirect('/admin/homepage');
 });
 
-
- // homepage
 router.get('/' , (req , res , next)=>{
     return res.sendFile(path.join(__dirname ,'../static-files/html-files/homepage.html'));
 });
 
-router.get('/student/homepage' , (req , res)=>{
-    if(!req.session.studentId){
-        console.log('NO session . back to login ...');
-        return res.redirect('/login');
-    }
-    
-    return res.sendFile(path.join(__dirname ,'../static-files/html-files/student-home.html'));
-});
-
-router.get('/advisor/homepage' , (req , res)=>{
-    if(!req.session.advisorId){
-        console.log('NO session . back to login ...');
-        return res.redirect('/login');
-    }
+router.get('/advisor/homepage' , isAdvisor, (req , res)=>{
 
     return res.sendFile(path.join(__dirname ,'../static-files/html-files/advisor-home.html'));
 });
 
-router.get('/logout' , (req , res) =>{
-    req.session.destroy((error)=>{
-        if(error){
-            console.log(error.message);
-            return res.status(500).send(`<h1>Logout failed!</h1>`);
-        }
-
-        res.clearCookie('connect.sid');
-        return res.redirect('/login');
-    });
-})
-
-router.get('/login' , (req , res)=>{
-   return res.sendFile(path.join(__dirname , '../static-files/html-files/login.html'));
-});
-
-router.post('/login' , async (req , res)=>{
-    const {role , email , password} = req.body;
-    const userRole = Number(role);
-    const user = await getUser(userRole , email , password);
-
-    if(user && userRole === 3){
-        req.session.studentId = user.user_id;
-        return res.redirect('/student/homepage');
-    }
-    else if(user && userRole === 2){
-        req.session.advisorId = user.user_id;
-        return res.redirect('/advisor/homepage');
-    }
-    else{
-        console.log('Wrong credentials');
-        return res.redirect('/login');
-    }
-    
-});
-
-router.get('/signup' , async(req , res)=>{
-   return res.sendFile(path.join(__dirname , '../static-files/html-files/signup.html'));
-});
-
-router.post('/signup' , async (req , res)=>{
-    const {role , username , age , email , department , password} = req.body;
-    console.log(role);
-    const user = await createUser(role , username , age ,email , department , password);
-    if(user && role === '3'){
-        req.session.studentId = user.user_id;
-        return res.status(200).redirect('/student/homepage');
-    }
-    else if(user && role === '2'){
-        req.session.advisorId = user.user_id;
-        return res.status(200).redirect('/advisor/homepage');
-    }
-    else{
-        return res.status(422).send("Validation failed!");
-    }     
-});
-
-router.get('/announcements' , async(req , res)=>{
-    if(!req.session.studentId){
-        console.log(`NO session found , redirect ..`);
-        return res.redirect('/login');
-    }
-
-    const announcements = await getAnnouncements();
-    return res.send(announcements);
-});
-
-router.get('/announcements/api' , async (req , res)=>{
-    if(!req.session.studentId){
-        console.log(`NO session found , redirect ..`);
-        return res.redirect('/login');
-    }
-    return res.sendFile(path.join(__dirname , '../static-files/html-files/announcement.html'));
-});
-
-router.post('/announcements/api' , async (req , res)=>{
-    const {category , title , description , isUrgent} = req.body;
-    const announcementCategory = Number(category);
-    const announcement = await addAnnouncement(announcementCategory , title , description , isUrgent);
-    if(!announcement){
-        return res.status(500).send(`Internal problems ..`);
-    }
-
-    return res.redirect('/student/homepage');
-});
-
-router.get('/student/projects' , (req , res)=>{
-    if(!req.session.studentId){
-        console.log('No session found .. redirect');
-        return res.redirect('/login');
-    }
-
-    return res.sendFile(path.join(__dirname , '../static-files/html-files/project.html'));
-});
-
-router.post('/student/projects' , async (req , res)=>{
-
-    const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
-    const createdBy = req.session.studentId;
-
-    try{
-        const project = await createProjects(title , category , description , budget , skills , teamSize , reqAdvisor , createdBy);
-        console.log(project);
-        return res.redirect('/student/homepage');    
-    } 
-    catch(e){
-        res.status(500).send(`Inernal error ...`);
-    }
-})
-
-router.get('/projects' , async (req , res)=>{
-    if(!req.session.studentId){
-        console.log(`NO session found , redirect ..`);
-        return res.redirect('/login');  
-    }
-
-    const project = await getProjects();
-    if(!project){
-        return res.status(500).send('Internal issues ..');
-    }
-
-    return res.status(200).json(project);
-});
-
-router.get('/myprojects' , async(req , res)=>{
-
-    if(!req.session.studentId){
-        console.log(`No session found ... redirecting ..`);
-        res.redirect('/login');
-    }
-
-    const createdBy = req.session.studentId;
-    const myproject = await myProjects(createdBy);
-
-    if(!myProjects){
-        return res.status(500).send(`Internal issues ...`);
-    }
-
-    return res.send(myproject);
-});
 
 
 
