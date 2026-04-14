@@ -159,7 +159,11 @@ studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
 
 studentRoutes.get('/requests/:advisorId/advisors' , isStudent , (req , res)=>{
     try{
-        return res.render("request-advisor");
+
+        const advisorId = Number(req.params.advisorId);
+        return res.render("request-advisor" , {
+            advisorId : advisorId , 
+        });
     }
     catch(e){
         console.log(e.message);
@@ -170,14 +174,10 @@ studentRoutes.get('/requests/:advisorId/advisors' , isStudent , (req , res)=>{
 studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)=>{
 
     try{
-        const advisorId = req.params.advisorId;
+        const advisorId = Number(req.params.advisorId);
         const studentId = req.session.studentId;
         const {message , meetingMethod} = req.body;
-        console.log('ad: ',advisorId)
-        console.log('st : ',studentId)
-        console.log('msg : ',message)
-        console.log('method : ',meetingMethod)
-        const request = await requestAdvisor(advisorId , studentId , message , meetingMethod);
+        const request = await requestAdvisor(advisorId, studentId , message , meetingMethod);
 
         if(!request){
             console.log("Request failed ..");
@@ -193,7 +193,7 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
     }
 });
 
-// I have problems in the two above routes . i didnt fix them yet .
+
 
 
 

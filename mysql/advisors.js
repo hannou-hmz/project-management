@@ -59,7 +59,7 @@ async function updateAdvisorProfile(id, academicTitle , expertise , researches ,
 async function requestAdvisor(advisorId , studentId , message , meetingMethod){
 
     try{
-        const sql = "INSERT INTO advisor_requests (advisor_id , student_id , request_message , meeting_method) VALUES (?,?,?)";
+        const sql = "INSERT INTO advisor_requests (advisor_id , student_id , request_message , meeting_method) VALUES (?,?,?,?)";
         const [result] = await database.pool.execute(sql , [advisorId , studentId , message , meetingMethod]);
         if(result.affectedRows <= 0){
             console.log(`Insertion failed`);

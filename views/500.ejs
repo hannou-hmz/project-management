@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>500 - Server Error</title>
-    <link rel="stylesheet" href="500.css">
 </head>
 <body>
 
-    <div class="container">
+    <div style="text-align: center;" class="container">
 
-        <h1><%= errorCode || 500 %></h1>
+        <h1>500</h1>
         <h2>Internal Server Error</h2>
 
         <p>
-            <%= message || "Something went wrong on our server. Please try again later." %>
+            <%="Something went wrong on our server. Please try again later." %>
         </p>
 
         <a href="/" class="btn">Go Back Home</a>
 
-        <% if (error) { %>
-            <div class="error-box">
-                <strong>Debug Info:</strong><br>
-                <%= error %>
-            </div>
-        <% } %>
 
         <div class="code">If the problem persists, contact support.</div>
 
