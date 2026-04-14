@@ -1,0 +1,31 @@
+<h1>Applicants</h1>
+
+<% if (applicants && applicants.length > 0) { %>
+
+    <% applicants.forEach(app => { %>
+
+        <div style="margin-bottom: 20px;">
+
+            <p><strong>Project:</strong> <%= app.project_title %></p>
+
+            <p><strong>Email:</strong> <%= app.email %></p>
+
+            <p><strong>Message:</strong><%= app.request_message %></p>
+
+            <p><strong>Skills:</strong> <%= app.request_skills %></p>
+
+            <p><strong>Applied At:</strong> 
+                <%= app.request_date%>
+            </p>
+
+        </div>
+
+        <hr>
+
+    <% }) %>
+
+<% } else { %>
+
+    <h3 style="color: red;">No applicants found.</h3>
+
+<% } %>

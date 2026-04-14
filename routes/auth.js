@@ -12,12 +12,14 @@ authRoutes.get('/' , (req , res , next)=>{
 
 authRoutes.get('/projects' , async (req , res)=>{
 
-    const project = await getProjects();
-    if(!project){
+    const projects = await getProjects();
+    if(!projects){
         return res.status(500).send('Internal issues ..');
     }
 
-    return res.status(200).json(project);
+    return res.render("show-projects" , {
+        projects : projects
+    });
 });
 
 authRoutes.get('/login' , (req , res)=>{
@@ -49,8 +51,12 @@ authRoutes.get('/signup' , async(req , res)=>{
 });
 
 authRoutes.post('/signup' , async (req , res)=>{
-    const {role , username , age , email , department , password} = req.body;
-    console.log(role);
+    const {role , username , age , email , department , password , confirm_password} = req.body;
+    if(password != confirm_password){
+        console.log('Inorrect password');
+        return res.redirect('/signup');
+    }
+
     const user = await createUser(role , username , age ,email , department , password);
     if(user && role === '3'){
         req.session.studentId = user.user_id;

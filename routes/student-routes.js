@@ -5,9 +5,9 @@ const db = require('../mysql/db');
 const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
-const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
-const {createProjects , getProjects , deleteProjects, myProjects ,applyForProject , myProjectApplications} = require('../mysql/projects');
-
+const {getAnnouncements} = require('../mysql/announcements');
+const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
+const {applyForProject, myProjectApplications, deleteApplication, getApplicants} = require('../mysql/appliactions');
 
 function isStudent(req, res, next){
     if(!req.session.studentId){
@@ -28,21 +28,6 @@ studentRoutes.get('/announcements' , isStudent , async(req , res)=>{
     return res.render("announcements" , {
         announcements : announcements
     });
-});
-
-studentRoutes.get('/announcements/api' , isStudent ,async (req , res)=>{
-    return res.sendFile(path.join(__dirname , '../static-files/html-files/announcement.html'));
-});
-
-studentRoutes.post('/announcements/api' , async (req , res)=>{
-    const {category , title , description , isUrgent} = req.body;
-    const announcementCategory = Number(category);
-    const announcement = await addAnnouncement(announcementCategory , title , description , isUrgent);
-    if(!announcement){
-        return res.status(500).send(`Internal problems ..`);
-    }
-
-    return res.redirect('/student/homepage');
 });
 
 studentRoutes.get('/create/projects' , isStudent ,(req , res)=>{
@@ -133,6 +118,30 @@ studentRoutes.get('/applications' , isStudent , async(req , res)=>{
 
     return res.render("myapplications" , {
         applications : applications
+    });
+});
+
+studentRoutes.get('/applications/:applicationID/delete' , async(req , res)=>{
+    
+    const applicationId = req.params.applicationID;
+    const removeApplication = await deleteApplication(applicationId);
+    if(removeApplication === null){
+        return res.status(500).send("internal issues ..");
+    }
+
+    return res.render("myapplications" , {
+        applications : removeApplication
+    });
+});
+
+studentRoutes.get('/applicants' ,async (req , res)=>{
+
+    const id = req.session.studentId;
+    console.log(id);
+    const applicants = await getApplicants(id);
+    
+    return res.render("applicants" , {
+        applicants : applicants
     });
 });
 
