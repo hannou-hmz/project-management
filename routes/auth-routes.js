@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
+const {getAdvisors} = require('../mysql/advisors');
 const {createUser , getUser} = require('../mysql/users');
 const {getProjects} = require('../mysql/projects');
 
@@ -20,6 +21,20 @@ authRoutes.get('/projects' , async (req , res)=>{
     return res.render("show-projects" , {
         projects : projects
     });
+});
+
+authRoutes.get('/find/advisor' , async(req , res)=>{
+
+    try{
+        const advisors = await getAdvisors();
+        return res.render("find-advisors" , {
+            advisors : advisors
+        });
+    }
+
+    catch(e){
+        console.log(`Error : ${e.message}`);
+    }
 });
 
 authRoutes.get('/login' , (req , res)=>{

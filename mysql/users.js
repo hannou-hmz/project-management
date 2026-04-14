@@ -72,7 +72,7 @@ async function getUser(role , email , password){
 async function getAllUsers(){
 
     try{
-        const sql = "SELECT u.full_name , u.email , u.department , r.role_name FROM users AS u INNER JOIN roles AS r ON r.role_id = u.role";
+        const sql = "SELECT u.user_id, u.full_name , u.email , d.department_name , r.role_name FROM users AS u INNER JOIN roles AS r INNER JOIN departments AS d ON r.role_id = u.role AND d.department_id = department";
         const [rows] = await database.pool.execute(sql);
         if(rows.affectedRows <= 0){
             console.log("Empty set");
@@ -87,9 +87,30 @@ async function getAllUsers(){
     }
 }
 
+async function deleteUsers(userId){
+
+    try{
+        const sql = "DELETE FROM users WHERE user_id = ?";
+        const [result] = await database.pool.execute(sql , [userId]);
+        if(result.affectedRows <= 0){
+            console.log("User not deleted ..");
+            return false;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        return e.message;
+    }
+}
+
+
+
 module.exports = {
     createUser,
     getUser,
     getAdmin,
-    getAllUsers
+    getAllUsers,
+    deleteUsers
 }

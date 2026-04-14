@@ -1,0 +1,19 @@
+<form action="/student/requests/:advisorId/advisors" method="POST">
+
+    <input type="hidden" name="studentId">
+    <!-- Request Message -->
+    <label>Message to Advisor:</label><br>
+    <textarea name="message" rows="5" cols="40" required></textarea>
+    <br><br>
+
+    <!-- Meeting Method -->
+    <label>Meeting Method:</label><br>
+    <select name="meetingMethod" required>
+        <option value="online">Online</option>
+        <option value="in_person">In Person</option>
+    </select>
+    <br><br>
+
+
+    <button style="background-color: rgb(103, 103, 255); color: white;" type="submit">Send Request</button>
+</form>

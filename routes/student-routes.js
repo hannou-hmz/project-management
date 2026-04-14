@@ -4,6 +4,7 @@ const studentRoutes = express.Router();
 const db = require('../mysql/db');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
+const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
 const {applyForProject, myProjectApplications, deleteApplication, getApplicants} = require('../mysql/appliactions');
@@ -142,5 +143,56 @@ studentRoutes.get('/applicants' ,async (req , res)=>{
         applicants : applicants
     });
 });
+
+studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
+     try{
+        const advisors = await getAdvisors();
+        return res.render("find-advisors" , {
+            advisors : advisors
+        });
+    }
+
+    catch(e){
+        console.log(`Error : ${e.message}`);
+    }
+});
+
+// studentRoutes.get('/requests/:advisorId/advisors' , isStudent , (req , res)=>{
+//     try{
+//         return res.render("request-advisor");
+//     }
+//     catch(e){
+//         console.log(e.message);
+//         return res.status(500).render("500");
+//     }
+// })
+
+studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)=>{
+
+    try{
+        const advisorId = req.params.advisorId;
+        const studentId = req.session.studentId;
+        const {message , meetingMethod} = req.body;
+        console.log('ad: ',advisorId)
+        console.log('st : ',studentId)
+        console.log('msg : ',message)
+        console.log('method : ',meetingMethod)
+        const request = await requestAdvisor(advisorId , studentId , message , meetingMethod);
+
+        if(!request){
+            console.log("Request failed ..");
+            return res.status(500).send("request failed");
+        }
+
+        console.log(request);
+        return res.redirect('/student/find/advisors');
+    }
+
+    catch(e){
+        return e.message;
+    }
+});
+
+
 
 module.exports = studentRoutes;

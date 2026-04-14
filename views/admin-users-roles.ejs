@@ -10,9 +10,12 @@
 
             <p><strong>Email:</strong> <%= user.email %></p>
 
-            <p><strong>Department:</strong> <%= user.department %></p>
+            <p><strong>Department:</strong> <%= user.department_name %></p>
 
             <p><strong>Role:</strong> <%= user.role_name %></p>
+
+            <a style="background-color: rgb(94, 94, 94);color: white; padding: 7px;" 
+            href="/admin/users/<%= user.user_id%>/delete">Delete user</a>
 
         </div>
 

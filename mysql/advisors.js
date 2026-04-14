@@ -1,5 +1,23 @@
 const database = require('./db');
 
+async function getAdvisors(){
+    try{
+        const sql = "select u.user_id , u.full_name , u.email , d.department_name FROM users AS u INNER JOIN departments AS d ON d.department_id = u.department WHERE u.role = 2"
+        const [rows] = await database.pool.execute(sql);
+
+        if(!rows || rows.affectedRows <= 0){
+            console.log(`Advisors set Null`);
+            return null;
+        }
+
+        return rows;
+    }
+
+    catch(e){
+        return e.message;
+    }
+}
+
 async function createAdvisorProfile(id , academicTitle , expertise , researches , availability){
 
     try{
@@ -38,8 +56,28 @@ async function updateAdvisorProfile(id, academicTitle , expertise , researches ,
     }
 }
 
+async function requestAdvisor(advisorId , studentId , message , meetingMethod){
+
+    try{
+        const sql = "INSERT INTO advisor_requests (advisor_id , student_id , request_message , meeting_method) VALUES (?,?,?)";
+        const [result] = await database.pool.execute(sql , [advisorId , studentId , message , meetingMethod]);
+        if(result.affectedRows <= 0){
+            console.log(`Insertion failed`);
+            return null;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        return e.message;
+    }
+}
+
 
 module.exports = {
-    createAdvisorProfile , 
-    updateAdvisorProfile
+    createAdvisorProfile ,
+    getAdvisors, 
+    updateAdvisorProfile,
+    requestAdvisor
 }
