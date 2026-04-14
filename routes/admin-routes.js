@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const adminRouters = express.Router();
 const db = require('../mysql/db');
-const {createUser , getAdmin , getUser} = require('../mysql/users');
+const {getAdmin , getAllUsers} = require('../mysql/users');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects , deleteProjects} = require('../mysql/projects');
@@ -155,6 +155,23 @@ adminRouters.get('/categories/:categoryId/delete' , isAdmin , async(req , res)=>
     }
 });
 
+adminRouters.get('/users/roles' , isAdmin , async(req , res)=>{
+
+    try{
+        const users = await getAllUsers();
+        if(!users || users === null){
+            return res.status(500).send("internal issues..");
+        }
+
+        return res.render("admin-users-roles" , {
+            users : users
+        });
+    }
+
+    catch(e){
+        return e.message;
+    }
+});
 
 
 module.exports = adminRouters;

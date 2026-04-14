@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
-const {createUser , getAdmin , getUser} = require('../mysql/users');
+const {createUser , getUser} = require('../mysql/users');
 const {getProjects} = require('../mysql/projects');
 
 

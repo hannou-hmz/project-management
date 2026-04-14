@@ -1,0 +1,27 @@
+<h1>Users</h1>
+
+<% if (users && users.length > 0) { %>
+
+    <% users.forEach(user => { %>
+
+        <div style="margin-bottom: 20px;">
+
+            <h3><strong>Full Name:</strong> <%= user.full_name %></h3>
+
+            <p><strong>Email:</strong> <%= user.email %></p>
+
+            <p><strong>Department:</strong> <%= user.department %></p>
+
+            <p><strong>Role:</strong> <%= user.role_name %></p>
+
+        </div>
+
+        <hr>
+
+    <% }) %>
+
+<% } else { %>
+
+    <p>No users found.</p>
+
+<% } %>

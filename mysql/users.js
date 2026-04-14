@@ -69,8 +69,27 @@ async function getUser(role , email , password){
     }
 }
 
+async function getAllUsers(){
+
+    try{
+        const sql = "SELECT u.full_name , u.email , u.department , r.role_name FROM users AS u INNER JOIN roles AS r ON r.role_id = u.role";
+        const [rows] = await database.pool.execute(sql);
+        if(rows.affectedRows <= 0){
+            console.log("Empty set");
+            return null;
+        }
+
+        return rows;
+    }
+
+    catch(e){
+        return e.message;
+    }
+}
+
 module.exports = {
     createUser,
     getUser,
-    getAdmin
+    getAdmin,
+    getAllUsers
 }

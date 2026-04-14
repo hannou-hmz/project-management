@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
-const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {getAnnouncements} = require('../mysql/announcements');

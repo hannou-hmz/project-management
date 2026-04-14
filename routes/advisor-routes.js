@@ -3,7 +3,6 @@ const path = require('path');
 const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
-const {createUser , getAdmin , getUser} = require('../mysql/users');
 const {createAdvisorProfile , updateAdvisorProfile} = require('../mysql/advisors');
 
 
