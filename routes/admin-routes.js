@@ -68,6 +68,35 @@ adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
     });
 });
 
+adminRouters.get('/announcements/add' , isAdmin ,async (req , res)=>{
+
+    const categories = await getCategories();
+    if(!categories || categories === null){
+        return res.status(500).send("Internal issues..");
+    }
+    return res.render("admin-add-announcements" , {
+        categories : categories
+    });
+});
+
+adminRouters.post('/announcements/add', async(req , res)=>{
+
+    try{
+        const {category , title , description , isUrgent} = req.body;
+        const newAnnouncement = await addAnnouncement(category , title , description , isUrgent);
+
+        if(!newAnnouncement || newAnnouncement === null){
+            return res.status(500).send("Internal issues");
+        }
+
+        return res.redirect('/admin/announcements');
+    }
+
+    catch(e){
+        console.log(`Error : ${e.message}`);
+    }
+});
+
 adminRouters.get('/announcements/:id/delete' , async (req , res)=>{
 
     const announcementId = req.params.id;

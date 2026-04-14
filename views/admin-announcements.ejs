@@ -22,7 +22,11 @@
                 <%= ann.is_urgent ? "Yes 🔴" : "No" %>
             </p>
 
-            <a href="/admin/announcements/<%= ann.announcement_id%>/delete">Delete</a>
+            <a style="padding: 7px; background-color: black; color: white;" 
+             href="/admin/announcements/<%= ann.announcement_id%>/delete">Delete</a>
+
+            <a style="padding: 7px; background-color: black; color: white;" 
+            href="/admin/announcements/add">Add</a>
 
         </div>
 
