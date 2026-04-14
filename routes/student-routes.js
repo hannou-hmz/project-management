@@ -157,15 +157,15 @@ studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
     }
 });
 
-// studentRoutes.get('/requests/:advisorId/advisors' , isStudent , (req , res)=>{
-//     try{
-//         return res.render("request-advisor");
-//     }
-//     catch(e){
-//         console.log(e.message);
-//         return res.status(500).render("500");
-//     }
-// })
+studentRoutes.get('/requests/:advisorId/advisors' , isStudent , (req , res)=>{
+    try{
+        return res.render("request-advisor");
+    }
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+})
 
 studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)=>{
 
@@ -192,6 +192,8 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
         return e.message;
     }
 });
+
+// I have problems in the two above routes . i didnt fix them yet .
 
 
 
