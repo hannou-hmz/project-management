@@ -15,7 +15,7 @@ async function createProjects(title , type , description , budget , skills , tea
 
 async function getProjects(){
     try{
-        const sql = "SELECT p.project_id , p.project_title , c.category_name , p.project_description , p.budget , p.required_skills , p.created_at FROM projects AS p INNER JOIN categories AS c ON c.category_id = p.project_type;";
+        const sql = "SELECT p.project_id , p.project_title , c.category_name , u.full_name , p.project_description , p.budget , p.required_skills , p.created_at FROM projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id";
         const [rows] = await database.pool.execute(sql);
         if(rows.affectedRows <= 0){
             console.log("No projects here ..");

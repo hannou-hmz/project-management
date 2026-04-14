@@ -5,10 +5,10 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
 const path = require('path');
-const adminRouters = require('./routes/admin');
+const adminRouters = require('./routes/admin-routes');
 const studentRoutes = require('./routes/student-routes');
 const advisorRouters = require('./routes/advisor-routes');
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth-routes');
 const sessionStore = new MySQLStore({
   host: 'localhost',
   user: 'root',

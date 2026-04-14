@@ -137,7 +137,6 @@ studentRoutes.get('/applications/:applicationID/delete' , async(req , res)=>{
 studentRoutes.get('/applicants' ,async (req , res)=>{
 
     const id = req.session.studentId;
-    console.log(id);
     const applicants = await getApplicants(id);
     
     return res.render("applicants" , {

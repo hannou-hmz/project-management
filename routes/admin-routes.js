@@ -85,31 +85,45 @@ adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
 
 });
 
-// adminRouters.post('/categories' , isAdmin , async(req , res)=>{
+adminRouters.get('/categories/add', isAdmin , (req , res)=>{
 
-//     const {categoryName , description} = req.body;
-//     const createCategory = await addCategory(categoryName , description);
+    return res.render("admin-add-category");
+});
 
-//     if(!createCategory){
-//         console.log('Category failed..');
-//        return res.send('Internal issues'); 
-//     }
+adminRouters.post('/categories/add', isAdmin ,async(req , res)=>{
 
-//     return res.redirect('/admin/categories');
+    try{
+        const {categoryName , categoryDescription} = req.body;
+        const newCategory = await addCategory(categoryName , categoryDescription);
 
-// });
+        if(!newCategory || newCategory === null){
+            return res.status(500).send("Insertion failed ..");
+        }
 
-adminRouters.post('/categories/delete' , async(req , res)=>{
-
-    const {projectId} = req.body;
-    console.log('ID : ',projectId);
-    const removeCategory = await deleteCategory(projectId);
-
-    if(!removeCategory){
-        return res.send('Internal issues..');
+        return res.redirect('/admin/categories');
     }
 
-    return res.redirect('/admin/homepage');
+    catch(e){
+        console.log(`Problem ${e.message}`);
+        return res.status(500).send("Internal issues");
+    }
+});
+
+adminRouters.get('/categories/:categoryId/delete' , isAdmin , async(req , res)=>{
+    try{
+
+        const categoryId = req.params.categoryId;
+        const removeCategory = await deleteCategory(categoryId);
+        if(!removeCategory){
+            return res.status(500).send("deletion failed");
+        }
+
+        return res.redirect('/admin/categories');
+    }
+
+    catch(e){
+        console.log(`Error : ${e.message}`);
+    }
 });
 
 
