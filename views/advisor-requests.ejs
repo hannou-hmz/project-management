@@ -1,0 +1,50 @@
+<h1>Advisor Requests</h1>
+
+<% if (requests && requests.length > 0) { %>
+
+    <% requests.forEach(request => { %>
+
+        <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 10px;">
+
+            <h3><%= request.full_name %></h3>
+
+            <p><strong>Email:</strong> <%= request.email %></p>
+
+            <p><strong>Department:</strong> <%= request.department_name %></p>
+
+            <hr>
+
+            <p><strong>Project name:</strong> <%= request.project_name %></p>
+
+            <p><strong>Description:</strong> <%= request.project_description %></p>
+
+            <p><strong>Message:</strong> <%= request.request_message %></p>
+
+            <p><strong>Meeting Method:</strong> 
+                <%= request.meeting_method === "online" ? "Online 💻" : "In Person 🏫" %>
+            </p>
+
+            <p><strong>Requested At:</strong> 
+                <%= request.requested_at %>
+            </p>
+
+            <!-- Optional Actions -->
+            <div style="margin-top: 10px;">
+                <form action="/advisor/requests/<%= request.request_id %>/accept" method="POST" style="display:inline;">
+                    <button style="background-color: green; color: white; padding: 5px 10px;">Accept</button>
+                </form>
+
+                <form action="/advisor/requests/<%= request.request_id %>/reject" method="POST" style="display:inline;">
+                    <button style="background-color: red; color: white; padding: 5px 10px;">Reject</button>
+                </form>
+            </div>
+
+        </div>
+
+    <% }) %>
+
+<% } else { %>
+
+    <p>No requests found.</p>
+
+<% } %>

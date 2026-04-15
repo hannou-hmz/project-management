@@ -7,7 +7,7 @@ const {getCategories ,addCategory, deleteCategory} = require('../mysql/categorie
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
-const {applyForProject, myProjectApplications, deleteApplication, getApplicants} = require('../mysql/appliactions');
+const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
 
 function isStudent(req, res, next){
     if(!req.session.studentId){
@@ -157,12 +157,14 @@ studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
     }
 });
 
-studentRoutes.get('/requests/:advisorId/advisors' , isStudent , (req , res)=>{
+studentRoutes.get('/requests/:advisorId/advisors' , isStudent , async(req , res)=>{
     try{
 
         const advisorId = Number(req.params.advisorId);
+        const categories = await getCategories();
         return res.render("request-advisor" , {
             advisorId : advisorId , 
+            categories : categories
         });
     }
     catch(e){
@@ -176,8 +178,8 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
     try{
         const advisorId = Number(req.params.advisorId);
         const studentId = req.session.studentId;
-        const {message , meetingMethod} = req.body;
-        const request = await requestAdvisor(advisorId, studentId , message , meetingMethod);
+        const {projectName , projectDescription , categoryId, message , meetingMethod} = req.body;
+        const request = await requestAdvisor(advisorId, studentId , projectName , projectDescription , categoryId , message , meetingMethod);
 
         if(!request){
             console.log("Request failed ..");

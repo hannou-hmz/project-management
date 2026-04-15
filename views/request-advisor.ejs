@@ -2,9 +2,32 @@
 
     <input type="hidden" name="studentId">
     <!-- Request Message -->
+    <label> Project Name : </label><br>
+    <input type="text" name="projectName" required><br><br>
+    
+    <label> Project description : </label><br><br>
+    <textarea name="projectDescription" rows="4" cols="40 required"></textarea><br><br>
+
     <label>Message to Advisor:</label><br>
     <textarea name="message" rows="5" cols="40" required></textarea>
     <br><br>
+
+    <label>Category:</label><br>
+        <select name="categoryId" required>
+            
+            <!-- Placeholder option -->
+            <option value="" disabled selected>Choose a category</option>
+
+            <% if (categories && categories.length > 0) { %>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.category_id %>">
+                        <%= category.category_name %>
+                    </option>
+                <% }) %>
+            <% } %>
+
+        </select>
+<br><br>
 
     <!-- Meeting Method -->
     <label>Meeting Method:</label><br>

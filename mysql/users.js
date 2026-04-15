@@ -69,6 +69,27 @@ async function getUser(role , email , password){
     }
 }
 
+async function getUserById(userId){
+
+    try{
+        const sql = "SELECT u.full_name FROM users AS u WHERE user_id = ?";
+        const [rows] = await database.pool.execute(sql , [userId]);
+
+        if(rows.affectedRows <= 0 ){
+            console.log(`No such user`);
+            return null;
+        }
+
+        return rows[0];
+
+    }
+
+    catch(e){
+        console.log(`Error : `);
+        return e.message;
+    }
+}
+
 async function getAllUsers(){
 
     try{
@@ -110,6 +131,7 @@ async function deleteUsers(userId){
 module.exports = {
     createUser,
     getUser,
+    getUserById,
     getAdmin,
     getAllUsers,
     deleteUsers
