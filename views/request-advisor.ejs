@@ -1,10 +1,7 @@
 <form action="/student/requests/<%= advisorId %>/advisors" method="POST">
 
-    <input type="hidden" name="studentId">
-    <!-- Request Message -->
     <label>Project:</label><br>
     <select name="projectId" required>
-
         <!-- Placeholder -->
         <option value="" disabled selected>Choose a project</option>
 
@@ -21,32 +18,16 @@
     </select>
     <br><br>
 
+
     <label>Message to Advisor:</label><br>
     <textarea name="message" rows="5" cols="40" required></textarea>
     <br><br>
 
-    <label>Category:</label><br>
-        <select name="categoryId" required>
-            
-            <!-- Placeholder option -->
-            <option value="" disabled selected>Choose a category</option>
-
-            <% if (categories && categories.length > 0) { %>
-                <% categories.forEach(category => { %>
-                    <option value="<%= category.category_id %>">
-                        <%= category.category_name %>
-                    </option>
-                <% }) %>
-            <% } %>
-
-        </select>
-<br><br>
-
     <!-- Meeting Method -->
     <label>Meeting Method:</label><br>
     <select name="meetingMethod" required>
-        <option value="online">Online</option>
-        <option value="in_person">In Person</option>
+        <option value="online">online</option>
+        <option value="in_person">in person</option>
     </select>
     <br><br>
 

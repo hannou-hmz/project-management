@@ -18,11 +18,11 @@ async function getAdvisors(){
     }
 }
 
-async function requestAdvisor(advisorId , studentId , projectName , description , category, message , meetingMethod){
+async function requestAdvisor(advisorId, projectId , studentId , message , meetingMethod){
 
     try{
-        const sql = "INSERT INTO advisor_requests (advisor_id , student_id , project_name , project_description , project_type , request_message , meeting_method) VALUES (?,?,?,?,?,?,?)";
-        const [result] = await database.pool.execute(sql , [advisorId , studentId , projectName , description , category , message , meetingMethod ]);
+        const sql = "INSERT INTO advisor_requests (advisor_id , project_id, student_id , request_message , meeting_method) VALUES (?,?,?,?,?)";
+        const [result] = await database.pool.execute(sql , [advisorId , projectId, studentId , message , meetingMethod]);
         if(result.affectedRows <= 0){
             console.log(`Insertion failed`);
             return null;
@@ -59,7 +59,7 @@ async function advisorDashboard(){
 
 async function getRequests(advisorId){
     try{
-        const sql = " SELECT u.user_id, u.full_name , u.email , d.department_name , a.project_name, a.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = a.project_type WHERE a.advisor_id = ?";
+        const sql = "SELECT u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.advisor_id = ?";
         const [rows] = await database.pool.execute(sql , [advisorId]);
 
         if(rows.length <= 0){
