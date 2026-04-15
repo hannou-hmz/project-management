@@ -161,10 +161,14 @@ studentRoutes.get('/requests/:advisorId/advisors' , isStudent , async(req , res)
     try{
 
         const advisorId = Number(req.params.advisorId);
+        const studentId = req.session.studentId;
+        const [projects] = await db.pool.query('SELECT p.project_id , p.project_title , c.category_name , u.full_name , p.project_description , p.budget , p.required_skills , p.created_at FROM student_projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id WHERE p.created_by = ?' , [studentId]);
         const categories = await getCategories();
+        console.log(projects);
         return res.render("request-advisor" , {
             advisorId : advisorId , 
-            categories : categories
+            categories : categories,
+            projects : projects
         });
     }
     catch(e){

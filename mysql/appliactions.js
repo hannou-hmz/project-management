@@ -23,7 +23,7 @@ async function applyForProject(userId , projectId , email , message , skills){
 async function myProjectApplications(userId){
 
     try{
-        const sql = "SELECT a.request_id , p.project_title , c.category_name , c.category_name , a.request_date, a.request_message  FROM applications AS a INNER JOIN projects AS p INNER JOIN categories AS c ON a.project_id = p.project_id AND p.project_type = category_id  WHERE a.user_id = ?;";
+        const sql = "SELECT a.request_id , p.project_title , c.category_name , c.category_name , a.request_date, a.request_message  FROM applications AS a INNER JOIN student_projects AS p INNER JOIN categories AS c ON a.project_id = p.project_id AND p.project_type = category_id  WHERE a.user_id = ?;";
         const [rows] = await database.pool.execute(sql , [userId]);
         if(rows.length <= 0){
             console.log('No applications ..');
@@ -62,7 +62,7 @@ async function deleteApplication(applicationId){
 async function getApplicants(userId){
     
     try{
-        const sql = "SELECT a.email , a.request_message , a.request_skills , a.request_date , p.project_title , p.project_type , u.full_name , u.department FROM applications AS a INNER JOIN projects AS p INNER JOIN users AS u ON a.project_id = p.project_id AND u.user_id = p.created_by WHERE u.user_id = ?";
+        const sql = "SELECT a.email , a.request_message , a.request_skills , a.request_date , p.project_title , p.project_type , u.full_name , u.department FROM applications AS a INNER JOIN student_projects AS p INNER JOIN users AS u ON a.project_id = p.project_id AND u.user_id = p.created_by WHERE u.user_id = ?";
         const [rows] = await database.pool.execute(sql , [userId]);
         if(rows === null){
             console.log(`No applicants .`);

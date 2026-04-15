@@ -2,11 +2,24 @@
 
     <input type="hidden" name="studentId">
     <!-- Request Message -->
-    <label> Project Name : </label><br>
-    <input type="text" name="projectName" required><br><br>
-    
-    <label> Project description : </label><br><br>
-    <textarea name="projectDescription" rows="4" cols="40 required"></textarea><br><br>
+    <label>Project:</label><br>
+    <select name="projectId" required>
+
+        <!-- Placeholder -->
+        <option value="" disabled selected>Choose a project</option>
+
+        <% if (projects && projects.length > 0) { %>
+            <% projects.forEach(project => { %>
+                <option value="<%= project.project_id %>">
+                    <%= project.project_title %>
+                </option>
+            <% }) %>
+        <% } else { %>
+            <option disabled>No projects available</option>
+        <% } %>
+
+    </select>
+    <br><br>
 
     <label>Message to Advisor:</label><br>
     <textarea name="message" rows="5" cols="40" required></textarea>
