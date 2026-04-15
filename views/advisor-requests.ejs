@@ -6,6 +6,7 @@
 
         <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 10px;">
 
+
             <h3><%= request.full_name %></h3>
 
             <p><strong>Email:</strong> <%= request.email %></p>
@@ -32,12 +33,12 @@
 
             <!-- Optional Actions -->
             <div style="margin-top: 10px;">
-                <form action="/advisor/requests/<%= request.request_id %>/accept" method="POST" style="display:inline;">
+                <form action="/advisor/requests/<%= request.request_id %>/accept" method="GET" style="display:inline;">
                     <button style="background-color: green; color: white; padding: 5px 10px;">Accept</button>
                 </form>
 
-                <form action="/advisor/requests/<%= request.request_id %>/reject" method="POST" style="display:inline;">
-                    <button style="background-color: red; color: white; padding: 5px 10px;">Reject</button>
+                <form action="/advisor/requests/<%= request.request_id %>/reject" method="GET" style="display:inline; cursor: pointer;">
+                    <button style="background-color: red; color: white; padding: 5px 10px;cursor: pointer;">Reject</button>
                 </form>
             </div>
 

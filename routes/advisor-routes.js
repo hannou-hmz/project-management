@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
-const {advisorDashboard , getRequests, getPendingRequests} = require('../mysql/advisors');
+const {advisorDashboard , getRequests, getPendingRequests ,acceptRequest , rejectRequest} = require('../mysql/advisors');
 const { getUser , getUserById } = require('../mysql/users');
 
 
@@ -39,12 +39,11 @@ advisorRouters.get('/homepage' , isAdvisor, async(req , res)=>{
     }
 });
 
-advisorRouters.get('/requests' , async(req , res)=>{
+advisorRouters.get('/requests' , isAdvisor , async(req , res)=>{
 
     try{
         const advisorId = req.session.advisorId;
         const requests = await getRequests(advisorId);
-
         if(requests === null){
             return res.send("No requests found.");
         }
@@ -59,6 +58,23 @@ advisorRouters.get('/requests' , async(req , res)=>{
 
 });
 
+advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=>{
+    
+    try{
+        const requestId = req.params.requestId;
+        const accept = await acceptRequest(requestId);
+
+        if(accept === null){
+            console.log("acceptance failed ..");
+            return res.status(500).send("internal issues");
+        }
+
+        return res.redirect('/advisor/homepage');
+    }
+    catch(e){
+        return e.message;
+    }
+});
 
 
 

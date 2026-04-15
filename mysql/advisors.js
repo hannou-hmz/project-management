@@ -59,7 +59,7 @@ async function advisorDashboard(){
 
 async function getRequests(advisorId){
     try{
-        const sql = "SELECT u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.advisor_id = ?";
+        const sql = "SELECT a.request_id , u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.advisor_id = ?";
         const [rows] = await database.pool.execute(sql , [advisorId]);
 
         if(rows.length <= 0){
@@ -95,10 +95,9 @@ async function getPendingRequests(){
     }
 }
 
-async function acceptApplication(requestId){
+async function acceptRequest(requestId){
     try{
         const sql = "UPDATE advisor_requests SET status = 'accepted' WHERE request_id = ?";
-        const sql2 = "UPDATE applications SET status = 'accepted' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]);
 
         if(result.affectedRows <= 0){
@@ -114,7 +113,7 @@ async function acceptApplication(requestId){
     }
 }
 
-async function rejectApplication(requestId){
+async function rejectRequest(requestId){
     try{
         const sql = "UPDATE advisor_requests SET status = 'rejected' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]);
@@ -135,6 +134,8 @@ async function rejectApplication(requestId){
 module.exports = {
     getAdvisors, 
     getRequests,
+    acceptRequest,
+    rejectRequest,
     requestAdvisor,
     advisorDashboard,
     getPendingRequests
