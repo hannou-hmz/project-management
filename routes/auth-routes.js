@@ -38,7 +38,7 @@ authRoutes.get('/find/advisor' , async(req , res)=>{
 });
 
 authRoutes.get('/login' , (req , res)=>{
-   return res.sendFile(path.join(__dirname , '../static-files/html-files/login.html'));
+    return res.render("login");
 });
 
 authRoutes.post('/login' , async (req , res)=>{
@@ -62,7 +62,9 @@ authRoutes.post('/login' , async (req , res)=>{
 });
 
 authRoutes.get('/signup' , async(req , res)=>{
-   return res.sendFile(path.join(__dirname , '../static-files/html-files/signup.html'));
+   return res.render("signup" , {
+        title : "Create Account"
+   });
 });
 
 authRoutes.post('/signup' , async (req , res)=>{

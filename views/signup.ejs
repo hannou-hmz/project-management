@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title><%= title || "Signup" %></title>
+
     <link rel="stylesheet" href="/styling/signup.css">
     <link rel="icon" href="/img/fav.png">
 </head>
@@ -30,12 +31,14 @@
 
     <select name="department" required>
       <option value="">Select your department</option>
+
       <option value="302">Computer Science</option>
       <option value="405">Industrial Engineering</option>
       <option value="301">Robotic Engineering</option>
       <option value="200">Software Engineering</option>
       <option value="101">Chemical Engineering</option>
       <option value="111">Electrical Engineering</option>
+
     </select>
 
     <input type="number" name="age" placeholder="Age" required>
