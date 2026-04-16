@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
-const {modifyStudenPhoto , modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
+const {getMyAdvisorRequests} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
@@ -194,6 +194,27 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
     catch(e){
         return e.message;
     }
+});
+
+studentRoutes.get('/requests' , isStudent , async(req , res)=>{
+
+    try{
+        const studentId = req.session.studentId;
+        const getRequests = await getMyAdvisorRequests(studentId);
+
+        if(getRequests === null){
+            return res.send("No advisor requests ..");
+        }
+
+        return res.render("my-advisor-requests" , {
+            requests : getRequests
+        });
+    }
+    
+    catch(e){
+        return e.message;
+    }
+
 });
 
 

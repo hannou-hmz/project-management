@@ -76,6 +76,24 @@ advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=
     }
 });
 
+advisorRouters.get('/request/:requestId/reject' , isAdvisor , async(req , res)=>{
+
+    try{
+        const requestId = req.params.requestId;
+        const reject = await rejectRequest(requestId);
+
+        if(reject === null){
+            console.log("acceptance failed ..");
+            return res.status(500).send("internal issues");
+        }
+
+        return res.redirect('/advisor/homepage');
+    }
+    catch(e){
+        return e.message;
+    }
+});
+
 
 
 
