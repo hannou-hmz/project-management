@@ -85,7 +85,7 @@ async function getUserById(userId){
     }
 
     catch(e){
-        console.log(`Error : `);
+        console.log(`get user by id error : `);
         return e.message;
     }
 }

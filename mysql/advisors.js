@@ -14,7 +14,7 @@ async function getAdvisors(){
     }
 
     catch(e){
-        return e.message;
+        console.log(`Get advisors error : ${e.message}`);
     }
 }
 
@@ -32,7 +32,7 @@ async function requestAdvisor(advisorId, projectId , studentId , message , meeti
     }
 
     catch(e){
-        return e.message;
+        console.log(`Request advisor error : ${e.message}`);
     }
 }
 
@@ -51,8 +51,7 @@ async function advisorDashboard(){
     }
 
     catch(e){
-        console.log(`Error : `);
-        return e.message;
+        console.log(`Advisor infos {advisorDashboard()} : ${e.message}`);
     }
 
 }
@@ -71,15 +70,15 @@ async function getRequests(advisorId){
     }
 
     catch(e){
-        return e.message;
+        console.log(`Get all requests error : ${e.message}`);
     }
 }
 
-async function getPendingRequests(){
+async function countPendingRequests(advisorId){
 
     try{
-        const sql = "SELECT count(*) as pending_requests FROM advisor_requests WHERE status = 'pending' ";
-        const [result] = await database.pool.execute(sql);
+        const sql = "SELECT count(status) as pending_requests FROM advisor_requests WHERE status = 'pending' AND advisor_id = ?";
+        const [result] = await database.pool.execute(sql , [advisorId]);
 
         if(result.length <= 0){
             console.log(`No pending requests .`);
@@ -90,8 +89,25 @@ async function getPendingRequests(){
     }
 
     catch(e){
-        console.log(`Error`);
-        return e.message;
+        console.log(`Count pending request error : ${e.message}`);
+    }
+}
+
+async function getPendingRequests(advisorId){
+
+    try{
+        const sql = "SELECT a.request_id , u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.status = 'pending' AND a.advisor_id = ?";
+        const [rows] = await database.pool.execute(sql , [advisorId]);
+        if(rows === null){
+            console.log("No requests ..");
+            return null;
+        }
+
+        return true;
+
+    }
+    catch(e){
+       console.log(`Pending request request error : ${e.message}`);
     }
 }
 
@@ -109,7 +125,7 @@ async function acceptRequest(requestId){
     }
 
     catch(e){
-        return e.message;
+        console.log(`Accept request error : ${e.message}`);
     }
 }
 
@@ -127,7 +143,18 @@ async function rejectRequest(requestId){
     }
 
     catch(e){
-        return e.message;
+        console.log(`Reject request error : ${e.message}`);
+    }
+}
+
+async function myProjects(){
+
+    try{
+        const sql = "";
+    }
+
+    catch(e){
+        console.log(`Calling my projects error :${e.message} `);
     }
 }
 
@@ -138,5 +165,6 @@ module.exports = {
     rejectRequest,
     requestAdvisor,
     advisorDashboard,
+    countPendingRequests,
     getPendingRequests
 }

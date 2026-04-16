@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
-const {advisorDashboard , getRequests, getPendingRequests ,acceptRequest , rejectRequest} = require('../mysql/advisors');
+const {advisorDashboard , getRequests, getPendingRequests, countPendingRequests ,acceptRequest , rejectRequest} = require('../mysql/advisors');
 const { getUser , getUserById } = require('../mysql/users');
 
 
@@ -21,10 +21,10 @@ advisorRouters.get('/homepage' , isAdvisor, async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const advisor = await getUserById(advisorId);
-        const pendingReq = await getPendingRequests();
+        const pendingReq = await countPendingRequests(advisorId);
         if(advisor === null || pendingReq === null){
-            console.log(advisor);
-            console.log(pendingReq);
+            console.log(`/homepage error : ${advisor}`);
+            console.log(`/homepage error : ${pendingReq}`);
             return res.status(500).send(`Internal issues ..`);
         }
         
@@ -43,10 +43,11 @@ advisorRouters.get('/requests' , isAdvisor , async(req , res)=>{
 
     try{
         const advisorId = req.session.advisorId;
-        const requests = await getRequests(advisorId);
+        const requests = await getPendingRequests(advisorId);
         if(requests === null){
             return res.send("No requests found.");
         }
+
         return res.render("advisor-requests" , {
             requests : requests
         });
@@ -76,7 +77,7 @@ advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=
     }
 });
 
-advisorRouters.get('/request/:requestId/reject' , isAdvisor , async(req , res)=>{
+advisorRouters.get('/requests/:requestId/reject' , isAdvisor , async(req , res)=>{
 
     try{
         const requestId = req.params.requestId;
@@ -94,7 +95,17 @@ advisorRouters.get('/request/:requestId/reject' , isAdvisor , async(req , res)=>
     }
 });
 
+advisorRouters.get('/myprojects' , isAdvisor , async(req , res)=>{
 
+    try{
+
+
+    }
+    
+    catch(e){
+        return e.message;
+    }
+});
 
 
 

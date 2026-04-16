@@ -15,7 +15,7 @@
 
             <hr>
 
-            <p><strong>Project name:</strong> <%= request.project_name %></p>
+            <p><strong>Project name:</strong> <%= request.project_title %></p>
 
             <p><strong>Description:</strong> <%= request.project_description %></p>
 
@@ -34,10 +34,10 @@
             <!-- Optional Actions -->
             <div style="margin-top: 10px;">
                 <form action="/advisor/requests/<%= request.request_id %>/accept" method="GET" style="display:inline;">
-                    <button style="background-color: green; color: white; padding: 5px 10px;">Accept</button>
+                    <button style="background-color: green; color: white; padding: 5px 10px;cursor: pointer;">Accept</button>
                 </form>
 
-                <form action="/advisor/requests/<%= request.request_id %>/reject" method="GET" style="display:inline; cursor: pointer;">
+                <form action="/advisor/requests/<%= request.request_id %>/reject" method="GET" style="display:inline; ">
                     <button style="background-color: red; color: white; padding: 5px 10px;cursor: pointer;">Reject</button>
                 </form>
             </div>
