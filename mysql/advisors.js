@@ -103,7 +103,7 @@ async function getPendingRequests(advisorId){
             return null;
         }
 
-        return true;
+        return rows;
 
     }
     catch(e){
@@ -147,14 +147,21 @@ async function rejectRequest(requestId){
     }
 }
 
-async function myProjects(){
+async function myProjects(advisorId){
 
     try{
-        const sql = "";
+        const sql = "SELECT u.full_name , u.email , p.project_title , p.project_description , p.budget , a.meeting_method  FROM advisor_requests AS a INNER JOIN users AS u INNER JOIN student_projects AS p ON u.user_id = a.advisor_id AND p.project_id = a.project_id WHERE a.status = 'accepted' AND a.advisor_id = ?";
+        const [rows] = await database.pool.execute(sql , [advisorId]);
+        if(rows.length <= 0){
+            console.log("My projects is null");
+            return null;
+        }
+
+        return rows;
     }
 
     catch(e){
-        console.log(`Calling my projects error :${e.message} `);
+        console.log(`My projects error :${e.message} `);
     }
 }
 
@@ -163,6 +170,7 @@ module.exports = {
     getRequests,
     acceptRequest,
     rejectRequest,
+    myProjects,
     requestAdvisor,
     advisorDashboard,
     countPendingRequests,

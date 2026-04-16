@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
-const {advisorDashboard , getRequests, getPendingRequests, countPendingRequests ,acceptRequest , rejectRequest} = require('../mysql/advisors');
+const {advisorDashboard , getRequests, getPendingRequests, countPendingRequests ,acceptRequest , rejectRequest ,myProjects} = require('../mysql/advisors');
 const { getUser , getUserById } = require('../mysql/users');
 
 
@@ -95,11 +95,20 @@ advisorRouters.get('/requests/:requestId/reject' , isAdvisor , async(req , res)=
     }
 });
 
-advisorRouters.get('/myprojects' , isAdvisor , async(req , res)=>{
+advisorRouters.get('/projects' , isAdvisor , async(req , res)=>{
 
     try{
+        const advisorId = req.session.advisorId;
+        const projects = await myProjects(advisorId);
 
-
+        if(projects === null){
+            console.log("My projects is null");
+            return res.send("No projects found.");
+        }
+        
+        return res.render("advisor-my-projects" , {
+            projects : projects
+        });
     }
     
     catch(e){

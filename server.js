@@ -39,7 +39,11 @@ app.use('/student' , studentRoutes);
 app.use('/advisor' ,advisorRouters);
 
 app.use((req , res)=>{
-    return res.sendFile(path.join(__dirname , "static-files/html-files/404.html"));
+    return res.render("404" , {
+        title: "404 - Page Not Found",
+        errorCode: 404,
+        message: "The page you are looking for does not exist."
+    });
 });
 
 async function startServer(){

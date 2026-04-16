@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
-const {getMyAdvisorRequests} = require('../mysql/students');
+const {getMyAdvisorRequests , getStudentById} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
@@ -17,8 +17,17 @@ function isStudent(req, res, next){
     next();
 }
 
-studentRoutes.get('/homepage' , isStudent , (req , res)=>{
-    return res.sendFile(path.join(__dirname ,'../static-files/html-files/student-home.html'));
+studentRoutes.get('/homepage' , isStudent , async(req , res)=>{
+    const studentId = req.session.studentId;
+    const student = await getStudentById(studentId);
+    if(student === null){
+        console.log(`No student found`);
+        return res.send(`No student found`);
+    }
+
+    return res.render("student-homepage" , {
+        student : student
+    });
 });
 
 studentRoutes.get('/announcements' , isStudent , async(req , res)=>{
@@ -163,7 +172,6 @@ studentRoutes.get('/requests/:advisorId/advisors' , isStudent , async(req , res)
         const advisorId = Number(req.params.advisorId);
         const studentId = req.session.studentId;
         const [projects] = await db.pool.query('SELECT p.project_id , p.project_title , c.category_name , u.full_name , p.project_description , p.budget , p.required_skills , p.created_at FROM student_projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id WHERE p.created_by = ?' , [studentId]);
-        console.log(projects);
         return res.render("request-advisor" , {
             advisorId : advisorId , 
             projects : projects
@@ -181,6 +189,7 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
         const advisorId = Number(req.params.advisorId);
         const studentId = req.session.studentId;
         const {projectId , message , meetingMethod} = req.body;
+        console.log(meetingMethod);
         const request = await requestAdvisor(advisorId, Number(projectId) , studentId , message , meetingMethod);
         
         if(!request){

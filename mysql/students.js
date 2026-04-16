@@ -82,8 +82,27 @@ async function modifyStudenBio(student_id , bio){
     }
 }
 
+async function getStudentById(studentId){
+    try{
+
+        const sql = "SELECT * FROM users WHERE role = 3 AND user_id = ?";
+        const [row] = await database.pool.execute(sql , [studentId]);
+        if(row.length <= 0){
+            console.log("no student found");
+            return null
+        }
+
+        return row[0];
+    }
+
+    catch(e){
+        console.log(`NO such student .. ${e.message}`);
+    }
+}
+
 module.exports = {
     getMyAdvisorRequests,
+    getStudentById,
     modifyStudenPhoto , 
     modifyStudenSkills , 
     modifyStudenBio

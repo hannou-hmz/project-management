@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title><%= "Student Dashboard" %></title>
+
     <link rel="stylesheet" href="/styling/student-home.css">
     <link rel="icon" href="/img/fav.png">
-
 </head>
 <body>
 
@@ -15,19 +15,28 @@
         <a href="/student/create/projects">Create Project</a>
         <a href="/student/announcements">Announcements</a>
         <a href="/student/projects">Projects</a>
-        <a href="/student/myprojects">My projects</a>
-        <a href="/student/applications">My project applications</a>
-        <a href="/student/find/advisors">Find advisor</a>
+        <a href="/student/myprojects">My Projects</a>
+        <a href="/student/applications">My Project Applications</a>
+        <a href="/student/find/advisors">Find Advisor</a>
         <a href="/student/requests">My Requests</a>
         <a href="/student/applicants">Applicants</a>
-        <a href="/student/profile" style="margin-left:auto; background-color:#0800a6;">Profile</a>
-        <a href="/logout" style="margin-left:auto; background-color:#e74c3c;">Logout</a>  
+
+        <a href="/student/profile" style="margin-left:auto; background-color:#0800a6;">
+            Profile
+        </a>
+
+        <a href="/logout" style="background-color:#e74c3c;">
+            Logout
+        </a>  
     </nav>
 
     <!-- Content -->
     <div class="container">
-        <h2>Welcome to Dashboard</h2>
-        <p>Select an option from the navigation bar.</p>
+        <h2>Welcome <%= student.full_name || "Student" %> 👋</h2>
+
+        <p>
+            <%="Select an option from the navigation bar." %>
+        </p>
     </div>
 
 </body>
