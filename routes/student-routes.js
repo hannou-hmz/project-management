@@ -2,12 +2,14 @@ const express = require('express');
 const path = require('path');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
-const {getMyAdvisorRequests , getStudentById} = require('../mysql/students');
+const multer = require("multer");
+const {getMyAdvisorRequests ,getStudentProfileInfo, getStudentById , changeStudentPhoto ,modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
 const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
+const upload = multer({ dest: "uploads/" });
 
 function isStudent(req, res, next){
     if(!req.session.studentId){
@@ -226,8 +228,70 @@ studentRoutes.get('/requests' , isStudent , async(req , res)=>{
 
 });
 
+studentRoutes.get('/profile' , isStudent ,async(req , res)=>{
+
+    try{
+        const studentId = req.session.studentId;
+        const student = await getStudentProfileInfo(studentId);
+
+        if(student === null){
+            console.log(`No such student `);
+            return res.status(500).render("500");
+        }
+
+        console.log(student);
+        return res.render("student-profile" , {
+            student:student
+        });
+        
+    }
+
+    catch(e){
+        console.log(`St Profile error : ${e.message}`);
+        return res.status(500).render("500");
+    }
+});
+
+studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
+    try{
+        const studentId = req.session.studentId;
+        const {skills , bio} = req.body;
+        const updateBio = await modifyStudenBio(bio , studentId);
+        const updateSkills = await modifyStudenSkills(skills , studentId);
+
+        if(updateBio === null || updateSkills === null){
+            res.render("500");
+        }
+
+        return res.redirect("/student/profile");
+    }
+
+    catch(e){
+        console.log(`Error : ${e.message}`);
+        return res.render("500");
+    }
+});
+
+// studentRoutes.post('/profile/upload' , upload.single("profilePhoto"),  isStudent , async (req , res)=>{
+//     try{
+//         const studentId = req.session.studentId;
+        
+//         // const photo = await changeStudentPhoto(profilePhoto , studentId);
+//         console.log(req.file);
+//         // if(photo === null){
+//         //     return res.status(500).render("500");
+//         // }
+//         // console.log(profilePhoto);
+//         // console.log(photo);
+//         // return res.redirect("/student/profile");
+//     }
 
 
+//     catch(e){
+//         console.log(`Error : ${e.message}`);
+//         return res.status(500).render("500");
+//     }
+// });
 
 
 module.exports = studentRoutes;

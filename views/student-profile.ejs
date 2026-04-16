@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="/styling/student-profile.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Student Profile</h1>
+
+    <div class="profile-box">
+
+        <!-- Profile Picture -->
+        <div class="avatar">
+            <% if (student.profile_photo) { %>
+                <img src="<%= student.profile_photo %>" alt="Profile Picture">
+            <% } else { %>
+                <%= student.full_name ? student.full_name.charAt(0).toUpperCase() : "S" %>
+            <% } %>
+        </div>
+        <br><br>
+
+        <!-- Info (NOT editable) -->
+        <div class="info">
+            <p><span class="label">Full Name:</span> <%= student.full_name %></p>
+            <p><span class="label">Email:</span> <%= student.email %></p>
+            <p><span class="label">Department:</span> <%= student.department_name %></p>
+            <p><span class="label">Role:</span> Student</p>
+        </div>
+        <br><br>
+
+    </div>
+
+    <!-- Change Profile Picture -->
+    <form action="/student/profile/upload" method="POST" enctype="multipart/form-data">
+        <label><strong>Change Profile Picture:</strong></label><br>
+        <br>
+        <input type="file" name="profilePhoto" accept="image/*" required>
+        <br>
+        <button type="submit" class="btn">Upload</button>
+    </form>
+    <br>
+
+    <!-- Bio Section -->
+    <div class="section">
+        <form action="/student/profile/update" method="POST">
+
+            <label><strong>Bio:</strong></label><br>
+            <textarea name="bio" rows="4" cols="40"><%= student.bio || "" %></textarea>
+            <br>
+            <label><strong>Skills:</strong></label><br>
+            <input type="text" name="skills" 
+                   value="<%= student.skills || '' %>" 
+                   placeholder="e.g. AI, Web Development, Cybersecurity">
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+
+            <br><br>
+        
+    </div>
+
+    <br><br>
+
+    <!-- Change Password -->
+    <a href="/student/profile/change-password" class="btn">Change Password</a>
+
+    <!-- Stats -->
+   
+    <a href="/student/dashboard" class="btn">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

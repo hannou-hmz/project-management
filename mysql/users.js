@@ -7,10 +7,12 @@ async function createUser(role , full_name , age , email , department , password
     try{
         const sql = "INSERT INTO users(role , full_name , age , email , department , password) VALUES(?,?,?,?,?,?)";
         const [result] = await database.pool.execute(sql , [role , full_name , age , email , department , encPassword]);
-        if(result.affectedRows){
-            console.log(`User created ✅`);
-            return result;
+        if(result.affectedRows <= 0){
+            console.log(`User creation failed !! `);
+            return null;
         } 
+
+        return result;
     }
     catch(e){
         console.log(`Storing user error : ${e.message}`);

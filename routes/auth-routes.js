@@ -4,6 +4,7 @@ const authRoutes = express.Router();
 const db = require('../mysql/db');
 const {getAdvisors} = require('../mysql/advisors');
 const {createUser , getUser} = require('../mysql/users');
+const {createStudentRow} = require('../mysql/students');
 const {getProjects} = require('../mysql/projects');
 
 
@@ -71,6 +72,7 @@ authRoutes.get('/signup' , async(req , res)=>{
 
 authRoutes.post('/signup' , async (req , res)=>{
     const {role , username , age , email , department , password , confirm_password} = req.body;
+
     if(password != confirm_password){
         console.log('Inorrect password');
         return res.redirect('/signup');
@@ -78,11 +80,14 @@ authRoutes.post('/signup' , async (req , res)=>{
 
     const user = await createUser(role , username , age ,email , department , password);
     if(user && role === '3'){
-        req.session.studentId = user.user_id;
+        req.session.studentId = user.insertId;
+        const studentId = user.insertId;
+        await createStudentRow(studentId);
         return res.status(200).redirect('/student/homepage');
     }
     else if(user && role === '2'){
-        req.session.advisorId = user.user_id;
+        req.session.studentId = user.insertId;
+        const advisorId = user.insertId; // we need a function to store the advisor row in advisors table
         return res.status(200).redirect('/advisor/homepage');
     }
     else{
