@@ -38,7 +38,9 @@ authRoutes.get('/find/advisor' , async(req , res)=>{
 });
 
 authRoutes.get('/login' , (req , res)=>{
-    return res.render("login");
+    return res.render("login" , {
+        title : "ProjectHub Login"
+    });
 });
 
 authRoutes.post('/login' , async (req , res)=>{
