@@ -20,7 +20,6 @@ app.set("view engine" , "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.use("/uploads", express.static("uploads"));
 app.use(express.static(path.join(__dirname, 'static-files')));
 app.use(session({
     secret : process.env.SESSION_SECRET,
@@ -38,6 +37,7 @@ app.use('/' , authRoutes)
 app.use('/admin' , adminRouters);
 app.use('/student' , studentRoutes);
 app.use('/advisor' ,advisorRouters);
+app.use("/uploads", express.static("uploads"));
 
 app.use((req , res)=>{
     return res.render("404" , {

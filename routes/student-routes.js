@@ -235,11 +235,11 @@ studentRoutes.get('/profile' , isStudent ,async(req , res)=>{
         const student = await getStudentProfileInfo(studentId);
 
         if(student === null){
-            console.log(`No such student `);
+             console.log("Student data : ",student);
             return res.status(500).render("500");
         }
 
-        console.log(student);
+        console.log("Student data : ",student);
         return res.render("student-profile" , {
             student:student
         });
@@ -260,7 +260,7 @@ studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
         const updateSkills = await modifyStudenSkills(skills , studentId);
 
         if(updateBio === null || updateSkills === null){
-            res.render("500");
+            res.status(500).render("500");
         }
 
         return res.redirect("/student/profile");
@@ -272,7 +272,7 @@ studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
     }
 });
 
-// studentRoutes.post('/profile/upload' , upload.single("profilePhoto"),  isStudent , async (req , res)=>{
+// studentRoutes.post('/upload/profile' , upload.single("profilePhoto"),  isStudent , async (req , res)=>{
 //     try{
 //         const studentId = req.session.studentId;
         

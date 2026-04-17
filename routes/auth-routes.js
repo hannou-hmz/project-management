@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
-const {getAdvisors} = require('../mysql/advisors');
+const {getAdvisors , createAdvisorRow} = require('../mysql/advisors');
 const {createUser , getUser} = require('../mysql/users');
 const {createStudentRow} = require('../mysql/students');
 const {getProjects} = require('../mysql/projects');
@@ -83,12 +83,13 @@ authRoutes.post('/signup' , async (req , res)=>{
         req.session.studentId = user.insertId;
         const studentId = user.insertId;
         await createStudentRow(studentId);
-        return res.status(200).redirect('/student/homepage');
+        return res.redirect('/student/homepage');
     }
     else if(user && role === '2'){
         req.session.studentId = user.insertId;
-        const advisorId = user.insertId; // we need a function to store the advisor row in advisors table
-        return res.status(200).redirect('/advisor/homepage');
+        const advisorId = user.insertId;
+        await createAdvisorRow(advisorId) // we need a function to store the advisor row in advisors table
+        return res.redirect('/advisor/homepage');
     }
     else{
         return res.status(422).send("Validation failed!");

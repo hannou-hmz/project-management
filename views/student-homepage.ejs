@@ -7,37 +7,181 @@
 
     <link rel="stylesheet" href="/styling/student-home.css">
     <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav>
-        <a href="/student/create/projects">Create Project</a>
-        <a href="/student/announcements">Announcements</a>
-        <a href="/student/projects">Projects</a>
-        <a href="/student/myprojects">My Projects</a>
-        <a href="/student/applications">My Project Applications</a>
-        <a href="/student/find/advisors">Find Advisor</a>
-        <a href="/student/requests">My Requests</a>
-        <a href="/student/applicants">Applicants</a>
+    <nav class="navbar">
+        <a class="nav-logo" href="#">Team<span>Match</span></a>
 
-        <a href="/student/profile" style="margin-left:auto; background-color:#0800a6;">
-            Profile
-        </a>
+        <div class="nav-links">
+            <a href="/student/projects" class="nav-link">Browse Projects</a>
+            <a href="/student/myprojects" class="nav-link">My Projects</a>
+            <a href="/student/applications" class="nav-link">Applications</a>
+            <a href="/student/announcements" class="nav-link">Announcements</a>
+            <a href="/student/find/advisors" class="nav-link">Find Advisor</a>
+            <a href="/student/requests" class="nav-link">Requests</a>
+            <a href="/student/applicants" class="nav-link">Applicants</a>
+        </div>
 
-        <a href="/logout" style="background-color:#e74c3c;">
-            Logout
-        </a>  
+        <div class="nav-actions">
+            <a href="/student/create/projects" class="nav-btn-accent">+ Create Project</a>
+            <a href="/student/profile" class="nav-btn-outline">Profile</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
     </nav>
 
     <!-- Content -->
     <div class="container">
-        <h2>Welcome <%= student.full_name || "Student" %> 👋</h2>
 
-        <p>
-            <%="Select an option from the navigation bar." %>
-        </p>
+        <!-- Hero Welcome -->
+        <div class="hero">
+            <div class="hero-inner">
+                <div class="hero-eyebrow">Student Dashboard</div>
+                <h1 class="hero-title">Welcome back, <span class="hero-name"><%= student.full_name || "Student" %></span></h1>
+                <p class="hero-sub">Find your perfect team, collaborate on projects, and connect with advisors — all in one place.</p>
+                <div class="hero-btns">
+                    <a href="/student/projects" class="btn-primary">Browse Projects</a>
+                    <a href="/student/create/projects" class="btn-outline-light">Create a Project</a>
+                </div>
+            </div>
+            <div class="hero-orb"></div>
+        </div>
+
+        <!-- Quick Access Grid -->
+        <div class="section-header">
+            <h2 class="section-title">Quick Access</h2>
+            <p class="section-sub">Everything you need, one click away.</p>
+        </div>
+
+        <div class="quick-grid">
+
+            <a href="/student/projects" class="quick-card">
+                <div class="quick-icon qc-blue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">Browse Projects</div>
+                    <div class="quick-desc">Explore open projects and find your next collaboration</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/create/projects" class="quick-card qc-featured">
+                <div class="quick-icon qc-amber">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">Create Project</div>
+                    <div class="quick-desc">Post a new project and build your ideal team</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/myprojects" class="quick-card">
+                <div class="quick-icon qc-green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/>
+                        <line x1="9" y1="17" x2="12" y2="17"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">My Projects</div>
+                    <div class="quick-desc">Manage and track the projects you're running</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/applications" class="quick-card">
+                <div class="quick-icon qc-purple">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 11 12 14 22 4"/>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">My Applications</div>
+                    <div class="quick-desc">Track projects you've applied to join</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/find/advisors" class="quick-card">
+                <div class="quick-icon qc-teal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">Find Advisor</div>
+                    <div class="quick-desc">Connect with faculty advisors for guidance</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/announcements" class="quick-card">
+                <div class="quick-icon qc-coral">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">Announcements</div>
+                    <div class="quick-desc">Stay up to date with platform news</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/requests" class="quick-card">
+                <div class="quick-icon qc-blue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">My Requests</div>
+                    <div class="quick-desc">View incoming and outgoing team requests</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <a href="/student/applicants" class="quick-card">
+                <div class="quick-icon qc-amber">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">Applicants</div>
+                    <div class="quick-desc">Review students who applied to your projects</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+        </div>
+
     </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
 
 </body>
 </html>

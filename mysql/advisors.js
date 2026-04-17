@@ -18,6 +18,26 @@ async function getAdvisors(){
     }
 }
 
+async function createAdvisorRow(advisorId){
+
+    try{
+        const sql = "INSERT INTO advisors(advisor_id) values(?)";
+        const [result] = await database.pool.execute(sql , [advisorId]);
+    
+        if(!result.affectedRows){
+            console.log(`Inserting student row failed ..`);
+            return null;
+        }
+    
+        return true
+    }
+    
+    catch(e){
+        console.log(`Student row insertion error : ${e.message}`);
+    }
+
+}
+
 async function requestAdvisor(advisorId, projectId , studentId , message , meetingMethod){
 
     try{
@@ -167,6 +187,7 @@ async function myProjects(advisorId){
 
 module.exports = {
     getAdvisors, 
+    createAdvisorRow,
     getRequests,
     acceptRequest,
     rejectRequest,
