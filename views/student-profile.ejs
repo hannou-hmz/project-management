@@ -2,77 +2,172 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile</title>
     <link rel="stylesheet" href="/styling/student-profile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="container">
-
-    <h1>Student Profile</h1>
-
-    <div class="profile-box">
-
-        <!-- Profile Picture -->
-        <div class="avatar">
-            <% if (student.profile_photo) { %>
-                <img src="<%= student.profile_photo %>" alt="Profile Picture">
-            <% } else { %>
-                <%= student.full_name ? student.full_name.charAt(0).toUpperCase() : "S" %>
-            <% } %>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/student/dashboard">Team<span>Match</span></a>
+        <div class="nav-actions">
+            <a href="/student/dashboard" class="nav-btn-outline">← Back to Dashboard</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
         </div>
-        <br><br>
+    </nav>
 
-        <!-- Info (NOT editable) -->
-        <div class="info">
-            <p><span class="label">Full Name:</span> <%= student.full_name %></p>
-            <p><span class="label">Email:</span> <%= student.email %></p>
-            <p><span class="label">Department:</span> <%= student.department_name %></p>
-            <p><span class="label">Role:</span> Student</p>
+    <div class="container">
+
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+            <div class="profile-hero-bg"></div>
+
+            <div class="profile-header-inner">
+
+                <!-- Avatar -->
+                <div class="avatar-wrap">
+                    <div class="avatar">
+                        <% if (student.profile_photo) { %>
+                            <img src="<%= student.profile_photo %>" alt="Profile Picture">
+                        <% } else { %>
+                            <%= student.full_name ? student.full_name.charAt(0).toUpperCase() : "S" %>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Identity Info -->
+                <div class="profile-identity">
+                    <h1 class="profile-name"><%= student.full_name %></h1>
+                    <div class="profile-meta-row">
+                        <span class="profile-badge"><%= student.department_name %></span>
+                        <span class="profile-badge role-badge">Student</span>
+                    </div>
+                    <p class="profile-email">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <%= student.email %>
+                    </p>
+                </div>
+
+            </div>
         </div>
-        <br><br>
+
+        <div class="two-col">
+
+            <!-- Left column -->
+            <div class="col-left">
+
+                <!-- Static Info -->
+                <div class="card">
+                    <div class="card-header">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Account Details
+                    </div>
+                    <div class="info-list">
+                        <div class="info-row">
+                            <span class="info-label">Full Name</span>
+                            <span class="info-value"><%= student.full_name %></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email</span>
+                            <span class="info-value"><%= student.email %></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Department</span>
+                            <span class="info-value"><%= student.department_name %></span>
+                        </div>
+                        <div class="info-row last">
+                            <span class="info-label">Role</span>
+                            <span class="info-value">Student</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="card card-flat">
+                    <div class="card-header">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        Security
+                    </div>
+                    <p class="card-hint">Keep your account secure by updating your password regularly.</p>
+                    <a href="/student/profile/change-password" class="btn-secondary full-width">Change Password</a>
+                </div>
+
+            </div>
+
+            <!-- Right column -->
+            <div class="col-right">
+
+                <!-- Change Profile Picture -->
+                <div class="card">
+                    <div class="card-header">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        Profile Picture
+                    </div>
+                    <form action="/student/profile/upload" method="POST" enctype="multipart/form-data">
+                        <div class="file-upload-area">
+                            <input type="file" name="profilePhoto" accept="image/*" required id="photoInput" class="file-input">
+                            <label for="photoInput" class="file-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                                <span id="fileName">Choose an image file</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary full-width">Upload Photo</button>
+                    </form>
+                </div>
+
+                <!-- Bio & Skills -->
+                <div class="card">
+                    <div class="card-header">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Bio & Skills
+                    </div>
+                    <form action="/student/profile/update" method="POST">
+
+                        <div class="form-group">
+                            <label class="form-label">Bio</label>
+                            <textarea name="bio" rows="4" class="form-textarea" placeholder="Tell your teammates a bit about yourself..."><%= student.bio || "" %></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Skills</label>
+                            <input type="text" name="skills" class="form-input"
+                                   value="<%= student.skills || '' %>"
+                                   placeholder="e.g. AI, Web Development, Cybersecurity">
+                            <p class="input-hint">Separate skills with commas</p>
+                        </div>
+
+                        <button type="submit" class="btn-primary full-width">Save Changes</button>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <!-- Change Profile Picture -->
-    <form action="/student/profile/upload" method="POST" enctype="multipart/form-data">
-        <label><strong>Change Profile Picture:</strong></label><br>
-        <br>
-        <input type="file" name="profilePhoto" accept="image/*" required>
-        <br>
-        <button type="submit" class="btn">Upload</button>
-    </form>
-    <br>
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
 
-    <!-- Bio Section -->
-    <div class="section">
-        <form action="/student/profile/update" method="POST">
-
-            <label><strong>Bio:</strong></label><br>
-            <textarea name="bio" rows="4" cols="40"><%= student.bio || "" %></textarea>
-            <br>
-            <label><strong>Skills:</strong></label><br>
-            <input type="text" name="skills" 
-                   value="<%= student.skills || '' %>" 
-                   placeholder="e.g. AI, Web Development, Cybersecurity">
-            <button type="submit" class="btn">Save Changes</button>
-        </form>
-
-            <br><br>
-        
-    </div>
-
-    <br><br>
-
-    <!-- Change Password -->
-    <a href="/student/profile/change-password" class="btn">Change Password</a>
-
-    <!-- Stats -->
-   
-    <a href="/student/dashboard" class="btn">Back to Dashboard</a>
-
-</div>
+    <script>
+        const input = document.getElementById('photoInput');
+        const label = document.getElementById('fileName');
+        if (input && label) {
+            input.addEventListener('change', () => {
+                label.textContent = input.files.length ? input.files[0].name : 'Choose an image file';
+            });
+        }
+    </script>
 
 </body>
 </html>
