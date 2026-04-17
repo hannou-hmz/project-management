@@ -9,7 +9,7 @@ const {getProjects} = require('../mysql/projects');
 
 
 authRoutes.get('/' , (req , res , next)=>{
-    return res.sendFile(path.join(__dirname ,'../static-files/html-files/homepage.html'));
+    return res.render("homepage");
 });
 
 authRoutes.get('/projects' , async (req , res)=>{
