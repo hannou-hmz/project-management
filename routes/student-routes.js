@@ -100,7 +100,7 @@ studentRoutes.get('/myprojects' , isStudent , async(req , res)=>{
         return res.status(500).send(`Internal issues ...`);
     }
 
-    return res.render("my-projects" , {
+    return res.render("st-my-projects" , {
         projects : myproject 
     });
 });
@@ -143,7 +143,7 @@ studentRoutes.get('/applications' , isStudent , async(req , res)=>{
     const id = req.session.studentId;
     const applications = await myProjectApplications(id);
 
-    return res.render("myapplications" , {
+    return res.render("st-applications" , {
         applications : applications
     });
 });
