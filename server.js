@@ -37,7 +37,6 @@ app.use('/' , authRoutes)
 app.use('/admin' , adminRouters);
 app.use('/student' , studentRoutes);
 app.use('/advisor' ,advisorRouters);
-app.use("/uploads", express.static("uploads"));
 
 app.use((req , res)=>{
     return res.render("404" , {

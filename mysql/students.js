@@ -3,7 +3,7 @@ const database = require('./db');
 async function getStudentProfileInfo(studentId){
     
     try{
-        const sql = "SELECT u.full_name , u.email , d.department_name , s.bio , s.skills , s.profile_photo FROM students AS s INNER JOIN users AS u  INNER JOIN departments AS d ON u.user_id = s.student_id AND d.department_id = u.department WHERE student_id = ?";
+        const sql = "SELECT u.full_name , u.email , d.department_name , s.bio , s.skills  FROM students AS s INNER JOIN users AS u  INNER JOIN departments AS d ON u.user_id = s.student_id AND d.department_id = u.department WHERE student_id = ?";
         const [rows] = await database.pool.execute(sql , [studentId]);
     
         if(rows.length <= 0){
@@ -58,26 +58,6 @@ async function createStudentRow(studentId){
         console.log(`Student row insertion error : ${e.message}`);
     }
 
-}
-
-async function changeStudentPhoto(photo , studentId){
-
-    try{
-        const sql = "UPDATE students SET profile_photo = ? WHERE student_id = ?";
-        const [result] = await database.pool.execute(sql , [photo , studentId]);
-
-        if(!result.affectedRows){
-            console.log("Changing profile photo failed!!");
-            return null;
-        }
-
-        return true;
-
-    }
-
-    catch(e){
-        console.log(`Profile photo change error ${e.message}`);
-    }
 }
 
 async function modifyStudenSkills(skills , studentId){
@@ -161,7 +141,6 @@ module.exports = {
     getStudentById,
     getStudentProfileInfo,
     createStudentRow,
-    changeStudentPhoto , 
     modifyStudenSkills , 
     modifyStudenBio
 }

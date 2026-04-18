@@ -19,7 +19,7 @@ function isAdmin(req, res, next){
 
 
 adminRouters.get('/dashboard' , (req , res)=>{
-    return res.sendFile(path.join(__dirname , '../static-files/html-files/admin-login.html'));
+    return res.render("admin-login");
 });
 
 adminRouters.post('/dashboard' , async(req , res)=>{

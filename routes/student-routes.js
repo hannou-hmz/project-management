@@ -2,14 +2,13 @@ const express = require('express');
 const path = require('path');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
-const multer = require("multer");
-const {getMyAdvisorRequests ,getStudentProfileInfo, getStudentById , changeStudentPhoto ,modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
+const {getMyAdvisorRequests ,getStudentProfileInfo, getStudentById ,modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
 const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
 const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
-const upload = multer({ dest: "uploads/" });
+
 
 function isStudent(req, res, next){
     if(!req.session.studentId){
@@ -41,9 +40,24 @@ studentRoutes.get('/announcements' , isStudent , async(req , res)=>{
     });
 });
 
-studentRoutes.get('/create/projects' , isStudent ,(req , res)=>{
+studentRoutes.get('/create/projects' , isStudent , async(req , res)=>{
 
-    return res.sendFile(path.join(__dirname , '../static-files/html-files/project.html'));
+    try{
+        const categories = await getCategories();
+        if(categories === null){
+            console.log("No category found ");
+            return res.status(500).render("500")
+        }
+
+        return res.render("student-create-projects" , {
+            categories : categories
+        });
+    }
+
+    catch(e){
+        console.log(e.message);
+    }
+    
 });
 
 studentRoutes.post('/create/projects' , async (req , res)=>{
@@ -65,12 +79,14 @@ studentRoutes.post('/create/projects' , async (req , res)=>{
 studentRoutes.get('/projects' , isStudent , async (req , res)=>{
 
     const projects = await getProjects();
-    if(!projects){
+    const categories = await getCategories();
+    if(!projects || !categories){
         return res.status(500).send('Internal issues ..');
     }
 
     return res.render("show-projects" , {
-        projects : projects
+        projects : projects,
+        categories : categories
     });
 
 });
@@ -239,7 +255,6 @@ studentRoutes.get('/profile' , isStudent ,async(req , res)=>{
             return res.status(500).render("500");
         }
 
-        console.log("Student data : ",student);
         return res.render("student-profile" , {
             student:student
         });
@@ -272,26 +287,6 @@ studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
     }
 });
 
-// studentRoutes.post('/upload/profile' , upload.single("profilePhoto"),  isStudent , async (req , res)=>{
-//     try{
-//         const studentId = req.session.studentId;
-        
-//         // const photo = await changeStudentPhoto(profilePhoto , studentId);
-//         console.log(req.file);
-//         // if(photo === null){
-//         //     return res.status(500).render("500");
-//         // }
-//         // console.log(profilePhoto);
-//         // console.log(photo);
-//         // return res.redirect("/student/profile");
-//     }
-
-
-//     catch(e){
-//         console.log(`Error : ${e.message}`);
-//         return res.status(500).render("500");
-//     }
-// });
 
 
 module.exports = studentRoutes;
