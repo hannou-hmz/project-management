@@ -364,6 +364,11 @@ a { text-decoration: none; color: inherit; }
   border-radius: 20px;
 }
 
+.expertise-tag {
+  background: var(--amber-light);
+  color: #7A4F00;
+}
+
 /* Footer */
 .ac-footer {
   padding: 0.9rem 1.3rem 1.25rem;
@@ -381,11 +386,21 @@ a { text-decoration: none; color: inherit; }
   color: #fff;
   font-size: 13px;
   font-weight: 500;
-  padding: 10px 16px;
+  padding: 11px 16px;
   border-radius: 9px;
-  transition: opacity 0.15s, transform 0.1s;
+  border: none;
+  transition: background 0.18s, transform 0.1s;
+  position: relative;
+  overflow: hidden;
 }
-.request-btn:hover { opacity: 0.87; }
+.request-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.15s;
+}
+.request-btn:hover { background: var(--navy-light); }
 .request-btn:active { transform: scale(0.99); }
 
 .request-btn-disabled {
@@ -396,10 +411,11 @@ a { text-decoration: none; color: inherit; }
   background: var(--cream);
   color: var(--muted);
   font-size: 13px;
-  padding: 10px 16px;
+  padding: 11px 16px;
   border-radius: 9px;
   border: 0.5px solid var(--border);
   cursor: not-allowed;
+  font-style: italic;
 }
 
 /* ===== EMPTY STATE ===== */

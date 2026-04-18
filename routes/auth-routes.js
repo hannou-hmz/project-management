@@ -6,21 +6,36 @@ const {getAdvisors , createAdvisorRow} = require('../mysql/advisors');
 const {createUser , getUser} = require('../mysql/users');
 const {createStudentRow} = require('../mysql/students');
 const {getProjects} = require('../mysql/projects');
+const { getCategories } = require('../mysql/categories');
 
 
-authRoutes.get('/' , (req , res , next)=>{
-    return res.render("homepage");
+authRoutes.get('/' , async(req , res , next)=>{
+    try{
+        const project = await getProjects();
+        const categories = await getCategories();
+        return res.render("homepage" , {
+            projects : project,
+        });
+    }
+
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500")
+    }
+    
 });
 
 authRoutes.get('/projects' , async (req , res)=>{
 
     const projects = await getProjects();
+    const categories = await getCategories();
     if(!projects){
         return res.status(500).send('Internal issues ..');
     }
 
     return res.render("show-projects" , {
-        projects : projects
+        projects : projects,
+        categories : categories
     });
 });
 

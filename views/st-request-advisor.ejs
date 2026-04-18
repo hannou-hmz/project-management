@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request an Advisor</title>
+    <link rel="stylesheet" href="/styling/advisor-request.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styling/st-request-advisor.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/student/homepage">Team<span>Match</span></a>
+        <div class="nav-actions">
+            <a href="/student/find/advisors" class="nav-btn-outline">← Back to Advisors</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-eyebrow">Advisor Request</div>
+            <h1 class="page-title">Send a Request</h1>
+            <p class="page-sub">Choose a project, write a message, and pick how you'd like to meet.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-layout">
+
+            <!-- Main Form -->
+            <div class="form-main">
+                <form action="/student/requests/<%= advisorId %>/advisors" method="POST">
+
+                    <!-- Project selection -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Project
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" for="projectId">Select the project you need advising for <span class="required">*</span></label>
+                            <select class="form-input form-select" name="projectId" id="projectId" required>
+                                <option value="" disabled selected>Choose a project</option>
+
+                                <% if (projects && projects.length > 0) { %>
+                                    <% projects.forEach(project => { %>
+                                        <option value="<%= project.project_id %>">
+                                            <%= project.project_title %>
+                                        </option>
+                                    <% }) %>
+                                <% } else { %>
+                                    <option disabled>No projects available — create one first</option>
+                                <% } %>
+
+                            </select>
+
+                            <% if (!projects || projects.length === 0) { %>
+                            <div class="no-projects-hint">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                You don't have any projects yet.
+                                <a href="/student/create/projects">Create one first →</a>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Message -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Message to Advisor
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" for="message">Introduce your project and what you need help with <span class="required">*</span></label>
+                            <textarea class="form-textarea" name="message" id="message" rows="5"
+                                placeholder="Hi! I'm working on a project about... I'd love your guidance on... My main challenges are..." required></textarea>
+                            <p class="input-hint">Be specific — a clear message increases your chance of a response.</p>
+                        </div>
+                    </div>
+
+                    <!-- Meeting Method -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            Meeting Preference
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">How would you prefer to meet? <span class="required">*</span></label>
+                            <div class="meeting-options">
+                                <label class="meeting-option">
+                                    <input type="radio" name="meetingMethod" value="online" required checked>
+                                    <div class="meeting-card">
+                                        <div class="meeting-icon">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                                        </div>
+                                        <div class="meeting-label">Online</div>
+                                        <div class="meeting-sub">Video call or remote session</div>
+                                    </div>
+                                </label>
+                                <label class="meeting-option">
+                                    <input type="radio" name="meetingMethod" value="in person" required>
+                                    <div class="meeting-card">
+                                        <div class="meeting-icon">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                        </div>
+                                        <div class="meeting-label">In Person</div>
+                                        <div class="meeting-sub">On campus meeting</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Send Request
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="form-sidebar">
+                <div class="tip-card">
+                    <div class="tip-header">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Tips for a strong request
+                    </div>
+                    <ul class="tip-list">
+                        <li>Briefly describe your project and its goals</li>
+                        <li>Be clear about what kind of guidance you need</li>
+                        <li>Mention your current progress or challenges</li>
+                        <li>Keep it professional but conversational</li>
+                        <li>Suggest your availability if you have preferences</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card reminder-card">
+                    <div class="tip-header">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        What happens next
+                    </div>
+                    <div class="steps-mini">
+                        <div class="step-mini">
+                            <div class="step-mini-num">1</div>
+                            <div class="step-mini-text">Your request is sent to the advisor</div>
+                        </div>
+                        <div class="step-mini">
+                            <div class="step-mini-num">2</div>
+                            <div class="step-mini-text">They review your project and message</div>
+                        </div>
+                        <div class="step-mini">
+                            <div class="step-mini-num">3</div>
+                            <div class="step-mini-text">If accepted, they'll reach out to schedule</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
+
+</body>
+</html>
