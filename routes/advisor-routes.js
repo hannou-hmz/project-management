@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
-const {advisorDashboard , getRequests, getPendingRequests, countPendingRequests ,acceptRequest , rejectRequest ,myProjects} = require('../mysql/advisors');
+const {advisorDashboard , getRequests, getAdvisorProfileInfo, getPendingRequests, countPendingRequests ,acceptRequest , rejectRequest ,myProjects} = require('../mysql/advisors');
 const { getUser , getUserById } = require('../mysql/users');
 
 
@@ -116,8 +116,35 @@ advisorRouters.get('/projects' , isAdvisor , async(req , res)=>{
     }
 });
 
-advisorRouters.get('/profile' , (req , res)=>{
-    
+advisorRouters.get('/profile' , isAdvisor , async(req , res)=>{
+
+    try{
+        const advisorId = req.session.advisorId;
+        const advisorInfos = await getAdvisorProfileInfo(advisorId);
+        if(advisorInfos === null){
+            return res.status(500).render("500");
+        }
+
+        console.log(advisorInfos);
+        return res.render("advisor-profile" , {
+            advisor : advisorInfos
+        });
+    }
+
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500"); 
+    }
+
+
+});
+
+advisorRouters.post('/profile' ,isAdvisor, async(req , res)=>{
+    try{
+
+        const advisorId = req.session.advisorId;
+        // to change the areas of expertise  ... Make database.
+    }
 });
 
 

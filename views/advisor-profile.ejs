@@ -1,56 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advisor Profile</title>
+    <link rel="stylesheet" href="/styling/advisor-profile.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styling/advisor-profile.css">
+  </head>
 <body>
 
-<h1>Profile</h1>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/advisor/homepage">Team<span>Match</span></a>
+        <div class="nav-actions">
+            <a href="/advisor/dashboard" class="nav-btn-outline">← Dashboard</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
 
-<!-- 🔒 NON-EDITABLE SECTION -->
-<div class="profile-info">
+    <div class="page-wrap">
 
-  <img id="preview"
-       src="../static-files//profile-photos/default.jpg user.profile_photo || 'default.jpg' %>"
-       alt="Profile Photo"
-       width="150">
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+            <div class="profile-hero-bg"></div>
 
-  <p><strong>Full Name:</strong> <%= user.full_name %></p>
-  <p><strong>Email:</strong> <%= user.email %></p>
-  <p><strong>Department:</strong> <%= user.department %></p>
+            <div class="profile-header-inner">
 
-</div>
+                <!-- Avatar -->
+                <div class="avatar-wrap">
+                    <div class="avatar" id="avatarDisplay">
+                        <img id="preview"
+                             src="../static-files/profile-photos/default.jpg user.profile_photo || 'default.jpg' %>"
+                             alt="Profile Photo"
+                             onerror="this.style.display='none'; document.getElementById('avatarInitials').style.display='flex';">
+                        <div id="avatarInitials" class="avatar-initials">
+                            <%= advisor.full_name ? advisor.full_name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() : 'AD' %>
+                        </div>
+                    </div>
+                    <div class="avail-indicator <%= advisor.available ? 'is-available' : 'is-unavailable' %>"
+                         title="<%= advisor.available ? 'Available for advising' : 'Not available' %>"></div>
+                </div>
 
-<hr>
+                <!-- Identity -->
+                <div class="profile-identity">
+                    <h1 class="profile-name"><%= advisor.full_name %></h1>
+                    <div class="profile-meta-row">
+                        <span class="profile-badge title-badge"><%= advisor.academic_title || 'Faculty Advisor' %></span>
+                        <span class="profile-badge dept-badge"><%= advisor.department_name %></span>
+                    </div>
+                    <p class="profile-email">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <%= advisor.email %>
+                    </p>
+                </div>
 
-<!-- ✏️ EDITABLE SECTION -->
-<form action="/advisor/profile" method="POST">
+            </div>
+        </div>
 
-  <div>
-    <label>Areas of Expertise:</label>
-    <input type="text" name="expertise" value="<%= user.expertise %>">
-  </div>
+        <div class="container">
+            <div class="two-col">
 
-  <div>
-    <label>Researches:</label>
-    <textarea name="researches"><%= user.researches %></textarea>
-  </div>
+                <!-- Left column — static info -->
+                <div class="col-left">
 
-  <div>
-    <label>Academic Title:</label>
-    <input type="text" name="academic_title" value="<%= user.academic_title %>">
-  </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Account Details
+                        </div>
+                        <div class="info-list">
+                            <div class="info-row">
+                                <span class="info-label">Full Name</span>
+                                <span class="info-value"><%= advisor.full_name %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Email</span>
+                                <span class="info-value"><%= advisor.email %></span>
+                            </div>
+                            <div class="info-row last">
+                                <span class="info-label">Department</span>
+                                <span class="info-value"><%= advisor.department_name %></span>
+                            </div>
+                        </div>
+                    </div>
 
-  <div>
-    <label>
-      <input type="checkbox" name="available" <%= user.available ? 'checked' : '' %>>
-      Available for advising
-    </label>
-  </div>
+                    <!-- Availability status display -->
+                    <div class="card avail-card <%= advisor.available ? 'avail-on' : 'avail-off' %>">
+                        <div class="avail-card-row">
+                            <div class="avail-card-left">
+                                <div class="avail-card-dot <%= advisor.available ? 'dot-on' : 'dot-off' %>"></div>
+                                <div>
+                                    <div class="avail-card-title"><%= advisor.available ? 'You are available' : 'You are unavailable' %></div>
+                                    <div class="avail-card-sub">Students <%= advisor.available ? 'can' : 'cannot' %> send you advising requests</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-  <button type="submit">Save Changes</button>
+                </div>
 
-</form>
+                <!-- Right column — editable form -->
+                <div class="col-right">
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            Edit Profile
+                        </div>
+
+                        <form action="/advisor/profile" method="POST">
+
+                            <div class="form-group">
+                                <label class="form-label" for="academic_title">Academic Title</label>
+                                <input class="form-input" type="text" id="academic_title" name="academic_title"
+                                       value="<%= advisor.academic_title %>"
+                                       placeholder="e.g. Associate Professor, Dr.">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="expertise">Areas of Expertise</label>
+                                <input class="form-input" type="text" id="expertise" name="expertise"
+                                       value="<%= advisor.expertise %>"
+                                       placeholder="e.g. Machine Learning, Computer Vision">
+                                <p class="input-hint">Separate areas with commas.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="researches">Research Interests</label>
+                                <textarea class="form-textarea" id="researches" name="researches" rows="5"
+                                          placeholder="Describe your current research projects and interests..."><%= advisor.researches %></textarea>
+                            </div>
+
+                            <!-- Availability toggle -->
+                            <div class="avail-toggle-wrap">
+                                <div class="avail-toggle-left">
+                                    <div class="avail-toggle-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="avail-toggle-title">Available for advising</div>
+                                        <div class="avail-toggle-sub">Students will be able to send you requests</div>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" name="available" <%= advisor.available ? 'checked' : '' %>>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Save Changes</button>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
 
 </body>
 </html>

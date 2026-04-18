@@ -38,6 +38,24 @@ async function createAdvisorRow(advisorId){
 
 }
 
+async function getAdvisorProfileInfo(advisorId){
+    try{
+        const sql = "select u.full_name , u.email , d.department_name , a.academic_title , a.areas_of_expertise , a.research , a.available   FROM users AS u INNER JOIN departments AS d INNER JOIN advisors AS a ON a.advisor_id = u.user_id AND d.department_id = u.department  WHERE user_id = ?";
+        const [result] = await database.pool.execute(sql , [advisorId]);
+        
+        if(result.length <= 0){
+            return null;
+        }
+
+        return result[0];
+    
+    }
+
+    catch(e){
+        console.log(`Finding advisor information : ${e.message}`);
+    }
+}
+
 async function requestAdvisor(advisorId, projectId , studentId , message , meetingMethod){
 
     try{
@@ -188,6 +206,7 @@ async function myProjects(advisorId){
 module.exports = {
     getAdvisors, 
     createAdvisorRow,
+    getAdvisorProfileInfo,
     getRequests,
     acceptRequest,
     rejectRequest,

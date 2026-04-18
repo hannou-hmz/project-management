@@ -88,7 +88,7 @@ authRoutes.post('/signup' , async (req , res)=>{
     else if(user && role === '2'){
         req.session.studentId = user.insertId;
         const advisorId = user.insertId;
-        await createAdvisorRow(advisorId) // we need a function to store the advisor row in advisors table
+        await createAdvisorRow(advisorId) 
         return res.redirect('/advisor/homepage');
     }
     else{
