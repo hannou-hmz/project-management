@@ -1,42 +1,168 @@
-<h1>Advisors</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find an Advisor</title>
+    <link rel="stylesheet" href="/styling/advisors.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styling/find-advisors.css">
+</head>
+<body>
 
-<% if (advisors && advisors.length > 0) { %>
-
-    <% advisors.forEach(advisor => { %>
-
-        <div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
-
-            <!-- Profile Photo -->
-            <!-- <img src="<%= advisor.profile_photo %>" 
-                 style="width:100px; height:100px; border-radius:50%; object-fit:cover;"> -->
-
-            <h3><%= advisor.full_name %></h3>
-
-            <p><strong>Email:</strong> <%= advisor.email %></p>
-
-            <p><strong>Department:</strong> <%= advisor.department_name %></p>
-
-            <p><strong>Academic Title:</strong> <%= advisor.academic_title %></p>
-
-            <p><strong>Researches:</strong> <%= advisor.researches %></p>
-
-            <p><strong>Areas of Interest:</strong> <%= advisor.areas_of_interest %></p>
-
-            <p><strong>Available:</strong> 
-                <%= advisor.is_available ? "Yes 🟢" : "No 🔴" %>
-            </p>
-
-            <a style="background-color: rgb(4, 0, 255);padding: 7px; color: white;" 
-            href="/student/requests/<%= advisor.user_id %>/advisors">Request</a>
-
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/student/homepage">Team<span>Match</span></a>
+        <div class="nav-links">
+            <a href="/student/projects" class="nav-link">Browse Projects</a>
+            <a href="/student/myprojects" class="nav-link">My Projects</a>
+            <a href="/student/applications" class="nav-link">Applications</a>
+            <a href="/student/find/advisors" class="nav-link active">Find Advisor</a>
         </div>
+        <div class="nav-actions">
+            <a href="/student/create/projects" class="nav-btn-accent">+ Create Project</a>
+            <a href="/student/profile" class="nav-btn-outline">Profile</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
 
-        <hr>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-eyebrow">Faculty Directory</div>
+            <h1 class="page-title">Find an Advisor</h1>
+            <p class="page-sub">Connect with faculty members who can guide your project to success.</p>
+        </div>
+    </div>
 
-    <% }) %>
+    <div class="container">
 
-<% } else { %>
+        <% if (advisors && advisors.length > 0) { %>
 
-    <p>No advisors found.</p>
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <span class="results-count">
+                        <strong><%= advisors.length %></strong> advisor<%= advisors.length !== 1 ? 's' : '' %> available
+                    </span>
+                </div>
+                <div class="toolbar-right">
+                    <div class="search-wrap">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search by name, department, or interest...">
+                    </div>
+                    <label>
+                        <input type="checkbox" id="availableOnly">
+                        Available only
+                    </label>
+                </div>
+            </div>
 
-<% } %>
+            <!-- Advisors Grid -->
+            <div class="advisors-grid" id="advisorsGrid">
+
+                <% advisors.forEach(advisor => { %>
+                <div class="advisor-card"
+                     data-name="<%= advisor.full_name %>"
+                     data-dept="<%= advisor.department_name %>"
+                     data-interests="<%= advisor.areas_of_interest %>"
+                     data-available="<%= advisor.is_available ? 'true' : 'false' %>">
+
+                    <div class="ac-top">
+                        <div class="ac-avatar-wrap">
+
+                            <% if (advisor.profile_photo) { %>
+                                <img class="ac-avatar-img" src="<%= advisor.profile_photo %>" alt="<%= advisor.full_name %>">
+                            <% } else { %>
+                                <div class="ac-avatar">
+                                    <%= advisor.full_name ? advisor.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'AD' %>
+                                </div>
+                            <% } %>
+
+                            <span class="avail-dot <%= advisor.is_available ? 'available' : 'unavailable' %>"></span>
+                        </div>
+
+                        <div class="ac-identity">
+                            <h3><%= advisor.full_name %></h3>
+                            <div><%= advisor.academic_title %></div>
+                            <div><%= advisor.department_name %></div>
+                        </div>
+
+                        <span>
+                            <%= advisor.is_available ? "Available" : "Unavailable" %>
+                        </span>
+                    </div>
+
+                    <div class="ac-details">
+
+                        <% if (advisor.researches) { %>
+                            <p><%= advisor.researches %></p>
+                        <% } %>
+
+                        <% if (advisor.areas_of_interest && typeof advisor.areas_of_interest === 'string') { %>
+                            <div>
+                                <% advisor.areas_of_interest.split(',').forEach(area => { %>
+                                    <span><%= area.trim() %></span>
+                                <% }) %>
+                            </div>
+                        <% } %>
+
+                        <p><%= advisor.email %></p>
+
+                    </div>
+
+                    <div class="ac-footer">
+                        <% if (advisor.is_available) { %>
+                            <a href="/student/requests/<%= advisor.user_id %>/advisors">
+                                Send Request
+                            </a>
+                        <% } else { %>
+                            <span>Currently Unavailable</span>
+                        <% } %>
+                    </div>
+
+                </div>
+                <% }) %>
+
+            </div>
+
+        <% } else { %>
+
+            <div>
+                <p>No advisors found</p>
+            </div>
+
+        <% } %>
+
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const availableOnly = document.getElementById('availableOnly');
+        const cards = document.querySelectorAll('.advisor-card');
+
+        function filterAdvisors() {
+            const query = searchInput.value.toLowerCase();
+            const onlyAvail = availableOnly.checked;
+
+            cards.forEach(card => {
+                const name = (card.dataset.name || '').toLowerCase();
+                const dept = (card.dataset.dept || '').toLowerCase();
+                const interests = (card.dataset.interests || '').toLowerCase();
+                const isAvail = card.dataset.available === 'true';
+
+                const match = (!query || name.includes(query) || dept.includes(query) || interests.includes(query)) &&
+                              (!onlyAvail || isAvail);
+
+                card.style.display = match ? '' : 'none';
+            });
+        }
+
+        if (searchInput) searchInput.addEventListener('input', filterAdvisors);
+        if (availableOnly) availableOnly.addEventListener('change', filterAdvisors);
+    </script>
+
+</body>
+</html>

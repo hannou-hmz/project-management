@@ -1,4 +1,6 @@
 const database = require('./db');
+const bcrypt = require('bcrypt');
+const SALT_COUNT = 8;
 
 async function getStudentProfileInfo(studentId){
     
@@ -58,6 +60,24 @@ async function createStudentRow(studentId){
         console.log(`Student row insertion error : ${e.message}`);
     }
 
+}
+
+async function changeStudentPassword(password , studentId){
+
+    try{
+        const hashPasswd = await bcrypt.hash(password , SALT_COUNT);
+        const sql = "UPDATE users SET password = ? WHERE user_id = ?";
+        const [result] = await database.pool.execute(sql , [hashPasswd , studentId]);
+
+        if(!result.affectedRows){
+            console.log("Update password failed !!");
+            return null;
+        }
+    }
+
+    catch(e){
+        console.log(`Password update failed : ${e.message}`);
+    }
 }
 
 async function modifyStudenSkills(skills , studentId){
@@ -141,6 +161,7 @@ module.exports = {
     getStudentById,
     getStudentProfileInfo,
     createStudentRow,
+    changeStudentPassword,
     modifyStudenSkills , 
     modifyStudenBio
 }

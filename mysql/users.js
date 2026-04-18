@@ -92,6 +92,27 @@ async function getUserById(userId){
     }
 }
 
+async function compareUserPassword(userId , currentPasswd){
+
+    try{
+        const sql = "SELECT password FROM users WHERE user_id = ?";
+        const [result] = await database.pool.execute(sql , [userId]);
+        if (result.length === 0) return null;
+        const isMatch = await bcrypt.compare(currentPasswd , result[0].password); 
+
+        if(!isMatch){
+            console.log(`Password do not match!`);
+            return false;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        console.log(`Password changing error : ${e.message}`);
+    }
+}
+
 async function getAllUsers(){
 
     try{
@@ -136,5 +157,6 @@ module.exports = {
     getUserById,
     getAdmin,
     getAllUsers,
+    compareUserPassword,
     deleteUsers
 }

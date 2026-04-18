@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Projects</title>
-    <link rel="stylesheet" href="/styling/myprojects.css">
+    <link rel="stylesheet" href="/styling/st-my-projects.css">
     <link rel="icon" href="/img/fav.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styling/st-my-projects.css">
 </head>
 <body>
 
     <!-- Navbar -->
     <nav class="navbar">
-        <a class="nav-logo" href="/student/dashboard">Team<span>Match</span></a>
+        <a class="nav-logo" href="/student/homepage">Team<span>Match</span></a>
         <div class="nav-links">
             <a href="/student/projects" class="nav-link">Browse Projects</a>
             <a href="/student/myprojects" class="nav-link active">My Projects</a>
@@ -56,8 +55,6 @@
                 <% projects.forEach(project => { %>
                 <div class="project-card">
 
-                    <!-- Left accent handled by CSS -->
-
                     <div class="pc-body">
 
                         <!-- Header row -->
@@ -72,11 +69,15 @@
                                     </span>
                                 </div>
                             </div>
-                            <a class="delete-btn" href="/student/<%= project.project_id %>/delete"
-                               onclick="return confirm('Are you sure you want to delete this project?')">
+
+                            <!-- Delete button — triggers custom modal -->
+                            <button class="delete-btn"
+                                    data-href="/student/<%= project.project_id %>/delete"
+                                    data-title="<%= project.project_title %>"
+                                    onclick="openDeleteModal(this)">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
                                 Delete
-                            </a>
+                            </button>
                         </div>
 
                         <!-- Description -->
@@ -144,6 +145,53 @@
             <span class="footer-copy">University Project Collaboration Platform</span>
         </div>
     </footer>
+
+
+    <!-- ===== DELETE CONFIRMATION MODAL ===== -->
+    <div class="modal-backdrop" id="modalBackdrop" onclick="closeDeleteModal()">
+        <div class="modal" id="deleteModal" onclick="event.stopPropagation()">
+
+            <div class="modal-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </div>
+
+            <h3 class="modal-title">Delete Project</h3>
+            <p class="modal-body">
+                You're about to permanently delete <strong id="modalProjectName"></strong>.
+                All applications linked to this project will also be removed. This cannot be undone.
+            </p>
+
+            <div class="modal-actions">
+                <button class="modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <a class="modal-confirm" id="modalConfirmBtn" href="#">Delete Project</a>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        function openDeleteModal(btn) {
+            const title = btn.dataset.title;
+            const href  = btn.dataset.href;
+
+            document.getElementById('modalProjectName').textContent = title;
+            document.getElementById('modalConfirmBtn').setAttribute('href', href);
+
+            document.getElementById('modalBackdrop').classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('modalBackdrop').classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeDeleteModal();
+        });
+    </script>
 
 </body>
 </html>

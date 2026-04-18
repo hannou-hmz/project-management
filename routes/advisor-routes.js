@@ -116,6 +116,10 @@ advisorRouters.get('/projects' , isAdvisor , async(req , res)=>{
     }
 });
 
+advisorRouters.get('/profile' , (req , res)=>{
+    
+});
+
 
 
 module.exports = advisorRouters;

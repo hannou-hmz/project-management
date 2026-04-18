@@ -1,24 +1,143 @@
-<h1>Apply for Project</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Project</title>
+    <link rel="stylesheet" href="/styling/apply.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styling/st-submit-application.css">
+</head>
+<body>
 
-<form action="/student/project/application/submit" method="POST">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/student/homepage">Team<span>Match</span></a>
+        <div class="nav-actions">
+            <a href="/student/projects" class="nav-btn-outline">← Back to Projects</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
 
-    <!-- hidden project id -->
-    <input type="hidden" name="projectId" value="<%= projectId %>">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-eyebrow">Project Application</div>
+            <h1 class="page-title">Apply for Project</h1>
+            <p class="page-sub">Tell the project owner about yourself and why you'd be a great fit.</p>
+        </div>
+    </div>
 
-    <label>Email address:</label><br>
-    <input name="email" required></input>
+    <div class="container">
+        <div class="form-layout">
 
-    <br><br>
+            <!-- Form Card -->
+            <div class="form-main">
+                <form action="/student/project/application/submit" method="POST">
 
-    <label>MESSAGE (inculde your github):</label><br>
-    <textarea rows="10" cols="60" type="text" name="message"></textarea>
+                    <!-- hidden project id -->
+                    <input type="hidden" name="projectId" value="<%= projectId %>">
 
-    <br><br>
+                    <!-- Email -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Contact
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" for="email">Email Address <span class="required">*</span></label>
+                            <input class="form-input" type="email" id="email" name="email" placeholder="you@university.edu" required>
+                            <p class="input-hint">The project owner will use this to reach you.</p>
+                        </div>
+                    </div>
 
-    <label>Skills:</label><br>
-    <input type="text" name="skills">
+                    <!-- Message -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Your Message
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" for="message">Introduce yourself and include your GitHub <span class="required">*</span></label>
+                            <textarea class="form-textarea" id="message" rows="10" name="message"
+                                placeholder="Hi! I'm interested in this project because...&#10;&#10;GitHub: https://github.com/yourname&#10;&#10;Tell the team about your experience, what you bring to the table, and why you're excited about this project."></textarea>
+                            <p class="input-hint">Tip: include your GitHub link, relevant experience, and why this project excites you.</p>
+                        </div>
+                    </div>
 
-    <br><br>
+                    <!-- Skills -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            Your Skills
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" for="skills">Skills you bring to this project</label>
+                            <input class="form-input" type="text" id="skills" name="skills"
+                                placeholder="e.g. Python, React, Machine Learning, UI/UX">
+                            <p class="input-hint">Separate skills with commas.</p>
+                        </div>
+                    </div>
 
-    <button type="submit">Submit</button>
-</form>
+                    <!-- Submit -->
+                    <button type="submit" class="submit-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Submit Application
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="form-sidebar">
+                <div class="tip-card">
+                    <div class="tip-header">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Tips for a strong application
+                    </div>
+                    <ul class="tip-list">
+                        <li>Be specific about your relevant experience</li>
+                        <li>Always include your GitHub profile link</li>
+                        <li>Explain why <em>this</em> project interests you</li>
+                        <li>List skills that match what the project needs</li>
+                        <li>Keep your message clear and concise</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card reminder-card">
+                    <div class="tip-header">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        What happens next
+                    </div>
+                    <div class="steps-mini">
+                        <div class="step-mini">
+                            <div class="step-mini-num">1</div>
+                            <div class="step-mini-text">Your application is sent to the project owner</div>
+                        </div>
+                        <div class="step-mini">
+                            <div class="step-mini-num">2</div>
+                            <div class="step-mini-text">They review your message and skills</div>
+                        </div>
+                        <div class="step-mini">
+                            <div class="step-mini-num">3</div>
+                            <div class="step-mini-text">You'll be contacted at your email if accepted</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
+
+</body>
+</html>

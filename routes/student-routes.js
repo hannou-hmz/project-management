@@ -2,10 +2,11 @@ const express = require('express');
 const path = require('path');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
-const {getMyAdvisorRequests ,getStudentProfileInfo, getStudentById ,modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
+const {getMyAdvisorRequests , changeStudentPassword ,getStudentProfileInfo, getStudentById ,modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
+const {compareUserPassword} = require('../mysql/users');
 const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
 const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
 
@@ -68,11 +69,15 @@ studentRoutes.post('/create/projects' , async (req , res)=>{
 
     try{
         const project = await createProjects(title , announcementCategory , description , budget , skills , teamSize , reqAdvisor , createdBy);
-        console.log(project);
+        if(project === null){
+            console.log("Project creation failed ..");
+            return res.status(500).render("500")
+        }
+
         return res.redirect('/student/homepage');    
     } 
     catch(e){
-        res.status(500).send(`Inernal error ...`);
+        res.status(500).render("500");
     }
 })
 
@@ -178,6 +183,7 @@ studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
             advisors : advisors
         });
     }
+    // i need to add apply for advisor button .
 
     catch(e){
         console.log(`Error : ${e.message}`);
@@ -284,6 +290,46 @@ studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
     catch(e){
         console.log(`Error : ${e.message}`);
         return res.render("500");
+    }
+});
+
+studentRoutes.get('/profile/change-password' , isStudent , (req , res)=>{
+
+    try{
+        return res.render("st-change-password");
+    }
+
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+    
+});
+
+studentRoutes.post('/profile/change-password' , isStudent , async(req , res)=>  {
+    try{
+        const studentId = req.session.studentId;
+        const {currentPassword , newPassword , confirmPassword} = req.body;
+        const checkCurrentPasswd = await compareUserPassword(studentId , currentPassword);
+        
+        if(!checkCurrentPasswd){
+            return res.status(500).render("500");
+        }
+
+        else{
+            if(newPassword != confirmPassword){
+                console.log(`Wrong password`);
+                return res.status(500).render("500")
+            }
+
+            const changePassword = await changeStudentPassword(newPassword , studentId);
+            return res.redirect('/student/profile');
+        }
+    }
+
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
     }
 });
 

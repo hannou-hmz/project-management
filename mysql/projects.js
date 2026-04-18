@@ -4,12 +4,17 @@ async function createProjects(title , type , description , budget , skills , tea
     try{
         const sql = "INSERT INTO student_projects(project_title , project_type , project_description , budget , required_skills , team_size , require_advisor , created_by) VALUES(?,?,?,?,?,?,?,?)";
         const [result] = await database.pool.execute(sql , [title , type , description , budget , skills , team_size , require_advisor ? 1 : 0 , created_by]);
+        
+        if(!result.affectedRows){
+            console.log("Project creation failed ..");
+            return null;
+        }
+
         console.log(`Project successefuly created`);
         return result;
     }
     catch(e){
         console.log(`Project not successefuly created : ${e.message}`);
-        return false;
     } 
 }
 
