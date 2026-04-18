@@ -3,7 +3,10 @@ const path = require('path');
 const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
-const {advisorDashboard , getRequests, getAdvisorProfileInfo, getPendingRequests, countPendingRequests ,acceptRequest , rejectRequest ,myProjects} = require('../mysql/advisors');
+const {advisorDashboard , getRequests, getAdvisorProfileInfo, getPendingRequests, 
+    countPendingRequests ,acceptRequest , rejectRequest ,myProjects ,setAcademicTitle,
+    isAdvisorAvailable,setResearches,setExpertise} = require('../mysql/advisors');
+
 const { getUser , getUserById } = require('../mysql/users');
 
 
@@ -140,10 +143,26 @@ advisorRouters.get('/profile' , isAdvisor , async(req , res)=>{
 });
 
 advisorRouters.post('/profile' ,isAdvisor, async(req , res)=>{
-    try{
 
+    try{
         const advisorId = req.session.advisorId;
-        // to change the areas of expertise  ... Make database.
+        const {academic_title,expertise,researches} = req.body;
+        const isAvailable = req.body.available === "1" ? 1 : 0;
+        const academicTitle = await setAcademicTitle(academic_title,advisorId );
+        const research = await setResearches(researches,advisorId);
+        const areaOfExpertise = await setExpertise(expertise,advisorId);
+        const availability = await isAdvisorAvailable(isAvailable,advisorId);
+
+        if(!academicTitle || !research || !areaOfExpertise || !availability){
+            return res.status(500).render("500");
+        }
+
+        return res.redirect('/advisor/profile');
+    }
+
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
     }
 });
 

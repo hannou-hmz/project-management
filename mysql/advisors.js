@@ -203,12 +203,84 @@ async function myProjects(advisorId){
     }
 }
 
+async function setAcademicTitle(academicTitle , advisorId){
+    try{
+        const sql = "UPDATE advisors SET academic_title = ? WHERE advisor_id = ?";
+        const [result] = await database.pool.execute(sql , [academicTitle , advisorId]);
+        if(!result.affectedRows){
+            console.log(`Set academic title failed !`);
+            return false;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        console.log(e.message);
+    }
+}
+
+async function setExpertise(expertise , advisorId){
+    try{
+        const sql = "UPDATE advisors SET areas_of_expertise = ? WHERE advisor_id = ?";
+        const [result] = await database.pool.execute(sql , [expertise , advisorId]);
+        if(!result.affectedRows){
+            console.log(`Set expertise failed !`);
+            return false;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        console.log(e.message);
+    }
+}
+
+async function setResearches(researches , advisorId){
+    try{
+        const sql = "UPDATE advisors SET research = ? WHERE advisor_id = ?";
+        const [result] = await database.pool.execute(sql , [researches , advisorId]);
+        if(!result.affectedRows){
+            console.log(`Set researches failed !`);
+            return false;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        console.log(e.message);
+    }
+}
+
+async function isAdvisorAvailable(available , advisorId){
+    try{
+        const sql = "UPDATE advisors SET available = ? WHERE advisor_id = ?";
+        const [result] = await database.pool.execute(sql , [available , advisorId]);
+        if(!result.affectedRows){
+            console.log(`Set availability failed !`);
+            return false;
+        }
+
+        return true;
+    }
+
+    catch(e){
+        console.log(e.message);
+    }
+}
+
 module.exports = {
     getAdvisors, 
     createAdvisorRow,
     getAdvisorProfileInfo,
     getRequests,
     acceptRequest,
+    setAcademicTitle,
+    isAdvisorAvailable,
+    setResearches,
+    setExpertise,
     rejectRequest,
     myProjects,
     requestAdvisor,
