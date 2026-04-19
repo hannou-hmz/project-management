@@ -142,8 +142,8 @@ adminRouters.get('/categories/:categoryId/delete' , isAdmin , async(req , res)=>
     try{
 
         const categoryId = req.params.categoryId;
-        const removeCategory = await deleteCategory(categoryId);
-        if(!removeCategory){
+        const result = await deleteCategory(categoryId);
+        if(!result){
             return res.status(500).send("deletion failed");
         }
 

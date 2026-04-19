@@ -155,7 +155,7 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </div>
 
-            <h3 class="modal-title">Delete Project</h3>
+            <h3 class="modal-title" onclick="deleteProject()">Delete Project</h3>
             <p class="modal-body">
                 You're about to permanently delete <strong id="modalProjectName"></strong>.
                 All applications linked to this project will also be removed. This cannot be undone.
@@ -191,6 +191,7 @@
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') closeDeleteModal();
         });
+
     </script>
 
 </body>

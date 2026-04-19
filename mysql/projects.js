@@ -20,7 +20,7 @@ async function createProjects(title , type , description , budget , skills , tea
 
 async function getProjects(){
     try{
-        const sql = "SELECT p.project_id , p.project_title , c.category_name , u.full_name , p.project_description , p.budget , p.required_skills , p.created_at FROM student_projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id";
+        const sql = "SELECT p.project_id , p.project_title , c.category_name , u.full_name , p.project_description ,p.team_size , p.budget , p.required_skills , p.created_at FROM student_projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id";
         const [rows] = await database.pool.execute(sql);
         if(rows.affectedRows <= 0){
             console.log("No projects here ..");
@@ -36,11 +36,11 @@ async function getProjects(){
     
 }
 
-async function deleteProjects(projectId){
+async function deleteProjects(projectId , studentId){
 
     try{
-        const sql = "DELETE FROM student_projects WHERE project_id = ?";
-        const [result] = await database.pool.execute(sql , [projectId]);
+        const sql = "DELETE FROM student_projects WHERE project_id = ? AND created_by = ?";
+        const [result] = await database.pool.execute(sql , [projectId , studentId]);
         if(result.affectedRows <= 0){
             console.log('DELETION failed ..');
             return null;
@@ -72,7 +72,7 @@ async function myProjects(createdBy){
     }
     catch(e){
         console.log(`My projects error :${e.message}`);
-        return false;
+        return e;
     };
 
 }

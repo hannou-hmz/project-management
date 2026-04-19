@@ -2,49 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advisor Dashboard</title>
+    <link rel="stylesheet" href="/styling/advisor-home.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styling/advisor-homepage.css">
 </head>
 <body>
 
     <!-- Navbar -->
-    <div class="navbar">
-        <h2>Advisor Panel</h2>
+    <nav class="navbar">
+        <a class="nav-logo" href="/advisor/dashboard">Team<span>Match</span></a>
         <div class="nav-links">
-            <a href="/logout">Logout</a>
+            <a href="/advisor/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/advisor/projects" class="nav-link">My Projects</a>
+            <a href="/advisor/requests" class="nav-link">Requests</a>
         </div>
-    </div>
+        <div class="nav-actions">
+            <a href="/advisor/profile" class="nav-btn-outline">Profile</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
 
     <div class="container">
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <a href="/advisor/dashboard">Dashboard</a>
-            <a href="/advisor/requests">Requests</a>
-            <a href="/advisor/projects">My Projects</a>
-            <a href="/advisor/profile">Profile Settings</a>
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-inner">
+                <div class="hero-eyebrow">Advisor Dashboard</div>
+                <h1 class="hero-title">
+                    Welcome, <span class="hero-name"><em><%= advisor.full_name || "Advisor" %></em></span>
+                </h1>
+                <p class="hero-sub">
+                    Manage your advised projects, review student requests, and keep your profile up to date.
+                </p>
+
+                <!-- Availability status inside hero -->
+                <div class="hero-avail <%= advisor.is_available ? 'avail-on' : 'avail-off' %>">
+                    <div class="avail-dot"></div>
+                    <span>
+                        You are currently
+                        <strong><%= advisor.is_available ? 'available' : 'unavailable' %></strong>
+                        for advising requests
+                    </span>
+                    <a href="/advisor/profile" class="avail-change">Change →</a>
+                </div>
+            </div>
+            <div class="hero-orb"></div>
         </div>
 
-        <!-- Main Content -->
-        <div class="content">
+        <!-- Quick access -->
+        <div class="section-header">
+            <h2 class="section-title">Quick Access</h2>
+            <p class="section-sub">Everything you need, one click away.</p>
+        </div>
 
-            <div class="card">
-                <h3>Welcome, <%= advisor.full_name %> 👋</h3>
-                <p>Manage your advising requests and projects here.</p>
-            </div>
+        <div class="quick-grid">
 
-             <div class="card">
-                <h3>Pending Requests</h3>
-                <p>You have <strong><%= pending.pending_requests | 0 %></strong> pending requests.</p>
-                <a href="/advisor/requests" class="btn">View Requests</a>
-            </div>
+            <!-- Profile -->
+            <a href="/advisor/profile" class="quick-card">
+                <div class="quick-icon qc-amber">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">My Profile</div>
+                    <div class="quick-desc">Update your bio, expertise, research areas, and availability</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
 
-        
-         
+            <!-- My Projects -->
+            <a href="/advisor/projects" class="quick-card qc-featured">
+                <div class="quick-icon qc-blue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">My Projects</div>
+                    <div class="quick-desc">View and manage the projects you are currently advising</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
+
+            <!-- Requests -->
+            <a href="/advisor/requests" class="quick-card">
+                <div class="quick-icon qc-green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="quick-text">
+                    <div class="quick-title">Student Requests</div>
+                    <div class="quick-desc">Review and respond to advising requests from students</div>
+                </div>
+                <div class="quick-arrow">→</div>
+            </a>
 
         </div>
 
     </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
 
 </body>
 </html>

@@ -1,35 +1,156 @@
-<h1>Announcements</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements</title>
+    <link rel="stylesheet" href="/styling/announcements.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+</head>
+<body>
 
-<% if (announcements && announcements.length > 0) { %>
-
-    <% announcements.forEach(ann => { %>
-
-        <div style="margin-bottom: 20px;">
-
-            <h3><%= ann.title %></h3>
-
-            <!-- <p><strong>ID:</strong> <%= ann.announcement_id %></p> -->
-
-            <p><strong>Category:</strong> <%= ann.category_name %></p>
-
-            <p><strong>Description:</strong> <%= ann.description %></p>
-
-            <p><strong>Created At:</strong> 
-                <%= ann.created_at %>
-            </p>
-
-            <p><strong>Urgent:</strong> 
-                <%= ann.is_urgent ? "Yes 🔴" : "No" %>
-            </p>
-
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/student/dashboard">Team<span>Match</span></a>
+        <div class="nav-links">
+            <a href="/student/projects" class="nav-link">Browse Projects</a>
+            <a href="/student/myprojects" class="nav-link">My Projects</a>
+            <a href="/student/applications" class="nav-link">Applications</a>
+            <a href="/student/announcements" class="nav-link active">Announcements</a>
+            <a href="/student/find/advisors" class="nav-link">Find Advisor</a>
         </div>
+        <div class="nav-actions">
+            <a href="/student/create/projects" class="nav-btn-accent">+ Create Project</a>
+            <a href="/student/profile" class="nav-btn-outline">Profile</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
 
-        <hr>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-eyebrow">Platform Updates</div>
+            <h1 class="page-title">Announcements</h1>
+            <p class="page-sub">Stay up to date with the latest news and important notices.</p>
+        </div>
+    </div>
 
-    <% }) %>
+    <div class="container">
 
-<% } else { %>
+        <% if (announcements && announcements.length > 0) { %>
 
-    <p>No announcements found.</p>
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <span class="results-count">
+                    <strong><%= announcements.length %></strong> announcement<%= announcements.length !== 1 ? 's' : '' %>
+                    <% const urgentCount = announcements.filter(a => a.is_urgent).length; %>
+                    <% if (urgentCount > 0) { %>
+                        · <span class="urgent-count"><%= urgentCount %> urgent</span>
+                    <% } %>
+                </span>
+                <label class="filter-toggle">
+                    <input type="checkbox" id="urgentOnly">
+                    <span class="filter-check"></span>
+                    Urgent only
+                </label>
+            </div>
 
-<% } %>
+            <!-- Announcements List -->
+            <div class="ann-list" id="annList">
+
+                <% announcements.forEach(ann => { %>
+                <div class="ann-card <%= ann.is_urgent ? 'is-urgent' : '' %>"
+                     data-urgent="<%= ann.is_urgent ? 'true' : 'false' %>">
+
+                    <!-- Urgent banner -->
+                    <% if (ann.is_urgent) { %>
+                    <div class="urgent-banner">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Urgent
+                    </div>
+                    <% } %>
+
+                    <div class="ann-body">
+
+                        <!-- Header -->
+                        <div class="ann-header">
+                            <div class="ann-header-left">
+                                <h3 class="ann-title"><%= ann.title %></h3>
+                                <div class="ann-meta-row">
+                                    <span class="ann-badge"><%= ann.category_name %></span>
+                                    <span class="ann-date">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                        <%= new Date(ann.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="ann-desc"><%= ann.description %></p>
+
+                    </div>
+
+                </div>
+                <% }) %>
+
+            </div>
+
+            <!-- Empty filter state -->
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <div class="empty-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+                <div class="empty-title">No urgent announcements</div>
+                <div class="empty-sub">All clear — nothing marked as urgent right now.</div>
+            </div>
+
+        <% } else { %>
+
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+                <div class="empty-title">No announcements yet</div>
+                <p class="empty-sub">Nothing to show right now. Check back later for platform updates.</p>
+            </div>
+
+        <% } %>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
+
+    <script>
+        const urgentOnly = document.getElementById('urgentOnly');
+        const cards      = document.querySelectorAll('.ann-card');
+        const emptyState = document.getElementById('emptyState');
+
+        if (urgentOnly) {
+            urgentOnly.addEventListener('change', () => {
+                const onlyUrgent = urgentOnly.checked;
+                let visible = 0;
+
+                cards.forEach(card => {
+                    const isUrgent = card.dataset.urgent === 'true';
+                    const show = !onlyUrgent || isUrgent;
+                    card.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+
+                if (emptyState) emptyState.style.display = visible === 0 ? 'flex' : 'none';
+            });
+        }
+    </script>
+
+</body>
+</html>

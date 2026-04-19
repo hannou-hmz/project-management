@@ -11,10 +11,11 @@ const { getCategories } = require('../mysql/categories');
 
 authRoutes.get('/' , async(req , res , next)=>{
     try{
-        const project = await getProjects();
+        const projects = await getProjects();
         const categories = await getCategories();
+        
         return res.render("homepage" , {
-            projects : project,
+            projects : projects,
         });
     }
 
