@@ -19,7 +19,7 @@ function isAdvisor(req, res, next){
 }
 
  
-advisorRouters.get('/homepage' , isAdvisor, async(req , res)=>{
+advisorRouters.get('/dashboard' , isAdvisor, async(req , res)=>{
 
     try{
         const advisorId = req.session.advisorId;
@@ -47,9 +47,6 @@ advisorRouters.get('/requests' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const requests = await getPendingRequests(advisorId);
-        if(requests === null){
-            return res.send("No requests found.");
-        }
 
         return res.render("advisor-requests" , {
             requests : requests
@@ -73,7 +70,7 @@ advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=
             return res.status(500).send("internal issues");
         }
 
-        return res.redirect('/advisor/homepage');
+        return res.redirect('/advisor/dashboard');
     }
     catch(e){
         return e.message;
@@ -91,7 +88,7 @@ advisorRouters.get('/requests/:requestId/reject' , isAdvisor , async(req , res)=
             return res.status(500).send("internal issues");
         }
 
-        return res.redirect('/advisor/homepage');
+        return res.redirect('/advisor/dashboard');
     }
     catch(e){
         return e.message;
@@ -103,13 +100,8 @@ advisorRouters.get('/projects' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const projects = await myProjects(advisorId);
-
-        if(projects === null){
-            console.log("My projects is null");
-            return res.send("No projects found.");
-        }
         
-        return res.render("advisor-my-projects" , {
+        return res.render("advisor-projects" , {
             projects : projects
         });
     }

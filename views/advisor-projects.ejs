@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <link rel="stylesheet" href="/styling/advisor-projects.css">
+    <link rel="icon" href="/img/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="nav-logo" href="/advisor/dashboard">Team<span>Match</span></a>
+        <div class="nav-links">
+            <a href="/advisor/dashboard" class="nav-link">Dashboard</a>
+            <a href="/advisor/projects" class="nav-link active">My Projects</a>
+            <a href="/advisor/requests" class="nav-link">Requests</a>
+        </div>
+        <div class="nav-actions">
+            <a href="/advisor/profile" class="nav-btn-outline">Profile</a>
+            <a href="/logout" class="nav-btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-eyebrow">Advisor Portal</div>
+            <h1 class="page-title">My Projects</h1>
+            <p class="page-sub">Projects you are currently assigned to advise.</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <% if (projects && projects.length > 0) { %>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <span class="results-count">
+                    <strong><%= projects.length %></strong> project<%= projects.length !== 1 ? 's' : '' %> assigned
+                </span>
+            </div>
+
+            <!-- Projects List -->
+            <div class="projects-list">
+
+                <% projects.forEach(p => { %>
+                <div class="project-card">
+
+                    <div class="pc-body">
+
+                        <!-- Header -->
+                        <div class="pc-header">
+                            <div class="pc-header-left">
+                                <h3 class="pc-title"><%= p.project_title %></h3>
+                                <div class="pc-badges">
+                                    <!-- Meeting method badge -->
+                                    <span class="badge meeting-badge">
+                                        <% if (p.meeting_method === 'online') { %>
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                                            Online
+                                        <% } else { %>
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                            In Person
+                                        <% } %>
+                                    </span>
+
+                                    <span class="badge budget-badge">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                        $<%= Number(p.budget).toLocaleString() %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="pc-desc"><%= p.project_description %></p>
+
+                        <div class="pc-divider"></div>
+
+                        <!-- Student info row -->
+                        <div class="student-row">
+                            <div class="student-avatar">
+                                <%= p.full_name ? p.full_name.charAt(0).toUpperCase() : 'S' %>
+                            </div>
+                            <div class="student-info">
+                                <div class="student-name"><%= p.full_name %></div>
+                                <div class="student-email">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                    <%= p.email %>
+                                </div>
+                            </div>
+                            <span class="student-label">Project Lead</span>
+                        </div>
+
+                    </div>
+                </div>
+                <% }) %>
+
+            </div>
+
+        <% } else { %>
+
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="empty-title">No projects assigned yet</div>
+                <p class="empty-sub">You haven't been assigned to any projects. Students can request your advising from the platform.</p>
+                <a href="/advisor/profile" class="btn-primary">Check your availability</a>
+            </div>
+
+        <% } %>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-logo">Team<span>Match</span></span>
+            <span class="footer-copy">University Project Collaboration Platform</span>
+        </div>
+    </footer>
+
+</body>
+</html>

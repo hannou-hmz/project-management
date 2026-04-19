@@ -71,7 +71,7 @@ authRoutes.post('/login' , async (req , res)=>{
     }
     else if(user && userRole === 2){
         req.session.advisorId = user.user_id;
-        return res.redirect('/advisor/homepage');
+        return res.redirect('/advisor/dashboard');
     }
     else{
         console.log('Wrong credentials');
