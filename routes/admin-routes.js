@@ -111,17 +111,16 @@ adminRouters.delete('/announcements/:id/delete' , async (req , res)=>{
 });
 
 adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
+    try{
+        const categories = await getCategories();
+        return res.render('admin-categories' , {
+            categories : categories
+        });
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }  
 
-    const categories = await getCategories();
-    return res.render('admin-categories' , {
-        categories : categories
-    });
-
-});
-
-adminRouters.get('/categories/add', isAdmin , (req , res)=>{
-
-    return res.render("admin-add-category");
 });
 
 adminRouters.post('/categories/add', isAdmin ,async(req , res)=>{
@@ -129,11 +128,6 @@ adminRouters.post('/categories/add', isAdmin ,async(req , res)=>{
     try{
         const {categoryName , categoryDescription} = req.body;
         const newCategory = await addCategory(categoryName , categoryDescription);
-
-        if(!newCategory || newCategory === null){
-            return res.status(500).send("Insertion failed ..");
-        }
-
         return res.redirect('/admin/categories');
     }
 
@@ -145,18 +139,15 @@ adminRouters.post('/categories/add', isAdmin ,async(req , res)=>{
 
 adminRouters.get('/categories/:categoryId/delete' , isAdmin , async(req , res)=>{
     try{
-
         const categoryId = req.params.categoryId;
         const result = await deleteCategory(categoryId);
-        if(!result){
-            return res.status(500).send("deletion failed");
-        }
 
         return res.redirect('/admin/categories');
     }
 
     catch(e){
         console.log(`Error : ${e.message}`);
+        return res.status(500).render("500");
     }
 });
 

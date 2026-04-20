@@ -14,7 +14,7 @@ const {applyForProject, myProjectApplications, deleteApplication, getApplicants 
 const limiter = limit({
     windowMs : 15 * 60 * 1000 ,
     max : 100 ,
-    message : "Too much requests"
+    message : "Too much requests . Try later"
 })
 
 function isStudent(req, res, next){
