@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
 const {getAdvisors , createAdvisorRow} = require('../mysql/advisors');
@@ -7,6 +8,12 @@ const {createUser , getUser} = require('../mysql/users');
 const {createStudentRow} = require('../mysql/students');
 const {getProjects} = require('../mysql/projects');
 const { getCategories } = require('../mysql/categories');
+
+const loginLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 15 minutes
+  max: 3,
+  message : "Too many attempts"
+});
 
 function isStudent(req, res, next){
     if(!req.session.studentId){
@@ -61,13 +68,13 @@ authRoutes.get('/find/advisor' , isStudent ,  async(req , res)=>{
     }
 });
 
-authRoutes.get('/login' , (req , res)=>{
+authRoutes.get('/login' ,(req , res)=>{
     return res.render("login" , {
         title : "ProjectHub Login"
     });
 });
 
-authRoutes.post('/login' , async (req , res)=>{
+authRoutes.post('/login' , loginLimiter , async (req , res)=>{
     const {role , email , password} = req.body;
     const userRole = Number(role);
     const user = await getUser(userRole , email , password);

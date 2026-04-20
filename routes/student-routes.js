@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const limit = require('express-rate-limit');
 const studentRoutes = express.Router();
 const db = require('../mysql/db');
 const {getMyAdvisorRequests , changeStudentPassword ,getStudentProfileInfo, getStudentById ,modifyStudenSkills , modifyStudenBio} = require('../mysql/students');
@@ -10,6 +11,11 @@ const {compareUserPassword} = require('../mysql/users');
 const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
 const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
 
+const limiter = limit({
+    windowMs : 15 * 60 * 1000 ,
+    max : 100 ,
+    message : "Too much requests"
+})
 
 function isStudent(req, res, next){
     if(!req.session.studentId){
@@ -22,26 +28,26 @@ function isStudent(req, res, next){
 studentRoutes.get('/homepage' , isStudent , async(req , res)=>{
     const studentId = req.session.studentId;
     const student = await getStudentById(studentId);
-    if(student === null){
-        console.log(`No student found`);
-        return res.send(`No student found`);
-    }
 
     return res.render("student-homepage" , {
         student : student
     });
 });
 
-studentRoutes.get('/announcements' , isStudent , async(req , res)=>{
-
-    const announcements = await getAnnouncements();
-    console.log(announcements);
-    return res.render("announcements" , {
-        announcements : announcements
-    });
+studentRoutes.get('/announcements' , isStudent , limiter , async(req , res)=>{
+    try{
+        const announcements = await getAnnouncements();
+        return res.render("announcements" , {
+            announcements : announcements
+        });
+    }
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
-studentRoutes.get('/create/projects' , isStudent , async(req , res)=>{
+studentRoutes.get('/create/projects' , isStudent , limiter ,async(req , res)=>{
 
     try{
         const categories = await getCategories();
@@ -57,7 +63,7 @@ studentRoutes.get('/create/projects' , isStudent , async(req , res)=>{
     
 });
 
-studentRoutes.post('/create/projects' ,isStudent, async (req , res)=>{
+studentRoutes.post('/create/projects' ,isStudent, limiter , async (req , res)=>{
 
     const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
     const createdBy = req.session.studentId;
@@ -72,7 +78,7 @@ studentRoutes.post('/create/projects' ,isStudent, async (req , res)=>{
     }
 })
 
-studentRoutes.get('/projects' , isStudent , async (req , res)=>{
+studentRoutes.get('/projects' , isStudent , limiter ,async (req , res)=>{
 
     try{
         const projects = await getProjects();
@@ -92,7 +98,7 @@ studentRoutes.get('/projects' , isStudent , async (req , res)=>{
 
 });
 
-studentRoutes.get('/myprojects', isStudent, async (req, res) => {
+studentRoutes.get('/myprojects', isStudent, limiter ,async (req, res) => {
     try {
         const createdBy = req.session.studentId;
         const myproject = await myProjects(createdBy);
@@ -107,7 +113,7 @@ studentRoutes.get('/myprojects', isStudent, async (req, res) => {
     }
 });
 
-studentRoutes.post('/project/:id/delete', isStudent, async (req, res) => {
+studentRoutes.post('/project/:id/delete', isStudent, limiter ,async (req, res) => {
     try {
         const projectId = req.params.id;
         const studentId = req.session.studentId;
@@ -121,14 +127,14 @@ studentRoutes.post('/project/:id/delete', isStudent, async (req, res) => {
     }
 });
 
-studentRoutes.get('/:id/delete' ,isStudent,async (req ,res)=>{
+studentRoutes.get('/:id/delete' , isStudent, limiter , async (req ,res)=>{
 
     const projectId = req.params.id;
     const deleteProject = await deleteProjects(projectId);
     return res.redirect('/student/myprojects');
 });
 
-studentRoutes.get('/project/application/:id/apply' , isStudent , async(req , res)=>{
+studentRoutes.get('/project/application/:id/apply' , isStudent , limiter , async(req , res)=>{
     
     const projectId = req.params.id;
 
@@ -137,7 +143,7 @@ studentRoutes.get('/project/application/:id/apply' , isStudent , async(req , res
     });
 });
 
-studentRoutes.post('/project/application/submit', isStudent , async(req , res)=>{
+studentRoutes.post('/project/application/submit', isStudent , limiter , async(req , res)=>{
     try{
         const id = req.session.studentId;
         const {projectId , email , message , skills}  = req.body;
@@ -152,7 +158,7 @@ studentRoutes.post('/project/application/submit', isStudent , async(req , res)=>
 
 });
 
-studentRoutes.get('/applications' , isStudent , async(req , res)=>{
+studentRoutes.get('/applications' , isStudent , limiter ,async(req , res)=>{
     try{
         const id = req.session.studentId;
         const applications = await myProjectApplications(id);
@@ -169,7 +175,7 @@ studentRoutes.get('/applications' , isStudent , async(req , res)=>{
     
 });
 
-studentRoutes.get('/applications/:applicationID/delete' ,isStudent, async(req , res)=>{
+studentRoutes.get('/applications/:applicationID/delete' ,isStudent, limiter ,async(req , res)=>{
     try{
         const applicationId = req.params.applicationID;
         const removeApplication = await deleteApplication(applicationId);
@@ -184,7 +190,7 @@ studentRoutes.get('/applications/:applicationID/delete' ,isStudent, async(req , 
     }
 });
 
-studentRoutes.get('/applicants' ,isStudent,async (req , res)=>{
+studentRoutes.get('/applicants' ,isStudent ,limiter ,async (req , res)=>{
     try{
         const id = req.session.studentId;
         const applicants = await getApplicants(id);
@@ -201,7 +207,7 @@ studentRoutes.get('/applicants' ,isStudent,async (req , res)=>{
     
 });
 
-studentRoutes.post('/applicants/:id/accept', isStudent , async(req , res)=>{
+studentRoutes.post('/applicants/:id/accept', isStudent , limiter ,async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const accept = await acceptApplication(requestId);
@@ -214,7 +220,7 @@ studentRoutes.post('/applicants/:id/accept', isStudent , async(req , res)=>{
     }
 });
 
-studentRoutes.post('/applicants/:id/reject' , isStudent , async(req , res)=>{
+studentRoutes.post('/applicants/:id/reject' , isStudent , limiter ,async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const reject = await rejectApplication(requestId);
@@ -227,7 +233,7 @@ studentRoutes.post('/applicants/:id/reject' , isStudent , async(req , res)=>{
     }
 });
 
-studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
+studentRoutes.get('/find/advisors' , isStudent , limiter ,async(req ,  res)=>{
      try{
         const advisors = await getAdvisors();
         return res.render("find-advisors" , {
@@ -240,7 +246,7 @@ studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
     }
 });
 
-studentRoutes.get('/requests/:advisorId/advisors' , isStudent , async(req , res)=>{
+studentRoutes.get('/requests/:advisorId/advisors' , isStudent , limiter ,async(req , res)=>{
     try{
 
         const advisorId = Number(req.params.advisorId);
@@ -257,7 +263,7 @@ studentRoutes.get('/requests/:advisorId/advisors' , isStudent , async(req , res)
     }
 })
 
-studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)=>{
+studentRoutes.post('/requests/:advisorId/advisors' , isStudent , limiter ,async(req ,res)=>{
 
     try{
         const advisorId = Number(req.params.advisorId);
@@ -273,7 +279,7 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
     }
 });
 
-studentRoutes.get('/requests' , isStudent , async(req , res)=>{
+studentRoutes.get('/requests' , isStudent , limiter ,async(req , res)=>{
 
     try{
         const studentId = req.session.studentId;
@@ -291,7 +297,7 @@ studentRoutes.get('/requests' , isStudent , async(req , res)=>{
 
 });
 
-studentRoutes.get('/profile' , isStudent ,async(req , res)=>{
+studentRoutes.get('/profile' , isStudent ,limiter ,async(req , res)=>{
     try{
         const studentId = req.session.studentId;
         const student = await getStudentProfileInfo(studentId);
@@ -307,7 +313,7 @@ studentRoutes.get('/profile' , isStudent ,async(req , res)=>{
     }
 });
 
-studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
+studentRoutes.post('/profile/update' , isStudent , limiter ,async(req , res)=>{
     try{
         const studentId = req.session.studentId;
         const {skills , bio} = req.body;
@@ -323,7 +329,7 @@ studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
     }
 });
 
-studentRoutes.get('/profile/change-password' , isStudent , (req , res)=>{
+studentRoutes.get('/profile/change-password' , isStudent , limiter ,(req , res)=>{
 
     try{
         return res.render("st-change-password");
@@ -336,7 +342,7 @@ studentRoutes.get('/profile/change-password' , isStudent , (req , res)=>{
     
 });
 
-studentRoutes.post('/profile/change-password' , isStudent , async(req , res)=>  {
+studentRoutes.post('/profile/change-password' , isStudent , limiter ,async(req , res)=>  {
     try{
         const studentId = req.session.studentId;
         const {currentPassword , newPassword , confirmPassword} = req.body;
