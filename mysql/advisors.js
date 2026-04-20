@@ -4,17 +4,12 @@ async function getAdvisors(){
     try{
         const sql = "select u.user_id , u.full_name , u.email , d.department_name , a.areas_of_expertise , a.available FROM users AS u INNER JOIN departments AS d INNER JOIN advisors AS a ON d.department_id = u.department WHERE u.role = 2"
         const [rows] = await database.pool.execute(sql);
-
-        if(!rows || rows.affectedRows <= 0){
-            console.log(`Advisors set Null`);
-            return null;
-        }
-
         return rows;
     }
 
     catch(e){
         console.log(`Get advisors error : ${e.message}`);
+        throw e;
     }
 }
 
@@ -23,17 +18,11 @@ async function createAdvisorRow(advisorId){
     try{
         const sql = "INSERT INTO advisors(advisor_id) values(?)";
         const [result] = await database.pool.execute(sql , [advisorId]);
-    
-        if(!result.affectedRows){
-            console.log(`Inserting student row failed ..`);
-            return null;
-        }
-    
-        return true
     }
     
     catch(e){
         console.log(`Student row insertion error : ${e.message}`);
+        throw e;
     }
 
 }
@@ -42,10 +31,6 @@ async function getAdvisorProfileInfo(advisorId){
     try{
         const sql = "select u.full_name , u.email , d.department_name , a.academic_title , a.areas_of_expertise , a.research , a.available   FROM users AS u INNER JOIN departments AS d INNER JOIN advisors AS a ON a.advisor_id = u.user_id AND d.department_id = u.department  WHERE user_id = ?";
         const [result] = await database.pool.execute(sql , [advisorId]);
-        
-        if(result.length <= 0){
-            return null;
-        }
 
         return result[0];
     
@@ -61,16 +46,11 @@ async function requestAdvisor(advisorId, projectId , studentId , message , meeti
     try{
         const sql = "INSERT INTO advisor_requests (advisor_id , project_id, student_id , request_message , meeting_method) VALUES (?,?,?,?,?)";
         const [result] = await database.pool.execute(sql , [advisorId , projectId, studentId , message , meetingMethod]);
-        if(result.affectedRows <= 0){
-            console.log(`Insertion failed`);
-            return null;
-        }
-
-        return true;
     }
 
     catch(e){
         console.log(`Request advisor error : ${e.message}`);
+        throw e;
     }
 }
 
@@ -80,16 +60,12 @@ async function advisorDashboard(){
         const sql = "SELECT u.full_name , a.status , a.requested_at FROM users AS u INNER JOIN advisor_requests AS a ON a.student_id = u.user_id";
         const [rows] = await database.pool.execute(sql);
 
-        if(rows.affectedRows <= 0){
-            console.log("Fetching advisor dashboard failed !!");
-            return null;
-        }
-
         return rows;
     }
 
     catch(e){
         console.log(`Advisor infos {advisorDashboard()} : ${e.message}`);
+        throw e;
     }
 
 }
@@ -97,18 +73,14 @@ async function advisorDashboard(){
 async function getRequests(advisorId){
     try{
         const sql = "SELECT a.request_id , u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.advisor_id = ?";
-        const [rows] = await database.pool.execute(sql , [advisorId]);
-
-        if(rows.length <= 0){
-            console.log('No requests !!');
-            return null;
-        }
+        const [rows] = await database.pool.execute(sql , [advisorId])
 
         return rows;
     }
 
     catch(e){
         console.log(`Get all requests error : ${e.message}`);
+        throw e;
     }
 }
 
@@ -118,16 +90,12 @@ async function countPendingRequests(advisorId){
         const sql = "SELECT count(status) as pending_requests FROM advisor_requests WHERE status = 'pending' AND advisor_id = ?";
         const [result] = await database.pool.execute(sql , [advisorId]);
 
-        if(result.length <= 0){
-            console.log(`No pending requests .`);
-            return null;
-        }
-
         return result[0];
     }
 
     catch(e){
         console.log(`Count pending request error : ${e.message}`);
+        throw e;
     }
 }
 
@@ -136,16 +104,13 @@ async function getPendingRequests(advisorId){
     try{
         const sql = "SELECT a.request_id , u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.status = 'pending' AND a.advisor_id = ?";
         const [rows] = await database.pool.execute(sql , [advisorId]);
-        if(rows === null){
-            console.log("No requests ..");
-            return null;
-        }
 
         return rows;
 
     }
     catch(e){
        console.log(`Pending request request error : ${e.message}`);
+       throw e;
     }
 }
 
@@ -154,16 +119,11 @@ async function acceptRequest(requestId){
         const sql = "UPDATE advisor_requests SET status = 'accepted' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]);
 
-        if(result.affectedRows <= 0){
-            console.log("status update failed !!");
-            return null;
-        }
-
-        return true;
     }
 
     catch(e){
         console.log(`Accept request error : ${e.message}`);
+        throw e;
     }
 }
 
@@ -172,16 +132,11 @@ async function rejectRequest(requestId){
         const sql = "UPDATE advisor_requests SET status = 'rejected' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]);
 
-        if(result.affectedRows <= 0){
-            console.log("status update failed !!");
-            return null;
-        }
-
-        return true;
     }
 
     catch(e){
         console.log(`Reject request error : ${e.message}`);
+        throw e;
     }
 }
 
@@ -190,16 +145,13 @@ async function myProjects(advisorId){
     try{
         const sql = "SELECT u.full_name , u.email , p.project_title , p.project_description , p.budget , a.meeting_method  FROM advisor_requests AS a INNER JOIN users AS u INNER JOIN student_projects AS p ON u.user_id = a.advisor_id AND p.project_id = a.project_id WHERE a.status = 'accepted' AND a.advisor_id = ?";
         const [rows] = await database.pool.execute(sql , [advisorId]);
-        if(rows.length <= 0){
-            console.log("My projects is null");
-            return null;
-        }
 
         return rows;
     }
 
     catch(e){
         console.log(`My projects error :${e.message} `);
+        throw e;
     }
 }
 
@@ -207,16 +159,11 @@ async function setAcademicTitle(academicTitle , advisorId){
     try{
         const sql = "UPDATE advisors SET academic_title = ? WHERE advisor_id = ?";
         const [result] = await database.pool.execute(sql , [academicTitle , advisorId]);
-        if(!result.affectedRows){
-            console.log(`Set academic title failed !`);
-            return false;
-        }
-
-        return true;
     }
 
     catch(e){
         console.log(e.message);
+        throw e;
     }
 }
 
@@ -224,16 +171,12 @@ async function setExpertise(expertise , advisorId){
     try{
         const sql = "UPDATE advisors SET areas_of_expertise = ? WHERE advisor_id = ?";
         const [result] = await database.pool.execute(sql , [expertise , advisorId]);
-        if(!result.affectedRows){
-            console.log(`Set expertise failed !`);
-            return false;
-        }
 
-        return true;
     }
 
     catch(e){
         console.log(e.message);
+        throw e;
     }
 }
 
@@ -241,16 +184,11 @@ async function setResearches(researches , advisorId){
     try{
         const sql = "UPDATE advisors SET research = ? WHERE advisor_id = ?";
         const [result] = await database.pool.execute(sql , [researches , advisorId]);
-        if(!result.affectedRows){
-            console.log(`Set researches failed !`);
-            return false;
-        }
-
-        return true;
     }
 
     catch(e){
         console.log(e.message);
+        throw e;
     }
 }
 
@@ -258,16 +196,11 @@ async function isAdvisorAvailable(available , advisorId){
     try{
         const sql = "UPDATE advisors SET available = ? WHERE advisor_id = ?";
         const [result] = await database.pool.execute(sql , [available , advisorId]);
-        if(!result.affectedRows){
-            console.log(`Set availability failed !`);
-            return false;
-        }
-
-        return true;
     }
 
     catch(e){
         console.log(e.message);
+        throw e;
     }
 }
 

@@ -14,116 +14,90 @@
 
 <body>
 
-<div class="page-split">
+<div class="page">
 
-    <!-- Left Panel -->
-    <div class="left-panel">
-        <a href="/" class="brand">Team<span>Match</span></a>
+    <!-- Brand -->
+    <a href="/" class="brand">Team<span>Match</span></a>
 
-        <div class="left-content">
-            <div class="left-eyebrow">University Project Hub</div>
-            <h1 class="left-title">Build your<br><em>dream team</em></h1>
-            <p class="left-sub">Join thousands of students finding collaborators, advisors, and project partners across every department.</p>
-
-            <div class="left-stats">
-                <div class="stat">
-                    <div class="stat-num">500+</div>
-                    <div class="stat-label">Active Projects</div>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <div class="stat-num">1,200+</div>
-                    <div class="stat-label">Students</div>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <div class="stat-num">80+</div>
-                    <div class="stat-label">Advisors</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="left-orb"></div>
+    <!-- Heading -->
+    <div class="page-top">
+        <h1 class="page-title">Create your account</h1>
+        <p class="page-sub">Already have an account? <a href="/login" class="inline-link">Sign in →</a></p>
     </div>
 
-    <!-- Right Panel -->
-    <div class="right-panel">
-        <div class="form-card">
+    <!-- Form card -->
+    <div class="form-card">
 
-            <div class="form-top">
-                <h2 class="form-title">Create Account</h2>
-                <p class="form-sub">Already have an account? <a href="/login" class="form-link">Sign in</a></p>
+        <form method="POST" action="/signup">
+
+            <!-- Role Selector -->
+            <div class="field-group">
+                <label class="field-label">I am a</label>
+                <div class="roles">
+                    <div class="role active" data-role="3">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Student
+                    </div>
+                    <div class="role" data-role="2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        Instructor
+                    </div>
+                </div>
+                <!-- hidden input -->
+                <input type="hidden" name="role" id="role" value="3">
             </div>
 
-            <form method="POST" action="/signup">
-
-                <!-- Role Selector -->
+            <!-- Name & Email -->
+            <div class="field-row">
                 <div class="field-group">
-                    <label class="field-label">I am a</label>
-                    <div class="roles">
-                        <div class="role active" data-role="3">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            Student
-                        </div>
-                        <div class="role" data-role="2">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                            Instructor
-                        </div>
-                    </div>
-                    <!-- hidden input -->
-                    <input type="hidden" name="role" id="role" value="3">
+                    <label class="field-label">Full Name</label>
+                    <input class="field-input" type="text" name="username" placeholder="e.g. Alex Johnson" required>
                 </div>
-
-                <!-- Name & Email -->
-                <div class="field-row">
-                    <div class="field-group">
-                        <label class="field-label">Full Name</label>
-                        <input class="field-input" type="text" name="username" placeholder="e.g. Alex Johnson" required>
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Email Address</label>
-                        <input class="field-input" type="email" name="email" placeholder="you@university.edu" required>
-                    </div>
+                <div class="field-group">
+                    <label class="field-label">Email Address</label>
+                    <input class="field-input" type="email" name="email" placeholder="you@university.edu" required>
                 </div>
+            </div>
 
-                <!-- Department & Age -->
-                <div class="field-row">
-                    <div class="field-group">
-                        <label class="field-label">Department</label>
-                        <select class="field-input field-select" name="department" required>
-                            <option value="">Select department</option>
-                            <option value="302">Computer Science</option>
-                            <option value="405">Industrial Engineering</option>
-                            <option value="301">Robotic Engineering</option>
-                            <option value="200">Software Engineering</option>
-                            <option value="101">Chemical Engineering</option>
-                            <option value="111">Electrical Engineering</option>
-                        </select>
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Age</label>
-                        <input class="field-input" type="number" name="age" placeholder="e.g. 21" required>
-                    </div>
+            <!-- Department & Age -->
+            <div class="field-row">
+                <div class="field-group">
+                    <label class="field-label">Department</label>
+                    <select class="field-input field-select" name="department" required>
+                        <option value="">Select department</option>
+                        <option value="302">Computer Science</option>
+                        <option value="405">Industrial Engineering</option>
+                        <option value="301">Robotic Engineering</option>
+                        <option value="200">Software Engineering</option>
+                        <option value="101">Chemical Engineering</option>
+                        <option value="111">Electrical Engineering</option>
+                    </select>
                 </div>
-
-                <!-- Passwords -->
-                <div class="field-row">
-                    <div class="field-group">
-                        <label class="field-label">Password</label>
-                        <input class="field-input" type="password" name="password" placeholder="Create a password" required>
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Confirm Password</label>
-                        <input class="field-input" type="password" name="confirm_password" placeholder="Repeat password" required>
-                    </div>
+                <div class="field-group">
+                    <label class="field-label">Age</label>
+                    <input class="field-input" type="number" name="age" placeholder="e.g. 21" required>
                 </div>
+            </div>
 
-                <button class="submit-btn" type="submit">Create Account</button>
+            <!-- Passwords -->
+            <div class="field-row">
+                <div class="field-group">
+                    <label class="field-label">Password</label>
+                    <input class="field-input" type="password" name="password" placeholder="Create a password" required>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Confirm Password</label>
+                    <input class="field-input" type="password" name="confirm_password" placeholder="Repeat password" required>
+                </div>
+            </div>
 
-            </form>
+            <button class="submit-btn" type="submit">Create Account</button>
 
-        </div>
+        </form>
+
     </div>
+
+    <p class="back-link"><a href="/">← Back to home</a></p>
 
 </div>
 

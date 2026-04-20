@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const adminRouters = express.Router();
 const db = require('../mysql/db');
-const {getAdmin , getAllUsers , deleteUsers} = require('../mysql/users');
+const {getAdmin , getAllUsers , deleteUsers, getUsersRoles , changeUserRole} = require('../mysql/users');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects , deleteProjects} = require('../mysql/projects');
@@ -36,7 +36,13 @@ adminRouters.post('/dashboard' , async(req , res)=>{
 })
 
 adminRouters.get('/homepage' , isAdmin ,(req , res)=>{
-    return res.sendFile(path.join(__dirname , "../static-files/html-files/admin-homepage.html"));
+    try{
+        return res.render("admin-homepage");
+    }
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
 adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
@@ -62,7 +68,6 @@ adminRouters.get('/projects/:id/delete', async(req , res)=>{
 adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
 
     const announcements = await getAnnouncements();
-    console.log(announcements);
     return res.render("admin-announcements" , {
         announcements : announcements
     });
@@ -85,10 +90,6 @@ adminRouters.post('/announcements/add', async(req , res)=>{
         const {category , title , description , isUrgent} = req.body;
         const newAnnouncement = await addAnnouncement(category , title , description , isUrgent);
 
-        if(!newAnnouncement || newAnnouncement === null){
-            return res.status(500).send("Internal issues");
-        }
-
         return res.redirect('/admin/announcements');
     }
 
@@ -97,12 +98,16 @@ adminRouters.post('/announcements/add', async(req , res)=>{
     }
 });
 
-adminRouters.get('/announcements/:id/delete' , async (req , res)=>{
+adminRouters.delete('/announcements/:id/delete' , async (req , res)=>{
+    try{
+        const announcementId = req.params.id;
+        const removeAnnoucements = await deleteAnnouncement(announcementId);
 
-    const announcementId = req.params.id;
-    const removeAnnoucements = await deleteAnnouncement(announcementId);
-
-    return res.redirect('/admin/announcements');
+        return res.redirect('/admin/announcements');
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
 adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
@@ -159,17 +164,31 @@ adminRouters.get('/users/roles' , isAdmin , async(req , res)=>{
 
     try{
         const users = await getAllUsers();
-        if(!users || users === null){
-            return res.status(500).send("internal issues..");
-        }
+        const roles = await getUsersRoles();
 
         return res.render("admin-users-roles" , {
-            users : users
+            users : users,
+            roles : roles
         });
     }
 
     catch(e){
-        return e.message;
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+});
+
+adminRouters.patch('/:userId/change-role' , isAdmin , async(req , res)=>{
+    try{
+        const userId = req.params.userId;
+        const newRole = req.body.roleId;
+
+        const result = await changeUserRole(newRole , userId);
+        return res.redirect("/admin/users/roles");
+    }
+    catch(e){
+         console.log(e.message);
+        return res.status(500).render("500");
     }
 });
 
@@ -179,15 +198,12 @@ adminRouters.get('/users/:userId/delete' , isAdmin , async(req , res)=>{
         const userId = req.params.userId;
         const removeUser = await deleteUsers(userId);
 
-        if(!removeUser){
-            return res.status(500).send("Internal issues");
-        }
-
         return res.redirect('/admin/users/roles');
     }
 
     catch(e){
-        return e.message;
+         console.log(e.message);
+         return res.status(500).render("500");
     }
 });
 

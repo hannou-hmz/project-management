@@ -8,6 +8,13 @@ const {createStudentRow} = require('../mysql/students');
 const {getProjects} = require('../mysql/projects');
 const { getCategories } = require('../mysql/categories');
 
+function isStudent(req, res, next){
+    if(!req.session.studentId){
+        console.log('No student session .. redirecting ..');
+        return res.redirect('/login');
+    }
+    next();
+}
 
 authRoutes.get('/' , async(req , res , next)=>{
     try{
@@ -26,7 +33,7 @@ authRoutes.get('/' , async(req , res , next)=>{
     
 });
 
-authRoutes.get('/projects' , async (req , res)=>{
+authRoutes.get('/projects' , isStudent , async (req , res)=>{
 
     const projects = await getProjects();
     const categories = await getCategories();
@@ -40,7 +47,7 @@ authRoutes.get('/projects' , async (req , res)=>{
     });
 });
 
-authRoutes.get('/find/advisor' , async(req , res)=>{
+authRoutes.get('/find/advisor' , isStudent ,  async(req , res)=>{
 
     try{
         const advisors = await getAdvisors();

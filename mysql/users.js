@@ -3,20 +3,14 @@ const bcrypt = require('bcrypt');
 const SALT_COUNT = 8;
 
 async function createUser(role , full_name , age , email , department , password){
-    const encPassword = await bcrypt.hash(password , SALT_COUNT);
     try{
+        const encPassword = await bcrypt.hash(password , SALT_COUNT);
         const sql = "INSERT INTO users(role , full_name , age , email , department , password) VALUES(?,?,?,?,?,?)";
         const [result] = await database.pool.execute(sql , [role , full_name , age , email , department , encPassword]);
-        if(result.affectedRows <= 0){
-            console.log(`User creation failed !! `);
-            return null;
-        } 
-
         return result;
     }
     catch(e){
-        console.log(`Storing user error : ${e.message}`);
-        return false;
+        throw e;
     }
 }
 
@@ -39,8 +33,7 @@ async function getAdmin(email , password){
         
     }
     catch(e){
-        console.log(`Not an admin : ${e.message}`);
-        return false;
+        throw e;
     }
     
 }
@@ -50,24 +43,17 @@ async function getUser(role , email , password){
     try{
         const sql = "SELECT * FROM users WHERE role = ? AND email = ?";
         const [rows] = await database.pool.execute(sql, [role , email]);
-        if(rows.length === 0){
-            return null
-        }
 
-        const unhashPassword = await bcrypt.compare(password , rows[0].password);
-        if(!unhashPassword){
-           console.log('User is not in database!!!')
-            return null;
+        const isMatch = await bcrypt.compare(password , rows[0].password);
+        if(isMatch){
+            console.log('User found in database.')
+            return rows[0];
         }
         
-        console.log('User found in database.')
-        return rows[0];
- 
     }
     
     catch (e) {
-        console.log(`Finding user error : ${e.message}`);
-        return null;
+        throw e;
     }
 }
 
@@ -76,19 +62,11 @@ async function getUserById(userId){
     try{
         const sql = "SELECT u.full_name FROM users AS u WHERE user_id = ?";
         const [rows] = await database.pool.execute(sql , [userId]);
-
-        if(rows.affectedRows <= 0 ){
-            console.log(`No such user`);
-            return null;
-        }
-
         return rows[0];
-
     }
 
     catch(e){
-        console.log(`get user by id error : `);
-        return e.message;
+        throw e;
     }
 }
 
@@ -109,25 +87,31 @@ async function compareUserPassword(userId , currentPasswd){
     }
 
     catch(e){
-        console.log(`Password changing error : ${e.message}`);
+        throw e;
     }
 }
 
 async function getAllUsers(){
 
     try{
-        const sql = "SELECT u.user_id, u.full_name , u.email , d.department_name , r.role_name FROM users AS u INNER JOIN roles AS r INNER JOIN departments AS d ON r.role_id = u.role AND d.department_id = department";
+        const sql = "SELECT u.user_id, u.role ,  u.full_name , u.email , d.department_name , r.role_name FROM users AS u INNER JOIN roles AS r INNER JOIN departments AS d ON r.role_id = u.role AND d.department_id = u.department";
         const [rows] = await database.pool.execute(sql);
-        if(rows.affectedRows <= 0){
-            console.log("Empty set");
-            return null;
-        }
-
         return rows;
     }
 
     catch(e){
-        return e.message;
+        throw e;
+    }
+}
+
+async function getUsersRoles(){
+    try{
+        const sql = "SELECT role_id , role_name FROM roles";
+        const [rows] = await database.pool.execute(sql);
+        return rows;
+    }
+    catch(e){
+        throw e;
     }
 }
 
@@ -136,16 +120,20 @@ async function deleteUsers(userId){
     try{
         const sql = "DELETE FROM users WHERE user_id = ?";
         const [result] = await database.pool.execute(sql , [userId]);
-        if(result.affectedRows <= 0){
-            console.log("User not deleted ..");
-            return false;
-        }
-
-        return true;
     }
 
     catch(e){
-        return e.message;
+        throw e;
+    }
+}
+
+async function changeUserRole(role , userId){
+    try{
+        const sql = "UPDATE users SET role = ? WHERE user_id = ?";
+        const [result] = await database.pool.execute(sql , [role , userId]);
+    }
+    catch(e){
+        throw e;
     }
 }
 
@@ -157,6 +145,8 @@ module.exports = {
     getUserById,
     getAdmin,
     getAllUsers,
+    getUsersRoles,
     compareUserPassword,
-    deleteUsers
+    deleteUsers,
+    changeUserRole
 }

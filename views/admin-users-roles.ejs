@@ -12,10 +12,27 @@
 
             <p><strong>Department:</strong> <%= user.department_name %></p>
 
-            <p><strong>Role:</strong> <%= user.role_name %></p>
+            <p><strong>Role:</strong> <%= user.role_name %></p> 
 
             <a style="background-color: rgb(94, 94, 94);color: white; padding: 7px;" 
             href="/admin/users/<%= user.user_id%>/delete">Delete user</a>
+
+           
+            <form action="/admin/<%= user.user_id %>/change-role?_method=PATCH" method="POST">
+                <select name="roleId" required>
+                    <option value="">-- Select a category --</option>
+
+                    <% roles.forEach(role => { %>
+                        <option value="<%= role.role_id %>">
+                            <%= role.role_name %>
+                        </option>
+                    <% }) %>
+
+                </select>
+
+                <button type="submit">Change Role</button>
+            </form>
+            
 
         </div>
 

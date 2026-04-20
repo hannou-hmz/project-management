@@ -45,10 +45,6 @@ studentRoutes.get('/create/projects' , isStudent , async(req , res)=>{
 
     try{
         const categories = await getCategories();
-        if(categories === null){
-            console.log("No category found ");
-            return res.status(500).render("500")
-        }
 
         return res.render("student-create-projects" , {
             categories : categories
@@ -61,7 +57,7 @@ studentRoutes.get('/create/projects' , isStudent , async(req , res)=>{
     
 });
 
-studentRoutes.post('/create/projects' , async (req , res)=>{
+studentRoutes.post('/create/projects' ,isStudent, async (req , res)=>{
 
     const {title , category , description , budget , skills , teamSize , reqAdvisor } = req.body;
     const createdBy = req.session.studentId;
@@ -69,11 +65,6 @@ studentRoutes.post('/create/projects' , async (req , res)=>{
 
     try{
         const project = await createProjects(title , announcementCategory , description , budget , skills , teamSize , reqAdvisor , createdBy);
-        if(project === null){
-            console.log("Project creation failed ..");
-            return res.status(500).render("500")
-        }
-
         return res.redirect('/student/homepage');    
     } 
     catch(e){
@@ -83,16 +74,21 @@ studentRoutes.post('/create/projects' , async (req , res)=>{
 
 studentRoutes.get('/projects' , isStudent , async (req , res)=>{
 
-    const projects = await getProjects();
-    const categories = await getCategories();
-    if(!projects || !categories){
-        return res.status(500).send('Internal issues ..');
+    try{
+        const projects = await getProjects();
+        const categories = await getCategories();
+
+        return res.render("show-projects" , {
+            projects : projects,
+            categories : categories
+        });
     }
 
-    return res.render("show-projects" , {
-        projects : projects,
-        categories : categories
-    });
+    catch(e){
+        console.log(`${e.message}`);
+        return res.status(500).render("500");
+    }
+    
 
 });
 
@@ -100,10 +96,6 @@ studentRoutes.get('/myprojects', isStudent, async (req, res) => {
     try {
         const createdBy = req.session.studentId;
         const myproject = await myProjects(createdBy);
-
-        if (!myproject) {
-            return res.status(500).send(`Internal issues ...`);
-        }
 
         return res.render("st-my-projects", {
             projects: myproject 
@@ -121,11 +113,6 @@ studentRoutes.post('/project/:id/delete', isStudent, async (req, res) => {
         const studentId = req.session.studentId;
 
         const result = await deleteProjects(projectId, studentId);
-
-        if (!result || result.affectedRows === 0) {
-            return res.status(404).send("Project not found or not deleted");
-        }
-
         return res.redirect("/student/myprojects");
 
     } catch (e) {
@@ -134,14 +121,10 @@ studentRoutes.post('/project/:id/delete', isStudent, async (req, res) => {
     }
 });
 
-studentRoutes.get('/:id/delete' ,async (req ,res)=>{
+studentRoutes.get('/:id/delete' ,isStudent,async (req ,res)=>{
 
     const projectId = req.params.id;
     const deleteProject = await deleteProjects(projectId);
-    if(deleteProject === null){
-        return res.status(500).send('Internal issues ..');
-    }
-
     return res.redirect('/student/myprojects');
 });
 
@@ -154,63 +137,74 @@ studentRoutes.get('/project/application/:id/apply' , isStudent , async(req , res
     });
 });
 
-studentRoutes.post('/project/application/submit'  , async(req , res)=>{
+studentRoutes.post('/project/application/submit', isStudent , async(req , res)=>{
+    try{
+        const id = req.session.studentId;
+        const {projectId , email , message , skills}  = req.body;
 
-    const id = req.session.studentId;
-    const {projectId , email , message , skills}  = req.body;
-
-    const application = await applyForProject(id , projectId , email , message , skills);
-    if(!application){
-        return res.send("internal issues");
+        const application = await applyForProject(id , projectId , email , message , skills);
+        return res.redirect('/student/projects');
     }
-    return res.redirect('/student/projects');
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500")
+    }
 
 });
 
 studentRoutes.get('/applications' , isStudent , async(req , res)=>{
+    try{
+        const id = req.session.studentId;
+        const applications = await myProjectApplications(id);
 
-    const id = req.session.studentId;
-    const applications = await myProjectApplications(id);
-
-    console.log(applications);
-    return res.render("st-applications" , {
-        applications : applications
-    });
-});
-
-studentRoutes.get('/applications/:applicationID/delete' , async(req , res)=>{
-    
-    const applicationId = req.params.applicationID;
-    const removeApplication = await deleteApplication(applicationId);
-    if(removeApplication === null){
-        return res.status(500).send("internal issues ..");
+        return res.render("st-applications" , {
+            applications : applications
+        });
     }
 
-    return res.render("st-applications" , {
-        applications : removeApplication
-    });
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+    
 });
 
-studentRoutes.get('/applicants' ,async (req , res)=>{
+studentRoutes.get('/applications/:applicationID/delete' ,isStudent, async(req , res)=>{
+    try{
+        const applicationId = req.params.applicationID;
+        const removeApplication = await deleteApplication(applicationId);
 
-    const id = req.session.studentId;
-    const applicants = await getApplicants(id);
+        return res.render("st-applications" , {
+            applications : removeApplication
+        });
+    }
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500")
+    }
+});
+
+studentRoutes.get('/applicants' ,isStudent,async (req , res)=>{
+    try{
+        const id = req.session.studentId;
+        const applicants = await getApplicants(id);
+        
+        return res.render("applicants" , {
+            applicants : applicants
+        });
+    }
+
+    catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
     
-    console.log(applicants);
-    return res.render("applicants" , {
-        applicants : applicants
-    });
 });
 
 studentRoutes.post('/applicants/:id/accept', isStudent , async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const accept = await acceptApplication(requestId);
-        if(accept === null){
-            return res.status(500).render("500");
-        }
-
-        console.log(accept);
         return res.redirect("/student/applicants");
     }
 
@@ -224,10 +218,6 @@ studentRoutes.post('/applicants/:id/reject' , isStudent , async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const reject = await rejectApplication(requestId);
-        if(reject === null){
-            return res.status(500).render("500");
-        }
-
         return res.redirect("/student/applicants");
     }
 
@@ -240,7 +230,6 @@ studentRoutes.post('/applicants/:id/reject' , isStudent , async(req , res)=>{
 studentRoutes.get('/find/advisors' , isStudent , async(req ,  res)=>{
      try{
         const advisors = await getAdvisors();
-        console.log(advisors);
         return res.render("find-advisors" , {
             advisors : advisors
         });
@@ -274,13 +263,7 @@ studentRoutes.post('/requests/:advisorId/advisors' , isStudent , async(req ,res)
         const advisorId = Number(req.params.advisorId);
         const studentId = req.session.studentId;
         const {projectId , message , meetingMethod} = req.body;
-        console.log(meetingMethod);
         const request = await requestAdvisor(advisorId, Number(projectId) , studentId , message , meetingMethod);
-        
-        if(!request){
-            console.log("Request failed ..");
-            return res.status(500).send("request failed");
-        }
 
         return res.redirect('/student/find/advisors');
     }
@@ -296,33 +279,22 @@ studentRoutes.get('/requests' , isStudent , async(req , res)=>{
         const studentId = req.session.studentId;
         const getRequests = await getMyAdvisorRequests(studentId);
 
-        if(getRequests === null){
-            return res.send("No advisor requests ..");
-        }
-
-        console.log(getRequests);
         return res.render("st-advisor-requests" , {
             requests : getRequests
         });
     }
     
     catch(e){
-        return e.message;
+        console.log(e.message);
+        return res.status(500).render("500");
     }
 
 });
 
 studentRoutes.get('/profile' , isStudent ,async(req , res)=>{
-
     try{
         const studentId = req.session.studentId;
         const student = await getStudentProfileInfo(studentId);
-
-        if(student === null){
-             console.log("Student data : ",student);
-            return res.status(500).render("500");
-        }
-
         return res.render("student-profile" , {
             student:student
         });
@@ -342,16 +314,12 @@ studentRoutes.post('/profile/update' , isStudent , async(req , res)=>{
         const updateBio = await modifyStudenBio(bio , studentId);
         const updateSkills = await modifyStudenSkills(skills , studentId);
 
-        if(updateBio === null || updateSkills === null){
-            res.status(500).render("500");
-        }
-
         return res.redirect("/student/profile");
     }
 
     catch(e){
         console.log(`Error : ${e.message}`);
-        return res.render("500");
+        return res.status(500).render("500");
     }
 });
 
@@ -394,7 +362,6 @@ studentRoutes.post('/profile/change-password' , isStudent , async(req , res)=>  
         return res.status(500).render("500");
     }
 });
-
 
 
 module.exports = studentRoutes;

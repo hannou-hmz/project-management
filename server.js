@@ -4,6 +4,7 @@ const app = express();
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
+const methodOverride = require('method-override');
 const path = require('path');
 const adminRouters = require('./routes/admin-routes');
 const studentRoutes = require('./routes/student-routes');
@@ -18,6 +19,7 @@ const sessionStore = new MySQLStore({
 
 app.set("view engine" , "ejs");
 
+app.use(methodOverride('_method')); // doesnt work for hidden forms
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(path.join(__dirname, 'static-files')));
