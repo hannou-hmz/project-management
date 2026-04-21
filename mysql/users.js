@@ -43,12 +43,16 @@ async function getUser(role , email , password){
     try{
         const sql = "SELECT * FROM users WHERE role = ? AND email = ?";
         const [rows] = await database.pool.execute(sql, [role , email]);
-
-        const isMatch = await bcrypt.compare(password , rows[0].password);
-        if(isMatch){
-            console.log('User found in database.')
-            return rows[0];
+        
+        if(rows.length > 0){
+            const isMatch = await bcrypt.compare(password , rows[0].password);
+            if(isMatch){
+                console.log('User found in database.')
+                return rows[0];
+            }
         }
+
+       return rows
     }
     
     catch (e) {

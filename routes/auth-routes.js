@@ -84,7 +84,7 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
         const {role , email , password} = req.body;
         const userRole = Number(role);
         const user = await getUser(userRole , email , password);
-
+        
         if(!email || typeof email !== 'string'){
             return res.status(400).send("Invalid input");
         }
