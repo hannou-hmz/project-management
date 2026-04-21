@@ -8,7 +8,7 @@ const {getCategories ,addCategory, deleteCategory} = require('../mysql/categorie
 const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
 const {compareUserPassword} = require('../mysql/users');
-const {createProjects , getProjects , deleteProjects, myProjects} = require('../mysql/projects');
+const {createProjects , getProjects , deleteProjects, myProjects , applyForProjects} = require('../mysql/projects');
 const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
 
 const limiter = limit({
@@ -81,7 +81,8 @@ studentRoutes.post('/create/projects' ,isStudent, limiter , async (req , res)=>{
 studentRoutes.get('/projects' , isStudent , limiter ,async (req , res)=>{
 
     try{
-        const projects = await getProjects();
+        const studentId = req.session.studentId;
+        const projects = await applyForProjects(studentId);
         const categories = await getCategories();
 
         return res.render("show-projects" , {
@@ -127,11 +128,16 @@ studentRoutes.post('/project/:id/delete', isStudent, limiter ,async (req, res) =
     }
 });
 
-studentRoutes.get('/:id/delete' , isStudent, limiter , async (req ,res)=>{
-
-    const projectId = req.params.id;
-    const deleteProject = await deleteProjects(projectId);
-    return res.redirect('/student/myprojects');
+studentRoutes.delete('/my-projects/:id/delete' , isStudent, limiter , async (req ,res)=>{
+     try{
+        const studentId = req.session.studentId;
+        const projectId = req.params.id;
+        const deleteProject = await deleteProjects(projectId , studentId);
+        return res.redirect('/student/myprojects');
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
 studentRoutes.get('/project/application/:id/apply' , isStudent , limiter , async(req , res)=>{

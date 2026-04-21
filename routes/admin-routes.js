@@ -19,20 +19,30 @@ function isAdmin(req, res, next){
 
 
 adminRouters.get('/dashboard' , (req , res)=>{
-    return res.render("admin-login");
+    try{
+        return res.render("admin-login");
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
 adminRouters.post('/dashboard' , async(req , res)=>{
-    const {email , password} = req.body;
-    const admin = await getAdmin(email , password);
-    if(admin){
-        req.session.adminId = admin.admin_id;
-        console.log(`Admin ✅`);
-        return res.redirect('/admin/homepage');
+    try{
+        const {email , password} = req.body;
+        const admin = await getAdmin(email , password);
+        if(admin){
+            req.session.adminId = admin.admin_id;
+            console.log(`Admin ✅`);
+            return res.redirect('/admin/homepage');
+        }
+        
+        console.log(`Not admin ❌`);
+        return res.redirect('/admin/dashboard');
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
     }
-    
-    console.log(`Not admin ❌`);
-    return res.redirect('/admin/dashboard');
 })
 
 adminRouters.get('/homepage' , isAdmin ,(req , res)=>{

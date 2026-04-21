@@ -49,7 +49,6 @@ async function getUser(role , email , password){
             console.log('User found in database.')
             return rows[0];
         }
-        
     }
     
     catch (e) {

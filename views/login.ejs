@@ -21,64 +21,64 @@
 
 <!-- Heading -->
 <div class="page-top">
-    <h1 class="page-title">Welcome back</h1>
-    <p class="page-sub">Sign in to your account to continue</p>
+<h1 class="page-title">Welcome back</h1>
+<p class="page-sub">Sign in to your account to continue</p>
 </div>
 
 <!-- Form card -->
 <div class="form-card">
 
-    <!-- Role Selector -->
+<!-- Role Selector -->
+<div class="field-group">
+    <label class="field-label">I am a</label>
+    <div class="role-toggle">
+        <div class="role active" data-role="3">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Student
+        </div>
+        <div class="role" data-role="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Instructor
+        </div>
+    </div>
+</div>
+
+<form method="POST" action="/login">
+
+    <input type="hidden" name="role" id="role" value="3">
+
     <div class="field-group">
-        <label class="field-label">I am a</label>
-        <div class="role-toggle">
-            <div class="role active" data-role="3">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Student
-            </div>
-            <div class="role" data-role="2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                Instructor
-            </div>
+        <label class="field-label">Email Address</label>
+        <div class="input-wrap">
+            <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input class="field-input" type="email" name="email" placeholder="you@university.edu" required>
         </div>
     </div>
 
-    <form method="POST" action="/login">
-
-        <input type="hidden" name="role" id="role" value="3">
-
-        <div class="field-group">
-            <label class="field-label">Email Address</label>
-            <div class="input-wrap">
-                <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                <input class="field-input" type="email" name="email" placeholder="you@university.edu" required>
-            </div>
+    <div class="field-group">
+        <label class="field-label">Password</label>
+        <div class="input-wrap">
+            <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input class="field-input" type="password" name="password" placeholder="Enter your password" required>
         </div>
-
-        <div class="field-group">
-            <label class="field-label">Password</label>
-            <div class="input-wrap">
-                <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                <input class="field-input" type="password" name="password" placeholder="Enter your password" required>
-            </div>
-        </div>
-
-        <button type="submit" class="signin-btn">Sign In</button>
-
-    </form>
-
-    <p class="signup-text">
-        Don't have an account? <a href="/signup" class="signup-link">Sign up →</a>
-    </p>
-
-    <!-- Admin box -->
-    <div class="admin-box">
-        <div class="admin-box-left">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <span>Are you an admin?</span>
-        </div>
-        <button class="admin-btn" id="admin-click" type="button">Admin Login</button>
     </div>
+
+    <button type="submit" class="signin-btn">Sign In</button>
+
+</form>
+
+<p class="signup-text">
+    Don't have an account? <a href="/signup" class="signup-link">Sign up →</a>
+</p>
+
+<!-- Admin box -->
+<div class="admin-box">
+    <div class="admin-box-left">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Are you an admin?</span>
+    </div>
+    <button class="admin-btn" id="admin-click" type="button">Admin Login</button>
+</div>
 
 </div>
 
@@ -91,24 +91,24 @@ const roles = document.querySelectorAll('.role');
 const input = document.getElementById('role');    
 
 roles.forEach(div => {
-    div.addEventListener("click", () => {
+div.addEventListener("click", () => {
 
-    const role = div.dataset.role;
-    input.value = role;
+const role = div.dataset.role;
+input.value = role;
 
-    roles.forEach(r => r.classList.remove('active'));
-    div.classList.add('active');
-    });
+roles.forEach(r => r.classList.remove('active'));
+div.classList.add('active');
+});
 });
 
 function goHome(){
-    window.location.href = '/';
+window.location.href = '/';
 }
 
 const admin = document.getElementById('admin-click');
 admin.addEventListener("click", (event) => {
-    event.preventDefault();
-    window.location.href = '/admin/dashboard';
+event.preventDefault();
+window.location.href = '/admin/dashboard';
 });
 </script>
 

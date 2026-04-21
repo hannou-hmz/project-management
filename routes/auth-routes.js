@@ -69,29 +69,46 @@ authRoutes.get('/find/advisor' , isStudent ,  async(req , res)=>{
 });
 
 authRoutes.get('/login' ,(req , res)=>{
-    return res.render("login" , {
+    try{
+        return res.render("login" , {
         title : "ProjectHub Login"
-    });
+        });
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
 authRoutes.post('/login' , loginLimiter , async (req , res)=>{
-    const {role , email , password} = req.body;
-    const userRole = Number(role);
-    const user = await getUser(userRole , email , password);
+    try{
+        const {role , email , password} = req.body;
+        const userRole = Number(role);
+        const user = await getUser(userRole , email , password);
 
-    if(user && userRole === 3){
-        req.session.studentId = user.user_id;
-        return res.redirect('/student/homepage');
+        if(!email || typeof email !== 'string'){
+            return res.status(400).send("Invalid input");
+        }
+
+        else{
+            if(user && userRole === 3){
+                req.session.studentId = user.user_id;
+                return res.redirect('/student/homepage');
+            }
+            else if(user && userRole === 2){
+                req.session.advisorId = user.user_id;
+                return res.redirect('/advisor/dashboard');
+            }
+            else{
+                console.log('Wrong credentials');
+                return res.redirect('/login');
+            }
+        }
+
+    }catch(e){  
+        console.log(e.message);
+        return res.status(500).render("500");
     }
-    else if(user && userRole === 2){
-        req.session.advisorId = user.user_id;
-        return res.redirect('/advisor/dashboard');
-    }
-    else{
-        console.log('Wrong credentials');
-        return res.redirect('/login');
-    }
-    
+ 
 });
 
 authRoutes.get('/signup' , async(req , res)=>{

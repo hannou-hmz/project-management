@@ -50,13 +50,24 @@ app.use((req , res)=>{
 
 async function startServer(){
     const PORT = process.env.PORT || 4000;
-    const CONNECTED = await testConnection();
-    if(!CONNECTED){
-        console.log('❌ NO Connection found..');
-    }
-    else{
-        app.listen(PORT , ()=>{ 
-            console.log(`Server running on port ${PORT}`)
+    try {
+        const CONNECTED = await testConnection();
+
+        if (CONNECTED) {
+            console.log("✅ MySQL connected");
+        } else {
+            console.log("⚠️ MySQL not connected (server still running)");
+        }
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+
+    } catch (err) {
+        console.log("DB error:", err.message);
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT} (no DB)`);
         });
     }
 }

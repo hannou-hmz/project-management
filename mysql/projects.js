@@ -34,12 +34,9 @@ async function deleteProjects(projectId , studentId){
         const sql = "DELETE FROM student_projects WHERE project_id = ? AND created_by = ?";
         const [result] = await database.pool.execute(sql , [projectId , studentId]);
         console.log("successefully deleted ..");
-        return true;
-    }
-
-    catch(e){
+    }catch(e){
         console.error("Delete projects error:", e.message);
-        throw e; // 🔥 important
+        throw e; 
     }
 }
 
@@ -59,9 +56,20 @@ async function myProjects(createdBy){
 
 }
 
+async function applyForProjects(studentId){
+    try{
+        const sql = "SELECT * FROM student_projects WHERE created_by != ?";
+        const [rows] = await database.pool.execute(sql , [studentId]);
+        return rows; 
+    }catch(e){
+        throw e;
+    }
+}
+
 module.exports = {
     createProjects,
     getProjects,
     deleteProjects,
-    myProjects
+    myProjects,
+    applyForProjects
 }

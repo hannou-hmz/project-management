@@ -1,16 +1,233 @@
-<h1>Projects</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Admin</title>
+<link rel="stylesheet" href="/styling/admin-projects.css">
+<link rel="icon" href="/img/fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+</head>
+<body>
 
-<% projects.forEach(project => { %>
-    <div>
-        <h3><%= project.project_title %></h3>
-        <p>Type: <%= project.category_name %></p>
-        <p><%= project.project_description %></p>
-        <p>Budget: <%= project.budget %></p>
-        <p>Skills: <%= project.required_skills %></p>
-        <p>Created at: <%= project.created_at %></p>
-
-        <a style="background-color: rgb(102, 102, 225); color: white; padding: 8px;" href="/admin/projects/<%= project.project_id %>/delete">Delete project</a>
-        <input type="hidden" name="projectId">
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        Team<span>Match</span>
+        <div class="sidebar-badge">Admin</div>
     </div>
-    <hr>
-<% }) %>
+    <div class="sidebar-section-label">Navigation</div>
+    <nav class="sidebar-nav">
+        <a href="/admin/dashboard" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+        </a>
+        <a href="/admin/categories" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Categories
+        </a>
+        <a href="/admin/projects" class="sidebar-link active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Projects
+        </a>
+        <a href="/admin/announcements" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Announcements
+        </a>
+        <a href="/admin/users/roles" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Users & Roles
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <a href="/logout" class="sidebar-logout">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+        </a>
+    </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="topbar-title">Projects</div>
+            <div class="topbar-sub">View and moderate all student projects</div>
+        </div>
+        <% if (projects && projects.length > 0) { %>
+        <div class="topbar-count">
+            <strong><%= projects.length %></strong> project<%= projects.length !== 1 ? 's' : '' %>
+        </div>
+        <% } %>
+    </div>
+
+    <div class="content">
+
+        <!-- Search & Filter toolbar -->
+        <% if (projects && projects.length > 0) { %>
+        <div class="toolbar">
+            <div class="search-wrap">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by title, category, or skills...">
+            </div>
+        </div>
+        <% } %>
+
+        <% if (projects && projects.length > 0) { %>
+
+            <!-- Table -->
+            <div class="data-table">
+                <div class="table-head">
+                    <div class="th">Project Title</div>
+                    <div class="th">Category</div>
+                    <div class="th">Budget</div>
+                    <div class="th">Skills</div>
+                    <div class="th">Created</div>
+                    <div class="th th-action">Action</div>
+                </div>
+
+                <% projects.forEach(project => { %>
+                <div class="table-row"
+                        data-title="<%= project.project_title %>"
+                        data-category="<%= project.category_name %>"
+                        data-skills="<%= project.required_skills %>">
+
+                    <!-- Title + description tooltip -->
+                    <div class="td td-title">
+                        <div class="project-title-text"><%= project.project_title %></div>
+                        <div class="project-desc-text"><%= project.project_description ? project.project_description.substring(0, 80) + (project.project_description.length > 80 ? '…' : '') : '' %></div>
+                    </div>
+
+                    <div class="td td-category">
+                        <span class="cat-badge"><%= project.category_name %></span>
+                    </div>
+
+                    <div class="td td-budget">
+                        $<%= project.budget ? Number(project.budget).toLocaleString() : '0' %>
+                    </div>
+
+                    <div class="td td-skills">
+                        <% if (project.required_skills) { %>
+                            <% project.required_skills.split(',').slice(0,2).forEach(skill => { %>
+                                <span class="skill-tag"><%= skill.trim() %></span>
+                            <% }) %>
+                            <% if (project.required_skills.split(',').length > 2) { %>
+                                <span class="skill-more">+<%= project.required_skills.split(',').length - 2 %></span>
+                            <% } %>
+                        <% } else { %>
+                            <span class="no-skills">—</span>
+                        <% } %>
+                    </div>
+
+                    <div class="td td-date">
+                        <%= new Date(project.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                    </div>
+
+                    <div class="td td-actions">
+                        <input type="hidden" name="projectId">
+                        <button class="delete-btn"
+                                data-href="/admin/projects/<%= project.project_id %>/delete"
+                                data-title="<%= project.project_title %>"
+                                onclick="openDeleteModal(this)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                            Delete
+                        </button>
+                    </div>
+
+                </div>
+                <% }) %>
+
+            </div>
+
+            <!-- Empty search state -->
+            <div class="empty-search" id="emptySearch" style="display:none;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                No projects match your search.
+            </div>
+
+        <% } else { %>
+
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="empty-title">No projects yet</div>
+                <p class="empty-sub">No projects have been created on the platform yet.</p>
+            </div>
+
+        <% } %>
+
+    </div>
+</main>
+
+
+<!-- ===== DELETE MODAL ===== -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeDeleteModal()">
+    <div class="modal" id="deleteModal" onclick="event.stopPropagation()">
+
+        <div class="modal-icon-del">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </div>
+
+        <h3 class="modal-title">Delete Project</h3>
+        <p class="modal-body">
+            Are you sure you want to permanently delete
+            <strong id="modalProjectName"></strong>?
+            All applications linked to this project will also be removed.
+        </p>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <a class="btn-del-confirm" id="modalConfirmBtn" href="#">Delete Project</a>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    // ===== DELETE MODAL =====
+    function openDeleteModal(btn) {
+        document.getElementById('modalProjectName').textContent = btn.dataset.title;
+        document.getElementById('modalConfirmBtn').setAttribute('href', btn.dataset.href);
+        document.getElementById('modalBackdrop').classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDeleteModal() {
+        document.getElementById('modalBackdrop').classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+
+    // ===== SEARCH =====
+    const searchInput = document.getElementById('searchInput');
+    const rows = document.querySelectorAll('.table-row');
+    const emptySearch = document.getElementById('emptySearch');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.toLowerCase();
+            let visible = 0;
+            rows.forEach(row => {
+                const title    = (row.dataset.title    || '').toLowerCase();
+                const category = (row.dataset.category || '').toLowerCase();
+                const skills   = (row.dataset.skills   || '').toLowerCase();
+                const match = !q || title.includes(q) || category.includes(q) || skills.includes(q);
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            if (emptySearch) emptySearch.style.display = visible === 0 ? 'flex' : 'none';
+        });
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeDeleteModal();
+    });
+</script>
+
+</body>
+</html>
