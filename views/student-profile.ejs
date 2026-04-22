@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile</title>
-    <link rel="stylesheet" href="/styling/student-profile.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styling/student-profile.css">
 </head>
 
 <body>
@@ -21,16 +21,15 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="page-wrap">
 
-        <!-- Profile Header Card -->
-        <div class="profile-header-card">
-            <div class="profile-hero-bg"></div>
+        <!-- ── HERO CARD ───────────────────────── -->
+        <div class="hero-card">
+            <div class="hero-cover"></div>
 
-            <div class="profile-header-inner">
-
+            <div class="hero-body">
                 <!-- Avatar -->
-                <div class="avatar-wrap">
+                <div class="avatar-ring">
                     <div class="avatar">
                         <% if (student.profile_photo) { %>
                             <img src="<%= student.profile_photo %>" alt="Profile Picture">
@@ -40,108 +39,176 @@
                     </div>
                 </div>
 
-                <!-- Identity Info -->
-                <div class="profile-identity">
-                    <h1 class="profile-name"><%= student.full_name %></h1>
-                    <div class="profile-meta-row">
-                        <span class="profile-badge"><%= student.department_name %></span>
-                        <span class="profile-badge role-badge">Student</span>
-                    </div>
-                    <p class="profile-email">
+                <!-- Identity -->
+                <div class="hero-info">
+                    <h1 class="hero-name"><%= student.full_name %></h1>
+                    <p class="hero-dept"><%= student.department_name %></p>
+                    <p class="hero-email">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                         <%= student.email %>
                     </p>
+                    <div class="badge-row">
+                        <span class="badge badge-dept">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            <%= student.department_name %>
+                        </span>
+                        <span class="badge badge-role">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Student
+                        </span>
+                    </div>
                 </div>
+            </div>
 
+            <!-- Quick stats strip -->
+            <div class="hero-strip">
+                <div class="strip-stat">
+                    <strong>Active</strong>
+                    <span>Status</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-stat">
+                    <strong><%= student.department_name %></strong>
+                    <span>Department</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-stat">
+                    <strong id="skillCount">—</strong>
+                    <span>Skills Listed</span>
+                </div>
             </div>
         </div>
 
+        <!-- ── TWO-COLUMN ──────────────────────── -->
         <div class="two-col">
 
-            <!-- Left column -->
-            <div class="col-left">
+            <!-- LEFT: Account + Security -->
+            <div style="display:flex; flex-direction:column; gap:20px;">
 
-                <!-- Static Info -->
-                <div class="card">
-                    <div class="card-header">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        Account Details
+                <!-- Account Details -->
+                <div class="s-card">
+                    <div class="s-head">
+                        <div class="s-head-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <span class="s-head-title">Account Details</span>
                     </div>
-                    <div class="info-list">
-                        <div class="info-row">
-                            <span class="info-label">Full Name</span>
-                            <span class="info-value"><%= student.full_name %></span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Email</span>
-                            <span class="info-value"><%= student.email %></span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Department</span>
-                            <span class="info-value"><%= student.department_name %></span>
-                        </div>
-                        <div class="info-row last">
-                            <span class="info-label">Role</span>
-                            <span class="info-value">Student</span>
+                    <div class="s-body">
+                        <div class="info-rows">
+                            <div class="info-row">
+                                <span class="info-label">Full Name</span>
+                                <span class="info-value"><%= student.full_name %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Email</span>
+                                <span class="info-value" style="font-size:.82rem;"><%= student.email %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Department</span>
+                                <span class="info-value"><%= student.department_name %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Role</span>
+                                <span class="info-value" style="color:var(--accent); font-weight:600;">Student</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Change Password -->
-                <div class="card card-flat">
-                    <div class="card-header">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        Security
+                <!-- Security -->
+                <div class="s-card">
+                    <div class="s-head">
+                        <div class="s-head-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <span class="s-head-title">Security</span>
                     </div>
-                    <p class="card-hint">Keep your account secure by updating your password regularly.</p>
-                    <a href="/student/profile/change-password" class="btn-secondary full-width">Change Password</a>
+                    <div class="s-body">
+                        <p class="security-hint">Keep your account secure by updating your password regularly. We recommend using a strong, unique password.</p>
+                        <a href="/student/profile/change-password" class="btn-secondary">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Change Password
+                        </a>
+                    </div>
                 </div>
 
             </div>
 
-            <!-- Right column -->
-            <div class="col-right">
-
-                <!-- Bio & Skills -->
-                <div class="card">
-                    <div class="card-header">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                        Bio & Skills
+            <!-- RIGHT: Bio & Skills form -->
+            <div class="s-card">
+                <div class="s-head">
+                    <div class="s-head-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     </div>
-                    <form action="/student/profile/update" method="POST">
+                    <span class="s-head-title">Bio &amp; Skills</span>
+                </div>
+                <div class="s-body">
+                    <form action="/student/profile/update" method="POST" id="profileForm">
 
                         <div class="form-group">
-                            <label class="form-label">Bio</label>
-                            <textarea name="bio" rows="4" class="form-textarea" placeholder="Tell your teammates a bit about yourself..."><%= student.bio || "" %></textarea>
+                            <label class="form-label">About You</label>
+                            <textarea name="bio" id="bioField" rows="5" class="form-textarea"
+                                placeholder="Describe your background, interests, and what you bring to a team..."><%= student.bio || "" %></textarea>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Skills</label>
-                            <input type="text" name="skills" class="form-input"
+                            <input type="text" name="skills" id="skillsField" class="form-input"
                                    value="<%= student.skills || '' %>"
                                    placeholder="e.g. AI, Web Development, Cybersecurity">
-                            <p class="input-hint">Separate skills with commas</p>
+                            <p class="input-hint">Separate skills with commas — they'll appear as tags below.</p>
+                            <!-- Live preview -->
+                            <div class="skills-preview" id="skillsPreview"></div>
                         </div>
 
-                        <button type="submit" class="btn-primary full-width">Save Changes</button>
+                        <button type="submit" class="btn-primary">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Save Changes
+                        </button>
 
                     </form>
                 </div>
-
             </div>
 
         </div>
 
     </div>
 
+    <!-- Toast notification -->
+    <div class="toast" id="toast">✓ Profile saved successfully!</div>
+
+    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-inner">
-            <span class="footer-logo">Team<span>Match</span></span>
-            <span class="footer-copy">University Project Collaboration Platform</span>
-        </div>
+        <div class="footer-logo">Team<span>Match</span></div>
+        <span class="footer-copy">University Project Collaboration Platform</span>
     </footer>
 
     <script>
+        /* ── Skills live preview ── */
+        const skillsField   = document.getElementById('skillsField');
+        const skillsPreview = document.getElementById('skillsPreview');
+        const skillCount    = document.getElementById('skillCount');
+
+        function renderSkills(val) {
+            const pills = val.split(',').map(s => s.trim()).filter(Boolean);
+            skillCount.textContent = pills.length || '—';
+            skillsPreview.innerHTML = pills
+                .map(s => `<span class="skill-pill">${s}</span>`)
+                .join('');
+        }
+
+        renderSkills(skillsField.value);
+        skillsField.addEventListener('input', () => renderSkills(skillsField.value));
+
+        /* ── Toast on form submit ── */
+        const form  = document.getElementById('profileForm');
+        const toast = document.getElementById('toast');
+        form.addEventListener('submit', () => {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        });
+
+        /* ── Photo input label (kept for compatibility) ── */
         const input = document.getElementById('photoInput');
         const label = document.getElementById('fileName');
         if (input && label) {

@@ -112,35 +112,46 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
 });
 
 authRoutes.get('/signup' , async(req , res)=>{
-   return res.render("signup" , {
+    try{
+        return res.render("signup" , {
         title : "Create Account"
-   });
+        });
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
 });
 
 authRoutes.post('/signup' , async (req , res)=>{
-    const {role , username , age , email , department , password , confirm_password} = req.body;
+    try{
+        const {role , username , age , email , department , password , confirm_password} = req.body;
 
-    if(password != confirm_password){
-        console.log('Inorrect password');
-        return res.redirect('/signup');
-    }
+        if(password != confirm_password){
+            console.log('Inorrect password');
+            return res.redirect('/signup');
+        }
 
-    const user = await createUser(role , username , age ,email , department , password);
-    if(user && role === '3'){
-        req.session.studentId = user.insertId;
-        const studentId = user.insertId;
-        await createStudentRow(studentId);
-        return res.redirect('/student/homepage');
+        const user = await createUser(role , username , age ,email , department , password);
+        if(user && role === '3'){
+            req.session.studentId = user.insertId;
+            const studentId = user.insertId;
+            await createStudentRow(studentId);
+            return res.redirect('/student/homepage');
+        }
+        else if(user && role === '2'){
+            req.session.advisorId = user.insertId;
+            const advisorId = user.insertId;
+            await createAdvisorRow(advisorId) 
+            return res.redirect('/advisor/dashboard');
+        }
+        else{
+            return res.status(422).send("Validation failed!");
+        } 
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
     }
-    else if(user && role === '2'){
-        req.session.studentId = user.insertId;
-        const advisorId = user.insertId;
-        await createAdvisorRow(advisorId) 
-        return res.redirect('/advisor/homepage');
-    }
-    else{
-        return res.status(422).send("Validation failed!");
-    }     
+        
 });
 
 authRoutes.get('/logout' , (req , res) =>{

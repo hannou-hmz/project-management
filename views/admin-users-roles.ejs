@@ -1,47 +1,246 @@
-<h1>Users</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users & Roles — Admin</title>
+<link rel="stylesheet" href="/styling/admin-users-roles.css">
+<link rel="icon" href="/img/fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+</head>
+<body>
 
-<% if (users && users.length > 0) { %>
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        Team<span>Match</span>
+        <div class="sidebar-badge">Admin</div>
+    </div>
+    <div class="sidebar-section-label">Navigation</div>
+    <nav class="sidebar-nav">
+        <a href="/admin/homepage" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+        </a>
+        <a href="/admin/categories" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Categories
+        </a>
+        <a href="/admin/projects" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Projects
+        </a>
+        <a href="/admin/announcements" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Announcements
+        </a>
+        <a href="/admin/users/roles" class="sidebar-link active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Users & Roles
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <a href="/logout" class="sidebar-logout">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+        </a>
+    </div>
+</aside>
 
-    <% users.forEach(user => { %>
+<!-- ===== MAIN ===== -->
+<main class="main">
 
-        <div style="margin-bottom: 20px;">
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="topbar-title">Users & Roles</div>
+            <div class="topbar-sub">Manage user accounts and assign roles</div>
+        </div>
+        <% if (users && users.length > 0) { %>
+        <div class="topbar-count">
+            <strong><%= users.length %></strong> user<%= users.length !== 1 ? 's' : '' %>
+        </div>
+        <% } %>
+    </div>
 
-            <h3><strong>Full Name:</strong> <%= user.full_name %></h3>
+    <div class="content">
 
-            <p><strong>Email:</strong> <%= user.email %></p>
+        <% if (users && users.length > 0) { %>
 
-            <p><strong>Department:</strong> <%= user.department_name %></p>
+            <!-- Search toolbar -->
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email, or department...">
+                </div>
+            </div>
 
-            <p><strong>Role:</strong> <%= user.role_name %></p> 
+            <!-- Table -->
+            <div class="data-table">
+                <div class="table-head">
+                    <div class="th">User</div>
+                    <div class="th">Department</div>
+                    <div class="th">Current Role</div>
+                    <div class="th">Change Role</div>
+                    <div class="th th-action">Action</div>
+                </div>
 
-            <a style="background-color: rgb(94, 94, 94);color: white; padding: 7px;" 
-            href="/admin/users/<%= user.user_id%>/delete">Delete user</a>
+                <% users.forEach(user => { %>
+                <div class="table-row"
+                        data-name="<%= user.full_name %>"
+                        data-email="<%= user.email %>"
+                        data-dept="<%= user.department_name %>">
 
-           
-            <form action="/admin/<%= user.user_id %>/change-role?_method=PATCH" method="POST">
-                <select name="roleId" required>
-                    <option value="">-- Select a category --</option>
+                    <!-- User cell -->
+                    <div class="td td-user">
+                        <div class="user-avatar">
+                            <%= user.full_name ? user.full_name.charAt(0).toUpperCase() : '?' %>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name"><%= user.full_name %></div>
+                            <div class="user-email"><%= user.email %></div>
+                        </div>
+                    </div>
 
-                    <% roles.forEach(role => { %>
-                        <option value="<%= role.role_id %>">
-                            <%= role.role_name %>
-                        </option>
-                    <% }) %>
+                    <!-- Department -->
+                    <div class="td td-dept"><%= user.department_name %></div>
 
-                </select>
+                    <!-- Current role badge -->
+                    <div class="td">
+                        <%
+                            let roleClass = 'role-default';
+                            const rn = (user.role_name || '').toLowerCase();
+                            if (rn === 'admin')      roleClass = 'role-admin';
+                            else if (rn === 'instructor' || rn === 'advisor') roleClass = 'role-advisor';
+                            else if (rn === 'student') roleClass = 'role-student';
+                        %>
+                        <span class="role-badge <%= roleClass %>"><%= user.role_name %></span>
+                    </div>
 
-                <button type="submit">Change Role</button>
-            </form>
-            
+                    <!-- Change role inline form -->
+                    <div class="td td-change-role">
+                        <form action="/admin/<%= user.user_id %>/change-role?_method=PATCH" method="POST" class="role-form">
+                            <select name="roleId" required class="role-select">
+                                <option value="">-- Select role --</option>
+                                <% roles.forEach(role => { %>
+                                    <option value="<%= role.role_id %>">
+                                        <%= role.role_name %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                            <button type="submit" class="btn-change-role">Apply</button>
+                        </form>
+                    </div>
 
+                    <!-- Delete -->
+                    <div class="td td-actions">
+                        <button class="delete-btn"
+                                data-name="<%= user.full_name %>"
+                                data-id="<%= user.user_id %>"
+                                onclick="openDeleteModal(this)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                            Delete
+                        </button>
+                    </div>
+
+                </div>
+                <% }) %>
+
+            </div>
+
+            <!-- Empty search state -->
+            <div class="empty-search" id="emptySearch" style="display:none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                No users match your search.
+            </div>
+
+        <% } else { %>
+
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="empty-title">No users found</div>
+                <p class="empty-sub">No users are registered on the platform yet.</p>
+            </div>
+
+        <% } %>
+
+    </div>
+</main>
+
+
+<!-- ===== DELETE MODAL ===== -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeDeleteModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+
+        <div class="modal-icon-del">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
         </div>
 
-        <hr>
+        <h3 class="modal-title">Delete User</h3>
+        <p class="modal-body-text">
+            Are you sure you want to permanently delete
+            <strong id="deleteUserName"></strong>?
+            Their projects, applications, and requests will also be removed.
+        </p>
 
-    <% }) %>
+        <form id="deleteForm" action="" method="POST">
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button type="submit" class="btn-del-confirm">Delete User</button>
+            </div>
+        </form>
 
-<% } else { %>
+    </div>
+</div>
 
-    <p>No users found.</p>
 
-<% } %>
+<script>
+    // ===== DELETE MODAL =====
+    function openDeleteModal(btn) {
+        document.getElementById('deleteUserName').textContent = btn.dataset.name;
+        document.getElementById('deleteForm').setAttribute(
+            'action',
+            '/admin/users/' + btn.dataset.id + '/delete?_method=DELETE'
+        );
+        document.getElementById('modalBackdrop').classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDeleteModal() {
+        document.getElementById('modalBackdrop').classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+
+    // ===== SEARCH =====
+    const searchInput = document.getElementById('searchInput');
+    const rows = document.querySelectorAll('.table-row');
+    const emptySearch = document.getElementById('emptySearch');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.toLowerCase();
+            let visible = 0;
+            rows.forEach(row => {
+                const name  = (row.dataset.name  || '').toLowerCase();
+                const email = (row.dataset.email || '').toLowerCase();
+                const dept  = (row.dataset.dept  || '').toLowerCase();
+                const match = !q || name.includes(q) || email.includes(q) || dept.includes(q);
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            if (emptySearch) emptySearch.style.display = visible === 0 ? 'flex' : 'none';
+        });
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeDeleteModal();
+    });
+</script>
+
+</body>
+</html>

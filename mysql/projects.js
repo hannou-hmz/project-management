@@ -16,7 +16,7 @@ async function createProjects(title , type , description , budget , skills , tea
 
 async function getProjects(){
     try{
-        const sql = "SELECT p.project_id , p.project_title , c.category_name , u.full_name , p.project_description ,p.team_size , p.budget , p.required_skills , p.created_at FROM student_projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id";
+        const sql = "SELECT p.created_by , p.project_id , p.project_title , c.category_name , u.full_name , p.project_description ,p.team_size , p.budget , p.required_skills , p.created_at FROM student_projects AS p INNER JOIN categories AS c INNER JOIN users AS u ON c.category_id = p.project_type AND p.created_by = u.user_id";
         const [rows] = await database.pool.execute(sql);
 
         return rows;
@@ -28,11 +28,10 @@ async function getProjects(){
     
 }
 
-async function deleteProjects(projectId , studentId){
-
+async function deleteProjects(projectId){
     try{
-        const sql = "DELETE FROM student_projects WHERE project_id = ? AND created_by = ?";
-        const [result] = await database.pool.execute(sql , [projectId , studentId]);
+        const sql = "DELETE FROM student_projects WHERE project_id = ? ";
+        const [result] = await database.pool.execute(sql , [projectId]);
         console.log("successefully deleted ..");
     }catch(e){
         console.error("Delete projects error:", e.message);
@@ -66,10 +65,23 @@ async function applyForProjects(studentId){
     }
 }
 
+async function totalProjects(){
+    try{
+        const sql = "SELECT COUNT(project_id) AS projectsCount FROM  student_projects;";
+        const [rows] = await database.pool.execute(sql);
+        return rows;
+
+    }catch(e){
+        console.log(e.message);
+        throw e;
+    }
+}
+
 module.exports = {
     createProjects,
     getProjects,
     deleteProjects,
     myProjects,
-    applyForProjects
+    applyForProjects,
+    totalProjects
 }

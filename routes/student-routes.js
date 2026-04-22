@@ -242,11 +242,11 @@ studentRoutes.post('/applicants/:id/reject' , isStudent , limiter ,async(req , r
 studentRoutes.get('/find/advisors' , isStudent , limiter ,async(req ,  res)=>{
      try{
         const advisors = await getAdvisors();
+        console.log(advisors);
         return res.render("find-advisors" , {
             advisors : advisors
         });
     }
-
     catch(e){
         console.log(`Error : ${e.message}`);
     }

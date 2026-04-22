@@ -67,31 +67,31 @@ adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
 });
 
 adminRouters.get('/projects/:id/delete', async(req , res)=>{
+    try{
+        const projectId = req.params.id;
+        const removeProject = await deleteProjects(projectId);
+        return res.redirect('/admin/projects');
 
-    const projectId = req.params.id;
-    const removeProject = await deleteProjects(projectId);
-    
-    return res.redirect('/admin/projects');
-    
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+      
 });
 
 adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
-
-    const announcements = await getAnnouncements();
-    return res.render("admin-announcements" , {
-        announcements : announcements
-    });
-});
-
-adminRouters.get('/announcements/add' , isAdmin ,async (req , res)=>{
-
-    const categories = await getCategories();
-    if(!categories || categories === null){
-        return res.status(500).send("Internal issues..");
+    try{
+        const announcements = await getAnnouncements();
+        const categories = await getCategories();
+        return res.render("admin-announcements" , {
+            announcements : announcements,
+            categories : categories
+        });
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
     }
-    return res.render("admin-add-announcements" , {
-        categories : categories
-    });
+    
 });
 
 adminRouters.post('/announcements/add', async(req , res)=>{
@@ -193,7 +193,7 @@ adminRouters.patch('/:userId/change-role' , isAdmin , async(req , res)=>{
     }
 });
 
-adminRouters.get('/users/:userId/delete' , isAdmin , async(req , res)=>{
+adminRouters.delete('/users/:userId/delete' , isAdmin , async(req , res)=>{
 
     try{
         const userId = req.params.userId;

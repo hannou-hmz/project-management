@@ -24,16 +24,12 @@ advisorRouters.get('/dashboard' , isAdvisor, async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const advisor = await getUserById(advisorId);
+        const [available] = await db.pool.execute("SELECT available FROM advisors WHERE advisor_id = ?" , [advisorId]);
         const pendingReq = await countPendingRequests(advisorId);
-        if(advisor === null || pendingReq === null){
-            console.log(`/homepage error : ${advisor}`);
-            console.log(`/homepage error : ${pendingReq}`);
-            return res.status(500).send(`Internal issues ..`);
-        }
-        
         return res.render("advisor-homepage" , {
             advisor : advisor ,
-            pending : pendingReq
+            pending : pendingReq,
+            isAvailable : available[0]
         });
     }
 
@@ -116,17 +112,13 @@ advisorRouters.get('/profile' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const advisorInfos = await getAdvisorProfileInfo(advisorId);
-        if(advisorInfos === null){
-            return res.status(500).render("500");
-        }
 
         console.log(advisorInfos);
         return res.render("advisor-profile" , {
             advisor : advisorInfos
         });
-    }
 
-    catch(e){
+    }catch(e){
         console.log(e.message);
         return res.status(500).render("500"); 
     }
@@ -138,17 +130,13 @@ advisorRouters.post('/profile' ,isAdvisor, async(req , res)=>{
 
     try{
         const advisorId = req.session.advisorId;
+        const available = req.body.available ? 1 : 0;
         const {academic_title,expertise,researches} = req.body;
-        const isAvailable = req.body.available === "1" ? 1 : 0;
-        const academicTitle = await setAcademicTitle(academic_title,advisorId );
+        const academicTitle = await setAcademicTitle(academic_title,advisorId);
         const research = await setResearches(researches,advisorId);
         const areaOfExpertise = await setExpertise(expertise,advisorId);
-        const availability = await isAdvisorAvailable(isAvailable,advisorId);
-
-        if(!academicTitle || !research || !areaOfExpertise || !availability){
-            return res.status(500).render("500");
-        }
-
+        const availability = await isAdvisorAvailable(available,advisorId);
+        
         return res.redirect('/advisor/profile');
     }
 
