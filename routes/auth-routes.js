@@ -113,26 +113,27 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
  
 });
 
-authRoutes.get('/forget-password' , async(req , res)=> {
-    try{
-        const {password , email} = req.body;
-        if(!email || typeof email !== 'string' || !password || typeof password !== 'string'){
+// authRoutes.patch('/forget-password' , async(req , res)=> {
+//     try{
+//         const {password , email} = req.body;
+//         if(!email || typeof email !== 'string' || !password || typeof password !== 'string'){
 
-            console.log('Suspicious attempt to reset password .');
+//             console.log('Suspicious attempt to reset password .');
 
-            return res.status(400).render("400" , {
-                error: "Invalid request",
-                message: "Missing required field: email"
-            });
-        }
+//             return res.status(400).render("400" , {
+//                 error: "Invalid request",
+//                 message: "Missing required field: email"
+//             });
+//         }
 
-        const reset = await resetPassword(password , email);
-        
-        return res.status(302).redirect('/login'); // 302 => found : temp redirect 
-    }catch(e){
+//         const reset = await resetPassword(password , email);
 
-    }
-});
+//         return res.status(302).redirect('/login'); // 302 => found : temp redirect 
+//     }catch(e){
+//         console.log();
+//         return res.status(500).render("500");
+//     }
+// });
 
 authRoutes.get('/signup' , async(req , res)=>{
     try{
