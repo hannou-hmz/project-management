@@ -57,7 +57,7 @@ async function myProjects(createdBy){
 
 async function applyForProjects(studentId){
     try{
-        const sql = "SELECT * FROM student_projects WHERE created_by != ?";
+        const sql = "SELECT s.*, u.full_name, d.department_name,c.category_name FROM student_projects AS s INNER JOIN users AS u ON s.created_by = u.user_id INNER JOIN categories AS c ON s.project_type = c.category_id INNER JOIN departments AS d ON d.department_id = u.department WHERE s.created_by != ?";
         const [rows] = await database.pool.execute(sql , [studentId]);
         return rows; 
     }catch(e){

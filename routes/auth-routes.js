@@ -4,13 +4,13 @@ const rateLimit = require('express-rate-limit');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
 const {getAdvisors , createAdvisorRow} = require('../mysql/advisors');
-const {createUser , getUser} = require('../mysql/users');
+const {createUser , getUser , resetPassword} = require('../mysql/users');
 const {createStudentRow} = require('../mysql/students');
 const {getProjects} = require('../mysql/projects');
 const { getCategories } = require('../mysql/categories');
 
 const loginLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 15 minutes
+  windowMs: 5 * 60 * 1000, // 5 minutes
   max: 3,
   message : "Too many attempts"
 });
@@ -27,6 +27,7 @@ authRoutes.get('/' , async(req , res , next)=>{
     try{
         const projects = await getProjects();
         const categories = await getCategories();
+        console.log(projects)
         
         return res.render("homepage" , {
             projects : projects,
@@ -71,7 +72,8 @@ authRoutes.get('/find/advisor' , isStudent ,  async(req , res)=>{
 authRoutes.get('/login' ,(req , res)=>{
     try{
         return res.render("login" , {
-        title : "ProjectHub Login"
+        title : "ProjectHub Login",
+        error : "Invalid passowrd or email"
         });
     }catch(e){
         console.log(e.message);
@@ -109,6 +111,27 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
         return res.status(500).render("500");
     }
  
+});
+
+authRoutes.get('/forget-password' , async(req , res)=> {
+    try{
+        const {password , email} = req.body;
+        if(!email || typeof email !== 'string' || !password || typeof password !== 'string'){
+
+            console.log('Suspicious attempt to reset password .');
+
+            return res.status(400).render("400" , {
+                error: "Invalid request",
+                message: "Missing required field: email"
+            });
+        }
+
+        const reset = await resetPassword(password , email);
+        
+        return res.status(302).redirect('/login'); // 302 => found : temp redirect 
+    }catch(e){
+
+    }
 });
 
 authRoutes.get('/signup' , async(req , res)=>{

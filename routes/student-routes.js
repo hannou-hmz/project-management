@@ -84,18 +84,14 @@ studentRoutes.get('/projects' , isStudent , limiter ,async (req , res)=>{
         const studentId = req.session.studentId;
         const projects = await applyForProjects(studentId);
         const categories = await getCategories();
-
         return res.render("show-projects" , {
             projects : projects,
             categories : categories
         });
-    }
-
-    catch(e){
+    }catch(e){
         console.log(`${e.message}`);
         return res.status(500).render("500");
     }
-    
 
 });
 
