@@ -98,7 +98,14 @@ async function resetPassword(password , email){
     try{
         const newPassword = await bcrypt.hash(password , SALT_COUNT);
         const sql = "UPDATE users SET password = ? WHERE email = ?";
-        const result = await database.pool.execute(sql , [newPassword , email]);
+        const [result] = await database.pool.execute(sql , [newPassword , email]);
+
+        if(result.affectedRows > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
 
     }catch(e){
         throw e;

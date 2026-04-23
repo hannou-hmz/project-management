@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Browse Projects</title>
-<link rel="stylesheet" href="/styling/projects.css">
 <link rel="icon" href="/img/fav.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styling/show-projects.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styling/project.css">
 </head>
 <body>
 
@@ -17,13 +16,13 @@
 <nav class="navbar">
     <a class="nav-logo" href="/student/homepage">Team<span>Match</span></a>
     <div class="nav-links">
-            <a href="/student/projects" class="nav-link">Browse Projects</a>
-            <a href="/student/myprojects" class="nav-link">My Projects</a>
-            <a href="/student/applications" class="nav-link">My Applications</a>
-            <a href="/student/announcements" class="nav-link">Announcements</a>
-            <a href="/student/find/advisors" class="nav-link">Find Advisor</a>
-            <a href="/student/requests" class="nav-link">Requests Advisor</a>
-            <a href="/student/applicants" class="nav-link">Applicants</a>
+        <a href="/student/projects" class="nav-link">Browse Projects</a>
+        <a href="/student/myprojects" class="nav-link">My Projects</a>
+        <a href="/student/applications" class="nav-link">My Applications</a>
+        <a href="/student/announcements" class="nav-link">Announcements</a>
+        <a href="/student/find/advisors" class="nav-link">Find Advisor</a>
+        <a href="/student/requests" class="nav-link">Requests Advisor</a>
+        <a href="/student/applicants" class="nav-link">Applicants</a>
     </div>
     <div class="nav-actions">
         <a href="/student/profile" class="nav-btn-outline">Profile</a>
@@ -55,14 +54,12 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="Search projects or skills...">
             </div>
             <select class="filter-select" id="categoryFilter">
-                    <option value="">-- Select a category --</option>
-
-                        <% categories.forEach(category => { %>
-                    <option value="<%= category.category_id %>">
-                        <%= category.category_name %>
-                    </option>
+                <option value="">-- Select a category --</option>
+                <% categories.forEach(category => { %>
+                <option value="<%= category.category_id %>">
+                    <%= category.category_name %>
+                </option>
                 <% }) %>
-
             </select>
         </div>
     </div>

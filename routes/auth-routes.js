@@ -127,6 +127,12 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
 //         }
 
 //         const reset = await resetPassword(password , email);
+//            if(!reset){
+//               return res.status(400).render("400" , {
+//                  error: "Invalid request",
+//                  message: "Missing required field: email"
+//              });
+//            } 
 
 //         return res.status(302).redirect('/login'); // 302 => found : temp redirect 
 //     }catch(e){
