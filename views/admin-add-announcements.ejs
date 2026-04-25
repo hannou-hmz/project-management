@@ -4,7 +4,7 @@
     <form action="/admin/announcements/add" method="POST">
         <div class="card">
 
-        <select name="category" required>
+        <select name="category">
             <option value="">Select your category</option>
             <% categories.forEach(cat => { %>
                 <option value="<%= cat.category_id %>">
