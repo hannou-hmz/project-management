@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 const adminRouters = express.Router();
 const db = require('../mysql/db');
+const {countAnnouncements, countProjects, countCategories, countUsers} = require('../mysql/admins');
 const {getAdmin , getAllUsers , deleteUsers, getUsersRoles , changeUserRole} = require('../mysql/users');
 const {getCategories ,addCategory, deleteCategory} = require('../mysql/categories');
 const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
@@ -45,9 +46,19 @@ adminRouters.post('/dashboard' , async(req , res)=>{
     }
 })
 
-adminRouters.get('/homepage' , isAdmin ,(req , res)=>{
+adminRouters.get('/homepage' , isAdmin , async(req , res)=>{
     try{
-        return res.render("admin-homepage");
+        const categories = await countCategories() ;
+        const projects = await countProjects();
+        const users = await countUsers();
+        const announcements = await countAnnouncements();
+        
+        return res.render("admin-homepage" , {
+            categories : categories,
+            projects : projects,
+            users : users,
+            announcements : announcements
+        });
     }
     catch(e){
         console.log(e.message);

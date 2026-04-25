@@ -89,12 +89,31 @@ async function countPendingRequests(advisorId){
     try{
         const sql = "SELECT count(status) as pending_requests FROM advisor_requests WHERE status = 'pending' AND advisor_id = ?";
         const [result] = await database.pool.execute(sql , [advisorId]);
-
         return result[0];
     }
 
     catch(e){
         console.log(`Count pending request error : ${e.message}`);
+        throw e;
+    }
+}
+
+async function countAcceptedRequests(advisorId){
+    try{    
+        const sql = "SELECT COUNT(status) AS total_accepted_requests FROM advisor_requests WHERE advisorId = ? AND status = 'accepted'";
+        const [result] = await database.pool.execute(sql , advisorId);
+        return result[0];
+    }catch(e){
+        throw e;
+    }
+}
+
+async function countRejectedRequests(advisorId){
+    try{    
+        const sql = "SELECT COUNT(status) AS total_rejected_requests FROM advisor_requests WHERE advisorId = ? AND status = 'rejected'";
+        const [result] = await database.pool.execute(sql , advisorId);
+        return result[0];
+    }catch(e){
         throw e;
     }
 }
@@ -114,14 +133,36 @@ async function getPendingRequests(advisorId){
     }
 }
 
+async function getAcceptedRequests(advisorId){
+    try{
+        const sql = "SELECT a.request_id , u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.status = 'accepted' AND a.advisor_id = ?";
+        const [rows] = await database.pool.execute(sql , [advisorId]);
+        return rows;
+
+    }catch(e){
+        throw e;
+    }
+}
+
+async function getRejectedRequests(advisorId){
+    try{
+        const sql = "SELECT a.request_id , u.user_id, u.full_name , u.email , d.department_name , sp.project_title, sp.project_description , c.category_name , a.request_message , a.meeting_method , a.requested_at FROM advisor_requests AS a INNER JOIN student_projects AS sp INNER JOIN users AS u INNER JOIN departments AS d INNER JOIN categories AS c ON u.user_id = a.student_id AND d.department_id = u.department AND c.category_id = sp.project_type AND sp.project_id = a.project_id WHERE a.status = 'rejected' AND a.advisor_id = ?";
+        const [rows] = await database.pool.execute(sql , [advisorId]);
+        return rows;
+
+    }catch(e){
+        throw e;
+    }
+}
+
 async function acceptRequest(requestId){
     try{
         const sql = "UPDATE advisor_requests SET status = 'accepted' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]);
-
-    }
-
-    catch(e){
+        if(result.affectedRows <= 0){
+            return null;
+        }
+    }catch(e){
         console.log(`Accept request error : ${e.message}`);
         throw e;
     }
@@ -132,9 +173,10 @@ async function rejectRequest(requestId){
         const sql = "UPDATE advisor_requests SET status = 'rejected' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]);
 
-    }
-
-    catch(e){
+        if(result.affectedRows <= 0){
+            return null;
+        }
+    }catch(e){
         console.log(`Reject request error : ${e.message}`);
         throw e;
     }
@@ -219,5 +261,9 @@ module.exports = {
     requestAdvisor,
     advisorDashboard,
     countPendingRequests,
-    getPendingRequests
+    getPendingRequests,
+    getAcceptedRequests,
+    getRejectedRequests,
+    countAcceptedRequests,
+    countRejectedRequests
 }

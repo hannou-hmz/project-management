@@ -69,6 +69,7 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: center; gap: 10px;
   padding: 1.1rem 1.25rem 0.85rem;
   position: relative;
+  cursor: pointer;
 }
 .sp-avatar {
   width: 40px; height: 40px; border-radius: 10px;

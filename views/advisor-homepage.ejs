@@ -26,8 +26,8 @@
     </div>
 
     <!-- Advisor identity card -->
-    <div class="sidebar-profile">
-        <div class="sp-avatar">
+    <div id="profile" class="sidebar-profile">
+        <div  class="sp-avatar">
             <%= advisor.full_name ? advisor.full_name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() : 'AD' %>
         </div>
         <div class="sp-info">
@@ -176,6 +176,12 @@
         const now = new Date();
         el.textContent = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
     }
+
+    
+        const getProfile = document.getElementById('profile').onclick = function profile(){
+                window.location.href = '/advisor/profile'
+            }
+    
 </script>
 
 </body>
