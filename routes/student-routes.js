@@ -214,22 +214,18 @@ studentRoutes.post('/applicants/:id/accept', isStudent , limiter ,async(req , re
         const requestId = Number(req.params.id);
         const accept = await acceptApplication(requestId);
         return res.redirect("/student/applicants");
-    }
-
-    catch(e){
+    }catch(e){
         console.log(e.message);
         return res.status(500).render("500");
     }
 });
 
-studentRoutes.post('/applicants/:id/reject' , isStudent , limiter ,async(req , res)=>{
+studentRoutes.delete('/applicants/:id/reject' , isStudent , limiter ,async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const reject = await rejectApplication(requestId);
         return res.redirect("/student/applicants");
-    }
-
-    catch(e){
+    }catch(e){
         console.log(e.message);
         return res.status(500).render("500");
     }
