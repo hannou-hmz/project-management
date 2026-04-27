@@ -19,10 +19,11 @@ const sessionStore = new MySQLStore({
 
 app.set("view engine" , "ejs");
 
-app.use(methodOverride('_method')); // doesnt work for hidden forms
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(path.join(__dirname, 'static-files')));
+app.use(methodOverride('_method')); // doesnt work for hidden forms
+//method override must always be after input parser (urlencoded)
 app.use(session({
     secret : process.env.SESSION_SECRET,
     resave : false,

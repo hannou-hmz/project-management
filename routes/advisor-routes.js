@@ -4,8 +4,9 @@ const app = express();
 const advisorRouters = express.Router();
 const db = require('../mysql/db');
 const {advisorDashboard , getRequests, getAdvisorProfileInfo, getPendingRequests, 
-    countPendingRequests ,acceptRequest , rejectRequest ,myProjects ,setAcademicTitle,
-    isAdvisorAvailable,setResearches,setExpertise} = require('../mysql/advisors');
+    acceptRequest , rejectRequest ,myProjects ,setAcademicTitle,
+    isAdvisorAvailable,setResearches,setExpertise , countAcceptedRequests,
+    countRejectedRequests , countPendingRequests} = require('../mysql/advisors');
 
 const { getUser , getUserById } = require('../mysql/users');
 
@@ -43,9 +44,15 @@ advisorRouters.get('/requests' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const requests = await getPendingRequests(advisorId);
+        const accepted = await countAcceptedRequests(advisorId);
+        const rejected = await countRejectedRequests(advisorId);
+        const pending = await countPendingRequests(advisorId);
 
         return res.render("advisor-requests" , {
-            requests : requests
+            requests : requests,
+            accepted : accepted,
+            rejected : rejected,
+            pending : pending
         });
     }
 

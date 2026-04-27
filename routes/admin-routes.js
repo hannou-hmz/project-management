@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const rateLimit = require('express-rate-limit');
 const adminRouters = express.Router();
 const db = require('../mysql/db');
 const {countAnnouncements, countProjects, countCategories, countUsers} = require('../mysql/admins');
@@ -9,6 +10,11 @@ const {getCategories ,addCategory, deleteCategory} = require('../mysql/categorie
 const {addAnnouncement , getAnnouncements , deleteAnnouncement} = require('../mysql/announcements');
 const {createProjects , getProjects , myProjects , deleteProjects} = require('../mysql/projects');
 
+const loginLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 3,
+  message : "Too many attempts"
+});
 
 function isAdmin(req, res, next){
     if(!req.session.adminId){
@@ -28,7 +34,7 @@ adminRouters.get('/dashboard' , (req , res)=>{
     }
 });
 
-adminRouters.post('/dashboard' , async(req , res)=>{
+adminRouters.post('/dashboard' , loginLimiter , async(req , res)=>{
     try{
         const {email , password} = req.body;
         const admin = await getAdmin(email , password);
@@ -67,17 +73,19 @@ adminRouters.get('/homepage' , isAdmin , async(req , res)=>{
 });
 
 adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
-    const projects = await getProjects();
-    if(!projects){
-        return res.status(500).send('Internal issues ..');
+    try{
+        const projects = await getProjects();
+        return res.render("admin-projects" ,{
+            projects : projects
+        });
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500")
     }
-
-    return res.render("admin-projects" ,{
-        projects : projects
-    });
+    
 });
 
-adminRouters.get('/projects/:id/delete', async(req , res)=>{
+adminRouters.get('/projects/:id/delete', async(req , res)=>{ // it has to be changed to delete not get.
     try{
         const projectId = req.params.id;
         const removeProject = await deleteProjects(projectId);
@@ -182,9 +190,7 @@ adminRouters.get('/users/roles' , isAdmin , async(req , res)=>{
             users : users,
             roles : roles
         });
-    }
-
-    catch(e){
+    }catch(e){
         console.log(e.message);
         return res.status(500).render("500");
     }

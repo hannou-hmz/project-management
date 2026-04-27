@@ -3,296 +3,478 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Announcements — Admin</title>
+<title>Announcements — Admin · TeamMatch</title>
 <link rel="stylesheet" href="/admin-styling/admin-announcements.css">
 <link rel="icon" href="/img/fav.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        Team<span>Match</span>
-        <div class="sidebar-badge">Admin</div>
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ═══════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     </div>
-    <div class="sidebar-section-label">Navigation</div>
-    <nav class="sidebar-nav">
-        <a href="/admin/dashboard" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Dashboard
-        </a>
-        <a href="/admin/categories" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-            Categories
-        </a>
-        <a href="/admin/projects" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Projects
-        </a>
-        <a href="/admin/announcements" class="sidebar-link active">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Announcements
-        </a>
-        <a href="/admin/users/roles" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Users & Roles
-        </a>
-    </nav>
-    <div class="sidebar-footer">
-        <a href="/logout" class="sidebar-logout">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Logout
-        </a>
+    <div class="sb-brand-text">
+      <span class="sb-name">Team<em>Match</em></span>
+      <span class="sb-role">Admin Panel</span>
     </div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-nav-label">Navigation</div>
+
+    <a href="/admin/homepage" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      </span>
+      <span class="sb-link-label">Dashboard</span>
+    </a>
+
+    <a href="/admin/categories" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </span>
+      <span class="sb-link-label">Categories</span>
+    </a>
+
+    <a href="/admin/projects" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </span>
+      <span class="sb-link-label">Projects</span>
+    </a>
+
+    <a href="/admin/announcements" class="sb-link active">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </span>
+      <span class="sb-link-label">Announcements</span>
+    </a>
+
+    <a href="/admin/users/roles" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="sb-link-label">Users &amp; Roles</span>
+    </a>
+  </nav>
+
+  <div class="sb-footer">
+    <div class="sb-admin-row">
+      <div class="sb-avatar">AD</div>
+      <div class="sb-admin-info">
+        <div class="sb-admin-name">Administrator</div>
+        <div class="sb-admin-sub">Super Admin</div>
+      </div>
+      <a href="/logout" class="sb-logout-btn" title="Logout">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </a>
+    </div>
+  </div>
+
 </aside>
 
-<!-- ===== MAIN ===== -->
-<main class="main">
+<!-- ═══════════════════════════════════════
+     LAYOUT MAIN
+════════════════════════════════════════ -->
+<div class="layout-main">
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <div class="topbar-title">Announcements</div>
-            <div class="topbar-sub">Publish and manage platform-wide notices</div>
-        </div>
-        <button class="btn-add" onclick="openAddModal()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            New Announcement
-        </button>
+  <!-- ── Topbar ── -->
+  <header class="topbar anim-topbar">
+    <div class="topbar-left">
+      <button class="mobile-toggle" id="mobileToggle" onclick="openSidebar()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-breadcrumb">
+        <span class="tb-root">Admin</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="tb-current">Announcements</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbarDate"></div>
+      <div class="tb-sep"></div>
+      <div class="topbar-status">
+        <span class="status-dot"></span>
+        <span>System Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Page Content ── -->
+  <main class="page-content">
+
+    <!-- Page Heading -->
+    <div class="page-heading anim-heading">
+      <div>
+        <h1 class="page-title">Announcements</h1>
+        <p class="page-subtitle">Publish and manage platform-wide notices for all users.</p>
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Announcement
+      </button>
     </div>
 
-    <div class="content">
+    <!-- Panel -->
+    <div class="panel anim-panel">
+
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <div class="panel-title">All Announcements</div>
+          <div class="panel-sub">
+            <% if (announcements && announcements.length > 0) { %>
+              <%= announcements.length %> announcement<%= announcements.length !== 1 ? 's' : '' %>
+              <% const urgentCount = announcements.filter(a => a.is_urgent).length; %>
+              <% if (urgentCount > 0) { %>
+                &nbsp;&middot;&nbsp;<span class="urgent-pill">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <%= urgentCount %> urgent
+                </span>
+              <% } %>
+            <% } else { %>
+              No announcements yet
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body">
 
         <% if (announcements && announcements.length > 0) { %>
 
-            <div class="count-bar">
-                <span>
-                    <strong><%= announcements.length %></strong> announcement<%= announcements.length !== 1 ? 's' : '' %>
-                </span>
-                <% const urgentCount = announcements.filter(a => a.is_urgent).length; %>
-                <% if (urgentCount > 0) { %>
-                    <span class="urgent-pill">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        <%= urgentCount %> urgent
-                    </span>
-                <% } %>
-            </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Priority</th>
+                  <th>Created</th>
+                  <th class="th-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% announcements.forEach((ann, index) => { %>
+                <tr class="table-row-anim <%= ann.is_urgent ? 'row-urgent' : '' %>"
+                    style="--row-index: <%= index %>;">
 
-            <!-- Table -->
-            <div class="data-table">
-                <div class="table-head">
-                    <div class="th">Title</div>
-                    <div class="th">Category</div>
-                    <div class="th">Description</div>
-                    <div class="th">Urgent</div>
-                    <div class="th">Created</div>
-                    <div class="th th-action">Action</div>
-                </div>
-
-                <% announcements.forEach(ann => { %>
-                <div class="table-row <%= ann.is_urgent ? 'row-urgent' : '' %>">
-
-                    <div class="td td-title">
-                        <% if (ann.is_urgent) { %>
+                  <!-- Title -->
+                  <td>
+                    <div class="ann-title-cell">
+                      <% if (ann.is_urgent) { %>
                         <span class="urgent-dot" title="Urgent"></span>
-                        <% } %>
-                        <%= ann.title %>
+                      <% } else { %>
+                        <span class="normal-dot"></span>
+                      <% } %>
+                      <span class="ann-title-text"><%= ann.title %></span>
                     </div>
+                  </td>
 
-                    <div class="td">
-                        <span class="cat-badge"><%= ann.category_name %></span>
+                  <!-- Category -->
+                  <td>
+                    <span class="cat-badge"><%= ann.category_name %></span>
+                  </td>
+
+                  <!-- Description with expand/collapse -->
+                  <td class="td-desc">
+                    <div class="desc-wrap">
+                      <div class="desc-text" data-expanded="false">
+                        <%= ann.description %>
+                      </div>
+                      <button class="desc-toggle" onclick="toggleDesc(this)" aria-label="Show more">
+                        <span class="desc-toggle-label">Show more</span>
+                        <svg class="desc-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                      </button>
                     </div>
+                  </td>
 
-                    <div class="td td-desc"><%= ann.description %></div>
+                  <!-- Priority -->
+                  <td>
+                    <% if (ann.is_urgent) { %>
+                      <span class="badge badge-urgent">
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                        Urgent
+                      </span>
+                    <% } else { %>
+                      <span class="badge badge-normal">Standard</span>
+                    <% } %>
+                  </td>
 
-                    <div class="td">
-                        <% if (ann.is_urgent) { %>
-                            <span class="badge-urgent">Urgent</span>
-                        <% } else { %>
-                            <span class="badge-normal">No</span>
-                        <% } %>
-                    </div>
+                  <!-- Date -->
+                  <td class="td-date">
+                    <%= new Date(ann.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                  </td>
 
-                    <div class="td td-date">
-                        <%= new Date(ann.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
-                    </div>
+                  <!-- Action -->
+                  <td class="td-action-cell">
+                    <button class="btn btn-danger btn-sm"
+                            data-title="<%= ann.title %>"
+                            data-id="<%= ann.announcement_id %>"
+                            onclick="openDeleteModal(this)">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                      Delete
+                    </button>
+                  </td>
 
-                    <div class="td td-actions">
-                        <button class="delete-btn"
-                                data-title="<%= ann.title %>"
-                                data-id="<%= ann.announcement_id %>"
-                                onclick="openDeleteModal(this)">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                            Delete
-                        </button>
-                    </div>
-
-                </div>
+                </tr>
                 <% }) %>
-
-            </div>
+              </tbody>
+            </table>
+          </div>
 
         <% } else { %>
 
-            <div class="empty-state">
-                <div class="empty-icon">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                </div>
-                <div class="empty-title">No announcements yet</div>
-                <p class="empty-sub">Publish your first announcement to notify all platform users.</p>
-                <button class="btn-add" onclick="openAddModal()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    New Announcement
-                </button>
+          <div class="empty-state anim-empty">
+            <div class="empty-icon-wrap">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             </div>
+            <div class="empty-title">No announcements yet</div>
+            <p class="empty-sub">Publish your first announcement to notify all platform users.</p>
+            <button class="btn btn-primary" onclick="openAddModal()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Announcement
+            </button>
+          </div>
 
         <% } %>
 
+      </div>
     </div>
-</main>
 
-
-<!-- ===== ADD ANNOUNCEMENT MODAL ===== -->
-<div class="modal-backdrop" id="addBackdrop" onclick="closeAddModal()">
-    <div class="modal modal-wide" onclick="event.stopPropagation()">
-
-        <div class="modal-header">
-            <div class="modal-header-left">
-                <div class="modal-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                </div>
-                <h3 class="modal-title">New Announcement</h3>
-            </div>
-            <button class="modal-close" onclick="closeAddModal()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-        </div>
-
-        <form action="/admin/announcements/add" method="POST">
-
-            <div class="modal-body">
-
-                <!-- Category -->
-                <div class="field-group">
-                    <label class="field-label" for="category">Category <span class="required">*</span></label>
-                    <select class="field-input field-select" name="category" id="category" required>
-                        <option value="">Select your category</option>
-                        <% categories.forEach(cat => { %>
-                            <option value="<%= cat.category_id %>">
-                                <%= cat.category_name %>
-                            </option>
-                        <% }) %>
-                    </select>
-                </div>
-
-                <!-- Title -->
-                <div class="field-group">
-                    <label class="field-label" for="title">Title <span class="required">*</span></label>
-                    <input class="field-input" id="title" name="title" placeholder="Announcement title" required>
-                </div>
-
-                <!-- Description -->
-                <div class="field-group">
-                    <label class="field-label" for="desc">Description <span class="required">*</span></label>
-                    <textarea class="field-textarea" id="desc" name="description" rows="5"
-                                placeholder="Write the full announcement content here..." required></textarea>
-                </div>
-
-                <!-- Urgent toggle -->
-                <div class="urgent-toggle-wrap">
-                    <div class="urgent-toggle-left">
-                        <div class="urgent-icon">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        </div>
-                        <div>
-                            <div class="urgent-toggle-title">Mark as Urgent</div>
-                            <div class="urgent-toggle-sub">Urgent announcements are visually highlighted for all users</div>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="isUrgent" id="urgentCheck" value="true">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" onclick="closeAddModal()">Cancel</button>
-                <button id="add-btn" type="submit" class="btn-submit">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                    Publish Announcement
-                </button>
-            </div>
-
-        </form>
-    </div>
+  </main>
 </div>
 
 
-<!-- ===== DELETE MODAL ===== -->
-<div class="modal-backdrop" id="deleteBackdrop" onclick="closeDeleteModal()">
-    <div class="modal" onclick="event.stopPropagation()">
+<!-- ═══════════════════════════════════════
+     ADD ANNOUNCEMENT MODAL
+════════════════════════════════════════ -->
+<div class="modal-backdrop" id="addBackdrop" onclick="closeAddModal()">
+  <div class="modal modal-wide" onclick="event.stopPropagation()">
 
-        <div class="modal-icon-del">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-icon-wrap mc-amber">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <h3 class="modal-title">New Announcement</h3>
+      </div>
+      <button class="modal-close" onclick="closeAddModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <form action="/admin/announcements/add" method="POST">
+      <div class="modal-body">
+
+        <div class="field-group">
+          <label class="field-label" for="category">Category <span class="required">*</span></label>
+          <select class="field-input field-select" name="category" id="category" required>
+            <option value="">Select a category</option>
+            <% categories.forEach(cat => { %>
+              <option value="<%= cat.category_id %>"><%= cat.category_name %></option>
+            <% }) %>
+          </select>
         </div>
 
-        <h3 class="modal-title">Delete Announcement</h3>
-        <p class="modal-del-body">
-            Are you sure you want to delete <strong id="deleteAnnTitle"></strong>?
-            This will remove it from all user feeds immediately.
-        </p>
+        <div class="field-group">
+          <label class="field-label" for="title">Title <span class="required">*</span></label>
+          <input class="field-input" id="title" name="title" placeholder="Announcement title" required>
+        </div>
 
-        <!-- Delete uses POST with _method=DELETE as in original -->
-        <form id="deleteForm" action="" method="POST">
-            <input type="hidden" name="_method" value="DELETE">
-            <div class="modal-actions">
-                <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-                <button type="submit" class="btn-del-confirm">Delete</button>
+        <div class="field-group">
+          <label class="field-label" for="desc">Description <span class="required">*</span></label>
+          <textarea class="field-textarea" id="desc" name="description" rows="5"
+                    placeholder="Write the full announcement content here..." required></textarea>
+        </div>
+
+        <div class="urgent-toggle-wrap">
+          <div class="urgent-toggle-left">
+            <div class="urgent-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-        </form>
+            <div>
+              <div class="urgent-toggle-title">Mark as Urgent</div>
+              <div class="urgent-toggle-sub">Urgent announcements are visually highlighted for all users</div>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" name="isUrgent" id="urgentCheck" value="true">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
 
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeAddModal()">Cancel</button>
+        <button id="add-btn" type="submit" class="btn btn-primary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Publish Announcement
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     DELETE MODAL
+════════════════════════════════════════ -->
+<div class="modal-backdrop" id="deleteBackdrop" onclick="closeDeleteModal()">
+  <div class="modal modal-delete" onclick="event.stopPropagation()">
+
+    <div class="delete-icon-wrap">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
     </div>
+
+    <h3 class="modal-title">Delete Announcement</h3>
+    <p class="delete-body">
+      Are you sure you want to delete <strong id="deleteAnnTitle"></strong>?
+      This will remove it from all user feeds immediately.
+    </p>
+
+    <form id="deleteForm" action="" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <div class="modal-footer modal-footer-center">
+        <button type="button" class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+        <button type="submit" class="btn btn-danger">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Delete
+        </button>
+      </div>
+    </form>
+
+  </div>
 </div>
 
 
 <script>
-    // ===== ADD MODAL =====
-    function openAddModal() {
-        document.getElementById('addBackdrop').classList.add('visible');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => document.getElementById('title').focus(), 60);
-    }
-    function closeAddModal() {
-        document.getElementById('addBackdrop').classList.remove('visible');
-        document.body.style.overflow = '';
-    }
+  // ── Date ──
+  const d = new Date();
+  const opts = { weekday:'short', month:'short', day:'numeric', year:'numeric' };
+  document.getElementById('topbarDate').textContent = d.toLocaleDateString('en-US', opts);
 
-    // ===== DELETE MODAL =====
-    function openDeleteModal(btn) {
-        const id    = btn.dataset.id;
-        const title = btn.dataset.title;
-        document.getElementById('deleteAnnTitle').textContent = title;
-        document.getElementById('deleteForm').setAttribute(
-            'action',
-            '/admin/announcements/' + id + '/delete?_method=DELETE'
-        );
-        document.getElementById('deleteBackdrop').classList.add('visible');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeDeleteModal() {
-        document.getElementById('deleteBackdrop').classList.remove('visible');
-        document.body.style.overflow = '';
-    }
+  // ── Sidebar (mobile) ──
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    const ov = document.getElementById('sidebarOverlay');
+    ov.style.display = 'block';
+    setTimeout(() => ov.classList.add('visible'), 10);
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    const ov = document.getElementById('sidebarOverlay');
+    ov.classList.remove('visible');
+    setTimeout(() => ov.style.display = 'none', 260);
+  }
 
-    // Close on Escape
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') { closeAddModal(); closeDeleteModal(); }
+  // ── Add Modal ──
+  function openAddModal() {
+    document.getElementById('addBackdrop').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('title').focus(), 60);
+  }
+  function closeAddModal() {
+    document.getElementById('addBackdrop').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  // ── Delete Modal ──
+  function openDeleteModal(btn) {
+    const id    = btn.dataset.id;
+    const title = btn.dataset.title;
+    document.getElementById('deleteAnnTitle').textContent = title;
+    document.getElementById('deleteForm').setAttribute(
+      'action',
+      '/admin/announcements/' + id + '/delete?_method=DELETE'
+    );
+    document.getElementById('deleteBackdrop').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDeleteModal() {
+    document.getElementById('deleteBackdrop').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  // ── Urgent toggle visual feedback ──
+  const urgentCheck = document.getElementById('urgentCheck');
+  const toggleWrap  = urgentCheck ? urgentCheck.closest('.urgent-toggle-wrap') : null;
+  if (urgentCheck && toggleWrap) {
+    urgentCheck.addEventListener('change', () => {
+      toggleWrap.classList.toggle('is-urgent', urgentCheck.checked);
     });
+  }
+
+  // ── Description expand/collapse ──
+  function toggleDesc(btn) {
+    const wrap     = btn.closest('.desc-wrap');
+    const textEl   = wrap.querySelector('.desc-text');
+    const label    = btn.querySelector('.desc-toggle-label');
+    const icon     = btn.querySelector('.desc-toggle-icon');
+    const expanded = textEl.dataset.expanded === 'true';
+
+    if (expanded) {
+      textEl.dataset.expanded = 'false';
+      textEl.style.maxHeight  = textEl.dataset.collapsedHeight + 'px';
+      label.textContent = 'Show more';
+      icon.style.transform = 'rotate(0deg)';
+      btn.classList.remove('is-expanded');
+    } else {
+      textEl.dataset.expanded = 'true';
+      textEl.style.maxHeight  = textEl.scrollHeight + 'px';
+      label.textContent = 'Show less';
+      icon.style.transform = 'rotate(180deg)';
+      btn.classList.add('is-expanded');
+    }
+  }
+
+  // ── Init description cells ──
+  // Collapsed height = ~3 lines (line-height ~1.5, font-size ~0.84rem ≈ 13.4px → ~60px for 3 lines)
+  const COLLAPSED_HEIGHT = 60;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Init desc cells
+    document.querySelectorAll('.desc-text').forEach(el => {
+      el.dataset.collapsedHeight = COLLAPSED_HEIGHT;
+      el.style.maxHeight = COLLAPSED_HEIGHT + 'px';
+      el.style.overflow  = 'hidden';
+
+      // Only show toggle if content overflows
+      const btn = el.nextElementSibling;
+      if (btn && el.scrollHeight <= COLLAPSED_HEIGHT + 4) {
+        btn.style.display = 'none';
+      }
+    });
+
+    // Stagger row animations — driven by CSS custom property
+    document.querySelectorAll('.table-row-anim').forEach(row => {
+      row.classList.add('row-visible');
+    });
+
+    // Trigger panel/heading animations
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.anim-topbar, .anim-heading, .anim-panel, .anim-empty')
+        .forEach(el => el.classList.add('is-visible'));
+    });
+  });
+
+  // ── Escape to close ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeAddModal(); closeDeleteModal(); }
+  });
 </script>
 
 </body>

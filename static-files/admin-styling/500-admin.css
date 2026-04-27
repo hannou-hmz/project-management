@@ -1,0 +1,253 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0a0f1e;
+      --ink:     #1a2135;
+      --muted:   #6b7a99;
+      --line:    #e4e9f2;
+      --surface: #f4f6fb;
+      --white:   #ffffff;
+      --accent:  #2563ff;
+      --accent2: #0ea5e9;
+      --coral:   #f43f5e;
+      --text:    #1a2135;
+      --text-sm: #4b5978;
+
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 2px 12px rgba(10,15,30,0.07);
+      --shadow-md: 0 4px 24px rgba(10,15,30,0.10);
+      --shadow-lg: 0 12px 48px rgba(10,15,30,0.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* ── Ambient background blobs ── */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(244,63,94,0.07) 0%, transparent 70%);
+      top: -120px;
+      right: -80px;
+    }
+    body::after {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(37,99,255,0.06) 0%, transparent 70%);
+      bottom: -100px;
+      left: -60px;
+    }
+
+    /* ── Card ── */
+    .error-card {
+      position: relative;
+      z-index: 1;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 52px 48px 44px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+
+      /* Entrance animation */
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.55s cubic-bezier(0.34, 1.2, 0.64, 1) 0.08s forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Brand strip at top ── */
+    .card-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(37,99,255,0.35);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.4px;
+    }
+    .brand-name em { font-style: normal; color: var(--accent); }
+
+    /* ── Error icon ── */
+    .error-icon-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, #fff1f2 30%, #ffe4e6);
+      border: 1px solid #fecdd3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: var(--coral);
+      box-shadow: 0 4px 16px rgba(244,63,94,0.14);
+
+      /* Slight pop-in delay */
+      opacity: 0;
+      transform: scale(0.88);
+      animation: popIn 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) 0.28s forwards;
+    }
+
+    @keyframes popIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Code badge ── */
+    .error-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9f1239;
+      background: #ffe4e6;
+      border: 1px solid #fecdd3;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Heading ── */
+    .error-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .error-title span {
+      display: block;
+      font-size: 3.2rem;
+      letter-spacing: -3px;
+      line-height: 1;
+      background: linear-gradient(135deg, #be123c, var(--coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    /* ── Message ── */
+    .error-message {
+      font-size: 0.9rem;
+      color: var(--text-sm);
+      line-height: 1.65;
+      max-width: 360px;
+      margin: 0 auto 28px;
+    }
+
+    /* ── Divider ── */
+    .error-divider {
+      height: 1px;
+      background: var(--line);
+      margin: 0 0 24px;
+    }
+
+    /* ── Actions ── */
+    .error-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 10px 20px;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(37,99,255,0.28);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 18px rgba(37,99,255,0.38); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--line);
+    }
+    .btn-ghost:hover { background: var(--surface); color: var(--text); }
+
+    /* ── Support note ── */
+    .support-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.775rem;
+      color: var(--muted);
+      margin-top: 22px;
+    }
+    .support-note svg { flex-shrink: 0; opacity: 0.6; }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .error-card { padding: 36px 24px 32px; }
+      .error-title span { font-size: 2.4rem; }
+      .btn { width: 100%; justify-content: center; }
+    }

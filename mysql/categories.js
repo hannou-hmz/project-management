@@ -30,7 +30,7 @@ async function addCategory(name, description){
     try{
         const sql = "INSERT INTO categories (category_name , category_description) VALUES(?,?)";
         const[result] = await database.pool.execute(sql , [name , description]);
-
+        return result;
         console.log(`Inserted successefully ..`);
     }
 

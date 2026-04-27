@@ -52,11 +52,24 @@ async function getApplicants(userId){
     }
 }
 
+async function updateApplicationStatus(stat, requestId ){
+    try{
+        const sql = "UPDATE applications SET status = ? WHERE request_id = ?";
+        const [result] = await database.pool.execute(sql , [stat , requestId]);
+
+    }catch(e){
+        throw e;
+    }
+}
+
 async function acceptApplication(requestId){
 
     try{
         const sql = "UPDATE applications SET status = 'accepted' WHERE request_id = ?";
         const [result] = await database.pool.execute(sql , [requestId]); 
+        if(result.affectedRows <= 0){
+            return null
+        }
     }
 
     catch(e){
@@ -84,5 +97,6 @@ module.exports = {
     deleteApplication,
     getApplicants,
     acceptApplication,
-    rejectApplication
+    rejectApplication,
+    updateApplicationStatus
 }

@@ -3,219 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Categories — Admin</title>
+<title>Categories — Admin · TeamMatch</title>
 <link rel="stylesheet" href="/admin-styling/admin-categories.css">
 <link rel="icon" href="/img/fav.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        Team<span>Match</span>
-        <div class="sidebar-badge">Admin</div>
+<!-- ═══════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+
+  <!-- Brand -->
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor"/><path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
     </div>
-    <div class="sidebar-section-label">Navigation</div>
-    <nav class="sidebar-nav">
-        <a href="/admin/homepage" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Dashboard
-        </a>
-        <a href="/admin/categories" class="sidebar-link active">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-            Categories
-        </a>
-        <a href="/admin/projects" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Projects
-        </a>
-        <a href="/admin/announcements" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Announcements
-        </a>
-        <a href="/admin/users/roles" class="sidebar-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Users & Roles
-        </a>
-    </nav>
-    <div class="sidebar-footer">
-        <a href="/logout" class="sidebar-logout">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Logout
-        </a>
+    <div class="sb-brand-text">
+      <span class="sb-name">Team<em>Match</em></span>
+      <span class="sb-role">Admin Console</span>
     </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="sb-nav">
+    <div class="sb-nav-label">Main Menu</div>
+
+    <a href="/admin/homepage" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      </span>
+      <span class="sb-link-label">Dashboard</span>
+    </a>
+
+    <a href="/admin/categories" class="sb-link active">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </span>
+      <span class="sb-link-label">Categories</span>
+    </a>
+
+    <a href="/admin/projects" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </span>
+      <span class="sb-link-label">Projects</span>
+    </a>
+
+    <a href="/admin/announcements" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </span>
+      <span class="sb-link-label">Announcements</span>
+    </a>
+
+    <a href="/admin/users/roles" class="sb-link">
+      <span class="sb-link-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      <span class="sb-link-label">Users &amp; Roles</span>
+    </a>
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div class="sb-footer">
+    <div class="sb-admin-row">
+      <div class="sb-avatar">A</div>
+      <div class="sb-admin-info">
+        <div class="sb-admin-name">Admin</div>
+        <div class="sb-admin-sub">Super Admin</div>
+      </div>
+      <a href="/logout" class="sb-logout-btn" title="Logout">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </a>
+    </div>
+  </div>
+
 </aside>
 
-<!-- ===== MAIN ===== -->
-<main class="main">
+<!-- Mobile overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <div class="topbar-title">Categories</div>
-            <div class="topbar-sub">Manage project classification types</div>
-        </div>
-        <button class="btn-add" onclick="openModal()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+<!-- ═══════════════════════════════════════
+     LAYOUT MAIN
+════════════════════════════════════════ -->
+<div class="layout-main">
+
+  <!-- ── Topbar ── -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-breadcrumb">
+        <span class="tb-root">TeamMatch</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="tb-current">Categories</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-add" onclick="openModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Category
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Page content ── -->
+  <main class="page-content">
+
+    <!-- Page heading -->
+    <div class="page-heading">
+      <div>
+        <h1 class="page-title">Categories</h1>
+        <p class="page-subtitle">Manage project classification types used across the platform.</p>
+      </div>
+    </div>
+
+    <!-- ── Content panel ── -->
+    <div class="panel">
+
+      <% if (categories && categories.length > 0) { %>
+
+        <!-- Panel header with count -->
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <h2 class="panel-title">All Categories</h2>
+            <p class="panel-sub"><%= categories.length %> categor<%= categories.length !== 1 ? 'ies' : 'y' %> found</p>
+          </div>
+          <button class="btn-add btn-add-sm" onclick="openModal()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add Category
-        </button>
-    </div>
+          </button>
+        </div>
 
-    <div class="content">
+        <!-- Table -->
+        <div class="panel-body table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Created</th>
+                <th class="th-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% categories.forEach(cat => { %>
+              <tr>
+                <td>
+                  <div class="cat-name-cell">
+                    <span class="cat-dot"></span>
+                    <span class="cat-name-text"><%= cat.category_name %></span>
+                  </div>
+                </td>
+                <td class="td-desc"><%= cat.category_description %></td>
+                <td class="td-date">
+                  <%= new Date(cat.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                </td>
+                <td class="td-actions">
+                  <a class="btn-delete"
+                     href="/admin/categories/<%= cat.category_id %>/delete"
+                     onclick="return confirmDelete('<%= cat.category_name %>', this)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    Delete
+                  </a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
 
-        <% if (categories && categories.length > 0) { %>
+      <% } else { %>
 
-            <!-- Count bar -->
-            <div class="count-bar">
-                <span><strong><%= categories.length %></strong> categor<%= categories.length !== 1 ? 'ies' : 'y' %></span>
-            </div>
+        <!-- Empty state -->
+        <div class="empty-state">
+          <div class="empty-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </div>
+          <div class="empty-title">No categories yet</div>
+          <p class="empty-sub">Create your first category to help students classify their projects.</p>
+          <button class="btn-add" onclick="openModal()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Category
+          </button>
+        </div>
 
-            <!-- Table -->
-            <div class="data-table">
-                <div class="table-head">
-                    <div class="th">Category Name</div>
-                    <div class="th">Description</div>
-                    <div class="th">Created</div>
-                    <div class="th th-action">Actions</div>
-                </div>
-
-                <% categories.forEach(cat => { %>
-                <div class="table-row">
-                    <div class="td td-name">
-                        <div class="cat-dot"></div>
-                        <%= cat.category_name %>
-                    </div>
-                    <div class="td td-desc"><%= cat.category_description %></div>
-                    <div class="td td-date">
-                        <%= new Date(cat.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
-                    </div>
-                    <div class="td td-actions">
-                        <a class="action-btn delete-btn"
-                            href="/admin/categories/<%= cat.category_id %>/delete"
-                            onclick="return confirmDelete('<%= cat.category_name %>', this)">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                            Delete
-                        </a>
-                    </div>
-                </div>
-                <% }) %>
-
-            </div>
-
-        <% } else { %>
-
-            <!-- Empty state -->
-            <div class="empty-state">
-                <div class="empty-icon">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                </div>
-                <div class="empty-title">No categories yet</div>
-                <p class="empty-sub">Create your first category to help students classify their projects.</p>
-                <button class="btn-add" onclick="openModal()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Add Category
-                </button>
-            </div>
-
-        <% } %>
+      <% } %>
 
     </div>
-</main>
+
+  </main>
+</div>
 
 
-<!-- ===== ADD CATEGORY MODAL ===== -->
+<!-- ═══════════════════════════════════════
+     ADD CATEGORY MODAL
+════════════════════════════════════════ -->
 <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()">
-    <div class="modal" id="addModal" onclick="event.stopPropagation()">
+  <div class="modal" id="addModal" onclick="event.stopPropagation()">
 
-        <div class="modal-header">
-            <div class="modal-header-left">
-                <div class="modal-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                </div>
-                <h3 class="modal-title">Add Category</h3>
-            </div>
-            <button class="modal-close" onclick="closeModal()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-icon-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
-
-        <form action="/admin/categories/add" method="POST">
-
-            <div class="modal-body">
-                <div class="field-group">
-                    <label class="field-label" for="categoryName">Category Name <span class="required">*</span></label>
-                    <input class="field-input" type="text" id="categoryName" name="categoryName"
-                            placeholder="e.g. TUBITAK, Teknofest, Course Project" required>
-                </div>
-
-                <div class="field-group" style="margin-bottom:0;">
-                    <label class="field-label" for="categoryDescription">Category Description <span class="required">*</span></label>
-                    <textarea class="field-textarea" id="categoryDescription" name="categoryDescription"
-                                rows="5" placeholder="Describe what kinds of projects belong to this category..." required></textarea>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn-submit">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Add Category
-                </button>
-            </div>
-
-        </form>
+        <h3 class="modal-title">Add Category</h3>
+      </div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
+
+    <form action="/admin/categories/add" method="POST">
+      <div class="modal-body">
+        <div class="field-group">
+          <label class="field-label" for="categoryName">Category Name <span class="required">*</span></label>
+          <input class="field-input" type="text" id="categoryName" name="categoryName"
+                 placeholder="e.g. TUBITAK, Teknofest, Course Project" required>
+        </div>
+        <div class="field-group field-group-last">
+          <label class="field-label" for="categoryDescription">Category Description <span class="required">*</span></label>
+          <textarea class="field-textarea" id="categoryDescription" name="categoryDescription"
+                    rows="5" placeholder="Describe what kinds of projects belong to this category..." required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn-submit">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Category
+        </button>
+      </div>
+    </form>
+
+  </div>
 </div>
 
 
-<!-- ===== DELETE CONFIRM MODAL ===== -->
+<!-- ═══════════════════════════════════════
+     DELETE CONFIRM MODAL
+════════════════════════════════════════ -->
 <div class="modal-backdrop" id="deleteBackdrop">
-    <div class="modal" id="deleteModal" onclick="event.stopPropagation()">
-        <div class="modal-icon-del">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-        </div>
-        <h3 class="modal-title" style="margin-bottom:8px;">Delete Category</h3>
-        <p class="modal-del-body">Are you sure you want to delete <strong id="deleteCatName"></strong>? This action cannot be undone.</p>
-        <div class="modal-footer">
-            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-            <a class="btn-del-confirm" id="deleteConfirmLink" href="#">Delete</a>
-        </div>
+  <div class="modal modal-delete" id="deleteModal" onclick="event.stopPropagation()">
+
+    <div class="delete-icon-wrap">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
     </div>
+    <h3 class="modal-title">Delete Category</h3>
+    <p class="delete-body">Are you sure you want to delete <strong id="deleteCatName"></strong>? This action cannot be undone.</p>
+    <div class="modal-footer modal-footer-center">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <a class="btn-delete-confirm" id="deleteConfirmLink" href="#">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+        Delete
+      </a>
+    </div>
+
+  </div>
 </div>
 
 
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
 <script>
-    // ===== ADD MODAL =====
-    function openModal() {
-        document.getElementById('modalBackdrop').classList.add('visible');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => document.getElementById('categoryName').focus(), 50);
-    }
-    function closeModal() {
-        document.getElementById('modalBackdrop').classList.remove('visible');
-        document.body.style.overflow = '';
-    }
+  // ===== ADD MODAL =====
+  function openModal() {
+    document.getElementById('modalBackdrop').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('categoryName').focus(), 50);
+  }
+  function closeModal() {
+    document.getElementById('modalBackdrop').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
 
-    // ===== DELETE MODAL =====
-    function confirmDelete(name, link) {
-        document.getElementById('deleteCatName').textContent = name;
-        document.getElementById('deleteConfirmLink').setAttribute('href', link.href);
-        document.getElementById('deleteBackdrop').classList.add('visible');
-        document.body.style.overflow = 'hidden';
-        return false; // prevent default navigation
-    }
-    function closeDeleteModal() {
-        document.getElementById('deleteBackdrop').classList.remove('visible');
-        document.body.style.overflow = '';
-    }
+  // ===== DELETE MODAL =====
+  function confirmDelete(name, link) {
+    document.getElementById('deleteCatName').textContent = name;
+    document.getElementById('deleteConfirmLink').setAttribute('href', link.href);
+    document.getElementById('deleteBackdrop').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    return false; // prevent default navigation
+  }
+  function closeDeleteModal() {
+    document.getElementById('deleteBackdrop').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
 
-    // Close on Escape
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') { closeModal(); closeDeleteModal(); }
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closeDeleteModal(); }
+  });
+
+  // Mobile sidebar
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('visible');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('visible');
+  }
+
+  // Stagger-in rows
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('tbody tr').forEach((row, i) => {
+      row.style.opacity = '0';
+      row.style.transform = 'translateY(8px)';
+      setTimeout(() => {
+        row.style.transition = 'opacity .35s ease, transform .35s ease';
+        row.style.opacity = '1';
+        row.style.transform = 'translateY(0)';
+      }, 60 + i * 45);
     });
+  });
 </script>
 
 </body>

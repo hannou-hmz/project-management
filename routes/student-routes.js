@@ -9,7 +9,9 @@ const {getAdvisors , requestAdvisor} = require('../mysql/advisors');
 const {getAnnouncements} = require('../mysql/announcements');
 const {compareUserPassword} = require('../mysql/users');
 const {createProjects , getProjects , deleteProjects, myProjects , applyForProjects} = require('../mysql/projects');
-const {applyForProject, myProjectApplications, deleteApplication, getApplicants , acceptApplication , rejectApplication} = require('../mysql/appliactions');
+const {applyForProject, myProjectApplications, deleteApplication, getApplicants ,
+     acceptApplication , rejectApplication,
+     updateApplicationStatus} = require('../mysql/appliactions');
 
 const limiter = limit({
     windowMs : 15 * 60 * 1000 ,
@@ -177,7 +179,8 @@ studentRoutes.get('/applications' , isStudent , limiter ,async(req , res)=>{
     
 });
 
-studentRoutes.get('/applications/:applicationID/delete' ,isStudent, limiter ,async(req , res)=>{
+
+studentRoutes.delete('/applications/:applicationID/delete' ,isStudent, limiter ,async(req , res)=>{
     try{
         const applicationId = req.params.applicationID;
         const removeApplication = await deleteApplication(applicationId);
@@ -194,22 +197,20 @@ studentRoutes.get('/applications/:applicationID/delete' ,isStudent, limiter ,asy
 
 studentRoutes.get('/applicants' ,isStudent ,limiter ,async (req , res)=>{
     try{
-        const id = req.session.studentId;
-        const applicants = await getApplicants(id);
-        
+        const studentId = req.session.studentId;
+        const applicants = await getApplicants(studentId);
         return res.render("applicants" , {
-            applicants : applicants
+            applicants : applicants,
         });
-    }
 
-    catch(e){
+    }catch(e){
         console.log(e.message);
         return res.status(500).render("500");
     }
     
 });
 
-studentRoutes.post('/applicants/:id/accept', isStudent , limiter ,async(req , res)=>{
+studentRoutes.patch('/applicants/:id/accept', isStudent , limiter ,async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const accept = await acceptApplication(requestId);
@@ -220,7 +221,20 @@ studentRoutes.post('/applicants/:id/accept', isStudent , limiter ,async(req , re
     }
 });
 
-studentRoutes.delete('/applicants/:id/reject' , isStudent , limiter ,async(req , res)=>{
+studentRoutes.patch('/applicants/:id/undo', isStudent , limiter ,async(req , res)=>{
+    try{
+        const requestId = Number(req.params.id);
+        const status = req.body.undo_appliaction
+        const result = await updateApplicationStatus(status ,requestId);
+        console.log(result);
+        return res.redirect("/student/applicants");
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+});
+
+studentRoutes.patch('/applicants/:id/reject' , isStudent , limiter ,async(req , res)=>{
     try{
         const requestId = Number(req.params.id);
         const reject = await rejectApplication(requestId);
