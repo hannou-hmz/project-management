@@ -6,7 +6,9 @@ const db = require('../mysql/db');
 const {advisorDashboard , getRequests, getAdvisorProfileInfo, getPendingRequests, 
     acceptRequest , rejectRequest ,myProjects ,setAcademicTitle,
     isAdvisorAvailable,setResearches,setExpertise , countAcceptedRequests,
-    countRejectedRequests , countPendingRequests} = require('../mysql/advisors');
+    countRejectedRequests , countPendingRequests,
+    getAcceptedRequests,
+    getRejectedRequests} = require('../mysql/advisors');
 
 const { getUser , getUserById } = require('../mysql/users');
 
@@ -27,14 +29,20 @@ advisorRouters.get('/dashboard' , isAdvisor, async(req , res)=>{
         const advisor = await getUserById(advisorId);
         const [available] = await db.pool.execute("SELECT available FROM advisors WHERE advisor_id = ?" , [advisorId]);
         const pendingReq = await countPendingRequests(advisorId);
+        const accepted = await countAcceptedRequests(advisorId);
+        const rejected = await countRejectedRequests(advisorId);
+        const pending = await countPendingRequests(advisorId);
+
         return res.render("advisor-homepage" , {
             advisor : advisor ,
             pending : pendingReq,
-            isAvailable : available[0]
+            isAvailable : available[0],
+            total_accepted : accepted[0],
+            total_rejected : rejected[0],
+            total_pending : pending[0]
         });
-    }
-
-    catch(e){
+    }catch(e){
+        console.log(e.message);
         return res.status(500).render("500");
     }
 });
@@ -44,25 +52,30 @@ advisorRouters.get('/requests' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const requests = await getPendingRequests(advisorId);
-        const accepted = await countAcceptedRequests(advisorId);
-        const rejected = await countRejectedRequests(advisorId);
-        const pending = await countPendingRequests(advisorId);
 
         return res.render("advisor-requests" , {
             requests : requests,
-            accepted : accepted,
-            rejected : rejected,
-            pending : pending
         });
-    }
-
-    catch(e){
+    }catch(e){
         return e.message;
     }
 
 });
 
-advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=>{
+advisorRouters.get('/requests/rejected' , isAdvisor , async(req , res)=>{
+    try{
+        const advisorId = req.session.advisorId;
+        const accepted = await getRejectedRequests(advisorId);
+
+        return res.render("advisor-rejected-requests");
+
+    }catch(e){
+        console.log(e.message);
+        return res.status(500).render("500");
+    }
+}) // no front-end no planning (either in dashboard , or in projects section)
+
+advisorRouters.patch('/requests/:requestId/accept' , isAdvisor , async(req , res)=>{
     
     try{
         const requestId = req.params.requestId;
@@ -70,7 +83,7 @@ advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=
 
         if(accept === null){
             console.log("acceptance failed ..");
-            return res.status(500).send("internal issues");
+            return res.status(500).send("500");
         }
 
         return res.redirect('/advisor/dashboard');
@@ -80,15 +93,15 @@ advisorRouters.get('/requests/:requestId/accept' , isAdvisor , async(req , res)=
     }
 });
 
-advisorRouters.get('/requests/:requestId/reject' , isAdvisor , async(req , res)=>{
+advisorRouters.patch('/requests/:requestId/reject' , isAdvisor , async(req , res)=>{
 
     try{
         const requestId = req.params.requestId;
         const reject = await rejectRequest(requestId);
 
         if(reject === null){
-            console.log("acceptance failed ..");
-            return res.status(500).send("internal issues");
+            console.log("decline failed ..");
+            return res.status(500).send("500");
         }
 
         return res.redirect('/advisor/dashboard');
@@ -103,9 +116,11 @@ advisorRouters.get('/projects' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const projects = await myProjects(advisorId);
+        const [advisor] = await db.pool.execute("SELECT available FROM advisors WHERE advisor_id = ?" , [advisorId]);
         
         return res.render("advisor-projects" , {
-            projects : projects
+            projects : projects,
+            advisor : advisor
         });
     }
     

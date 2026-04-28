@@ -47,8 +47,7 @@ async function myProjects(createdBy){
 
         console.log("Serving my projects...");
         return result; 
-    }
-    catch(e){
+    }catch(e){
         console.error("My projects error:", e.message);
         throw e; 
     };

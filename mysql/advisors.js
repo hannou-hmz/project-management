@@ -100,8 +100,8 @@ async function countPendingRequests(advisorId){
 
 async function countAcceptedRequests(advisorId){
     try{    
-        const sql = "SELECT COUNT(status) AS total_accepted_requests FROM advisor_requests WHERE advisorId = ? AND status = 'accepted'";
-        const [result] = await database.pool.execute(sql , advisorId);
+        const sql = "SELECT COUNT(status) AS total_accepted_requests FROM advisor_requests WHERE status = 'accepted' AND advisor_id = ?";
+        const [result] = await database.pool.execute(sql , [advisorId]);
         return result[0];
     }catch(e){
         throw e;
@@ -110,8 +110,8 @@ async function countAcceptedRequests(advisorId){
 
 async function countRejectedRequests(advisorId){
     try{    
-        const sql = "SELECT COUNT(status) AS total_rejected_requests FROM advisor_requests WHERE advisorId = ? AND status = 'rejected'";
-        const [result] = await database.pool.execute(sql , advisorId);
+        const sql = "SELECT COUNT(status) AS total_rejected_requests FROM advisor_requests WHERE status = 'rejected' AND advisor_id = ? ";
+        const [result] = await database.pool.execute(sql , [advisorId]);
         return result[0];
     }catch(e){
         throw e;

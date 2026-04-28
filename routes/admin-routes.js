@@ -30,7 +30,7 @@ adminRouters.get('/dashboard' , (req , res)=>{
         return res.render("admin-login");
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -48,7 +48,7 @@ adminRouters.post('/dashboard' , loginLimiter , async(req , res)=>{
         return res.redirect('/admin/dashboard');
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 })
 
@@ -68,7 +68,7 @@ adminRouters.get('/homepage' , isAdmin , async(req , res)=>{
     }
     catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -80,7 +80,7 @@ adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
         });
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500")
+        return res.status(500).render("500-admin")
     }
     
 });
@@ -93,7 +93,7 @@ adminRouters.get('/projects/:id/delete', async(req , res)=>{ // it has to be cha
 
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
       
 });
@@ -108,7 +108,7 @@ adminRouters.get('/announcements' , isAdmin , async(req , res)=>{
         });
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
     
 });
@@ -124,6 +124,7 @@ adminRouters.post('/announcements/add', async(req , res)=>{
 
     catch(e){
         console.log(`Error : ${e.message}`);
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -135,7 +136,7 @@ adminRouters.delete('/announcements/:id/delete' , async (req , res)=>{
         return res.redirect('/admin/announcements');
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -147,7 +148,7 @@ adminRouters.get('/categories' , isAdmin ,async(req , res)=>{
         });
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }  
 
 });
@@ -162,7 +163,7 @@ adminRouters.post('/categories/add', isAdmin ,async(req , res)=>{
 
     catch(e){
         console.log(`Problem ${e.message}`);
-        return res.status(500).send("Internal issues");
+        return res.status(500).send("500-admin");
     }
 });
 
@@ -176,7 +177,7 @@ adminRouters.get('/categories/:categoryId/delete' , isAdmin , async(req , res)=>
 
     catch(e){
         console.log(`Error : ${e.message}`);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -192,7 +193,7 @@ adminRouters.get('/users/roles' , isAdmin , async(req , res)=>{
         });
     }catch(e){
         console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -206,7 +207,7 @@ adminRouters.patch('/:userId/change-role' , isAdmin , async(req , res)=>{
     }
     catch(e){
          console.log(e.message);
-        return res.status(500).render("500");
+        return res.status(500).render("500-admin");
     }
 });
 
@@ -221,7 +222,7 @@ adminRouters.delete('/users/:userId/delete' , isAdmin , async(req , res)=>{
 
     catch(e){
          console.log(e.message);
-         return res.status(500).render("500");
+         return res.status(500).render("500-admin");
     }
 });
 
