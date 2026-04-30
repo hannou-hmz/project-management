@@ -64,8 +64,8 @@ async function startServer(){
             console.log(`Server running on port ${PORT}`);
         });
 
-    } catch (err) {
-        console.log("DB error:", err.message);
+    } catch (e) {
+        console.log(`DB error: ${e.message}`);
 
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT} (no DB)`);
