@@ -19,6 +19,7 @@ const sessionStore = new MySQLStore({
 
 app.set("view engine" , "ejs");
 
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(path.join(__dirname, 'static-files')));
@@ -35,7 +36,7 @@ app.use(session({
         maxAge : 1000 * 60 * 60 * 2
     }
 }));
-app.set('trust proxy', 1);
+
 
 app.use('/' , authRoutes)
 app.use('/admin' , adminRouters);
