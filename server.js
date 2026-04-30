@@ -14,7 +14,6 @@ const sessionStore = new MySQLStore({
     host : process.env.DB_HOST,
     user : process.env.DB_USER,
     port : process.env.DB_PORT,
-    database: 'project_hub',
     database : process.env.DB_NAME,
 });
 
