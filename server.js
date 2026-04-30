@@ -11,10 +11,11 @@ const studentRoutes = require('./routes/student-routes');
 const advisorRouters = require('./routes/advisor-routes');
 const authRoutes = require('./routes/auth-routes');
 const sessionStore = new MySQLStore({
-  host: 'localhost',
-  user: 'root',
-  password: 'root,locked',
-  database: 'project_hub'
+    host : process.env.DB_HOST,
+    user : process.env.DB_USER,
+    port : process.env.DB_PORT,
+    database: 'project_hub',
+    database : process.env.DB_NAME,
 });
 
 app.set("view engine" , "ejs");
