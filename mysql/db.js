@@ -21,7 +21,7 @@ async function testConnection(){
         return true;
     } 
     catch(connectionError){
-        console.log(`mySQL : ${connectionError.message}`);
+        console.error("MySQL Error:", connectionError);
         return false;
     }   
 }
