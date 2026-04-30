@@ -13,7 +13,7 @@
 <body>
 
 <%
-const isAvailable = !!(advisor.is_available || advisor.available);
+const isAvailable = !!(advisor.is_available || advisor.is_available);
 %>
 
 <!-- Mobile overlay -->
@@ -46,13 +46,13 @@ const isAvailable = !!(advisor.is_available || advisor.available);
       <div class="sp-title"><%= advisor.academic_title %></div>
       <% } %>
     </div>
-    <div class="sp-avail-dot <%= isAvailable ? 'dot-on' : 'dot-off' %>"
-         title="<%= isAvailable ? 'Available' : 'Unavailable' %>"></div>
+    <div class="sp-avail-dot <%= isAvailable  ? 'dot-on' : 'dot-off' %>"
+         title="<%= isAvailable  ? 'Available' : 'Unavailable' %>"></div>
   </div>
 
   <!-- Availability strip -->
-  <div class="sb-avail-strip <%= isAvailable ? 'avail-on' : 'avail-off' %>">
-    <span class="sa-label"><%= isAvailable.available ? 'Available for advising' : 'Not accepting requests' %></span>
+  <div class="sb-avail-strip <%= isAvailable  ? 'avail-on' : 'avail-off' %>">
+    <span class="sa-label"><%= isAvailable  ? 'Available for advising' : 'Not accepting requests' %></span>
     <a href="/advisor/profile" class="sa-link">Change →</a>
   </div>
 
@@ -80,7 +80,7 @@ const isAvailable = !!(advisor.is_available || advisor.available);
       <span class="sb-link-icon">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </span>
-      <span class="sb-link-label">Student Requests</span>
+      <span class="sb-link-label">New Requests</span>
       <% if (pending > 0) { %>
       <span class="sb-badge"><%= pending %></span>
       <% } %>
@@ -126,7 +126,7 @@ const isAvailable = !!(advisor.is_available || advisor.available);
       <div class="tb-sep"></div>
       <div class="topbar-avail-pill <%= isAvailable ? 'pill-on' : 'pill-off' %>">
         <span class="pill-dot"></span>
-        <%= isAvailable ? 'Available' : 'Unavailable' %>
+        <%= isAvailable? 'Available' : 'Unavailable' %>
       </div>
     </div>
   </header>
@@ -166,7 +166,7 @@ const isAvailable = !!(advisor.is_available || advisor.available);
           </div>
           <span class="stat-live stat-live-green">● Live</span>
         </div>
-        <div class="stat-num"><%= total_accepted %></div>
+        <div class="stat-num"><%= accepted %></div>
         <div class="stat-label">Accepted</div>
         <div class="stat-hint">Students currently advising</div>
       </div>
@@ -190,7 +190,7 @@ const isAvailable = !!(advisor.is_available || advisor.available);
           </div>
           <span class="stat-live stat-live-coral">● Live</span>
         </div>
-        <div class="stat-num"><%= total_rejected %></div>
+        <div class="stat-num"><%= rejected %></div>
         <div class="stat-label">Rejected</div>
         <div class="stat-hint">Requests declined</div>
       </div>
@@ -221,7 +221,7 @@ const isAvailable = !!(advisor.is_available || advisor.available);
         </div>
         <div class="qc-body">
           <div class="qc-title">
-            Student Requests
+            New Requests
             <% if (pending > 0) { %>
             <span class="qc-badge"><%= pending %> pending</span>
             <% } %>

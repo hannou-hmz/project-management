@@ -23,22 +23,20 @@ function isAdvisor(req, res, next){
 
  
 advisorRouters.get('/dashboard' , isAdvisor, async(req , res)=>{
-
     try{
         const advisorId = req.session.advisorId;
         const advisor = await getUserById(advisorId);
-        const [available] = await db.pool.execute("SELECT available FROM advisors WHERE advisor_id = ?" , [advisorId]);
+        const advisorInfos = await getAdvisorProfileInfo(advisorId);
         const pendingReq = await countPendingRequests(advisorId);
         const accepted = await countAcceptedRequests(advisorId);
         const rejected = await countRejectedRequests(advisorId);
         const pending = await countPendingRequests(advisorId);
-
         return res.render("advisor-homepage" , {
             advisor : advisor ,
             pending : pendingReq,
-            isAvailable : available[0],
-            total_accepted : accepted[0],
-            total_rejected : rejected[0],
+            advisor : advisorInfos,
+            accepted : accepted[0],
+            rejected : rejected[0],
             total_pending : pending[0]
         });
     }catch(e){
@@ -51,10 +49,12 @@ advisorRouters.get('/requests' , isAdvisor , async(req , res)=>{
 
     try{
         const advisorId = req.session.advisorId;
+        const advisorInfos = await getAdvisorProfileInfo(advisorId);
         const requests = await getPendingRequests(advisorId);
 
         return res.render("advisor-requests" , {
             requests : requests,
+            advisor : advisorInfos
         });
     }catch(e){
         return e.message;
@@ -116,11 +116,11 @@ advisorRouters.get('/projects' , isAdvisor , async(req , res)=>{
     try{
         const advisorId = req.session.advisorId;
         const projects = await myProjects(advisorId);
-        const [advisor] = await db.pool.execute("SELECT available FROM advisors WHERE advisor_id = ?" , [advisorId]);
+        const advisorInfos = await getAdvisorProfileInfo(advisorId);
         
         return res.render("advisor-projects" , {
             projects : projects,
-            advisor : advisor
+            advisor : advisorInfos
         });
     }
     
