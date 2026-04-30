@@ -10,7 +10,7 @@ const adminRouters = require('./routes/admin-routes');
 const studentRoutes = require('./routes/student-routes');
 const advisorRouters = require('./routes/advisor-routes');
 const authRoutes = require('./routes/auth-routes');
-const sessionStore = new MySQLStore({}, db);
+const sessionStore = new MySQLStore({}, pool);
 
 app.set("view engine" , "ejs");
 
