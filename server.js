@@ -5,6 +5,7 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
 const methodOverride = require('method-override');
+const nodemailer = require('nodemailer');
 const path = require('path');
 const adminRouters = require('./routes/admin-routes');
 const studentRoutes = require('./routes/student-routes');

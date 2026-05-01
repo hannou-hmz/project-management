@@ -189,7 +189,6 @@ a { text-decoration: none; color: inherit; }
 .tb-root    { color: var(--muted); font-weight: 400; }
 .tb-current { font-weight: 600; color: var(--text); }
 
-/* Project count pill in topbar */
 .topbar-count {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.78rem; font-weight: 600;
@@ -234,8 +233,6 @@ a { text-decoration: none; color: inherit; }
   background: var(--surface); gap: 16px; flex-wrap: wrap;
 }
 
-.panel-header-left {}
-
 .panel-title {
   font-family: 'Syne', sans-serif;
   font-size: 0.96rem; font-weight: 800;
@@ -244,13 +241,8 @@ a { text-decoration: none; color: inherit; }
 
 .panel-sub { font-size: 0.77rem; color: var(--muted); margin-top: 3px; }
 
-.panel-body {}
-
 /* ── Search ── */
-.search-wrap {
-  position: relative;
-  flex-shrink: 0;
-}
+.search-wrap { position: relative; flex-shrink: 0; }
 
 .search-icon {
   position: absolute;
@@ -301,16 +293,44 @@ a { text-decoration: none; color: inherit; }
 .data-table tbody tr:hover td { background: #fafbfe; }
 
 /* Project title cell */
-.project-title-cell { display: flex; flex-direction: column; gap: 3px; }
+.project-title-cell { display: flex; flex-direction: column; gap: 5px; }
 
 .project-title-text {
   font-weight: 600; color: var(--navy);
   font-size: 0.875rem;
 }
 
-.project-desc-text {
-  font-size: 0.77rem; color: var(--muted);
-  line-height: 1.4;
+/* Description toggle button — replaces the old .project-desc-text span */
+.desc-toggle {
+  display: inline-flex; align-items: flex-start; gap: 5px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.76rem; color: var(--muted);
+  background: none; border: none; padding: 0;
+  cursor: pointer; text-align: left; line-height: 1.45;
+  transition: color .15s;
+  max-width: 280px;
+}
+.desc-toggle svg { flex-shrink: 0; margin-top: 2px; opacity: 0.6; transition: opacity .15s; }
+.desc-toggle:hover { color: var(--accent); }
+.desc-toggle:hover svg { opacity: 1; color: var(--accent); }
+
+/* Creator cell */
+.creator-cell {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.creator-avatar {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #eef3ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+  color: var(--accent); font-size: 0.7rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  text-transform: uppercase;
+}
+
+.creator-name {
+  font-size: 0.83rem; font-weight: 500; color: var(--text);
+  white-space: nowrap;
 }
 
 /* Category badge */
@@ -435,7 +455,7 @@ a { text-decoration: none; color: inherit; }
 .btn-danger:hover { box-shadow: 0 6px 16px rgba(244,63,94,0.38); }
 
 /* ═══════════════════════════════════════════
-   MODAL
+   MODAL — SHARED
 ═══════════════════════════════════════════ */
 .modal-backdrop {
   position: fixed; inset: 0;
@@ -460,6 +480,7 @@ a { text-decoration: none; color: inherit; }
 }
 .modal-backdrop.visible .modal { transform: translateY(0) scale(1); }
 
+/* ── Delete modal ── */
 .modal-delete { padding: 32px 28px 28px; text-align: center; }
 
 .delete-icon-wrap {
@@ -487,6 +508,51 @@ a { text-decoration: none; color: inherit; }
 }
 .modal-footer-center { justify-content: center; }
 
+/* delete form inside modal — no extra spacing */
+#deleteForm { display: contents; }
+
+/* ── Description modal ── */
+.modal-desc { max-width: 520px; padding: 0; }
+
+.desc-modal-header {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.desc-modal-icon-wrap {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg, #eef3ff, #dbeafe);
+  border: 1px solid #bfdbfe; color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.desc-modal-sub {
+  font-size: 0.78rem; color: var(--muted);
+  margin-top: 3px;
+}
+
+.desc-close-btn {
+  margin-left: auto; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: none; border: 1.5px solid var(--line);
+  color: var(--muted); cursor: pointer;
+  transition: background .14s, color .14s, border-color .14s;
+}
+.desc-close-btn:hover { background: var(--surface); color: var(--text); border-color: var(--muted); }
+
+.desc-modal-body {
+  padding: 20px 24px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.desc-modal-body p {
+  font-size: 0.9rem; color: var(--text-sm);
+  line-height: 1.75; white-space: pre-wrap;
+}
+
 /* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
@@ -506,12 +572,12 @@ a { text-decoration: none; color: inherit; }
   .panel-header { gap: 12px; }
 
   /* Hide less critical columns on mobile */
-  .data-table th:nth-child(3),
-  .data-table td:nth-child(3),
-  .data-table th:nth-child(5),
-  .data-table td:nth-child(5) { display: none; }
+  .data-table th:nth-child(4),
+  .data-table td:nth-child(4),
+  .data-table th:nth-child(6),
+  .data-table td:nth-child(6) { display: none; }
 
-  .project-desc-text { display: none; }
+  .desc-toggle { display: none; }
   .topbar-count { display: none; }
 }
 
@@ -519,6 +585,6 @@ a { text-decoration: none; color: inherit; }
   .search-input { width: 140px; font-size: 0.78rem; }
 
   /* Further hide skills on very small screens */
-  .data-table th:nth-child(4),
-  .data-table td:nth-child(4) { display: none; }
+  .data-table th:nth-child(5),
+  .data-table td:nth-child(5) { display: none; }
 }

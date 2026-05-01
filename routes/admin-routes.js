@@ -85,7 +85,7 @@ adminRouters.get('/projects' , isAdmin ,async (req , res)=>{
     
 });
 
-adminRouters.get('/projects/:id/delete', async(req , res)=>{ // it has to be changed to delete not get.
+adminRouters.delete('/projects/:id/delete', async(req , res)=>{ // it has to be changed to delete not get.
     try{
         const projectId = req.params.id;
         const removeProject = await deleteProjects(projectId);
