@@ -136,6 +136,26 @@ a { text-decoration: none; color: inherit; }
   font-family: 'Outfit', sans-serif;
 }
 
+/* Label row — used for password field to align label + forgot link */
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.field-label-row .field-label { margin-bottom: 0; }
+
+/* ===== FORGOT PASSWORD LINK ===== */
+.forgot-link {
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.forgot-link:hover { color: #2563ff; }
+
 .input-wrap { position: relative; }
 
 .input-icon {
@@ -281,3 +301,18 @@ a { text-decoration: none; color: inherit; }
   border-color: rgba(239,68,68,0.5) !important;
   box-shadow: 0 0 0 3px rgba(239,68,68,0.12) !important;
 }
+
+/* ===== FORGOT PASSWORD ===== */
+.forgot-link {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  margin-top: -0.4rem;
+  transition: color 0.15s;
+}
+.forgot-link:hover { color: #2563ff; }
