@@ -18,7 +18,15 @@ The system aims to simplify collaboration and improve the quality of student pro
 
 ---
 
-## 🚀 Features
+## 🚀 Live Demo
+You can try the project here:  
+https://your-railway-app-link
+
+## 📌 How it works
+- Sign up as a student or instructor
+- Create or join a project as student
+- Send and accept requests as student
+- accept reject projects as instructor 
 
 ### 👨‍🎓 Students
 - Create, edit, delete projects
@@ -77,7 +85,11 @@ Initial ER diagram (There are changes ..)
 <img width="1241" height="690" alt="Screenshot 2026-04-21 165732" src="https://github.com/user-attachments/assets/f8ef2140-b848-4510-b817-100346b08d4f" />
 ---
 
-## ⚙️ Installation & Setup
+## 📄 License
 
-### 1. Clone the repository
-```bash
+Copyright (c) 2026 Hamza Hannou
+
+All rights reserved.
+
+This project and its source code may not be copied, modified, distributed, or used in any form without explicit permission from the author.
+
