@@ -40,12 +40,19 @@ adminRouters.post('/dashboard' , loginLimiter , async(req , res)=>{
         const admin = await getAdmin(email , password);
         if(admin){
             req.session.adminId = admin.admin_id;
-            console.log(`Admin ✅`);
-            return res.redirect('/admin/homepage');
+            req.session.save((err) => {
+                if (err){
+                    console.log(err.message);
+                    return res.status(500).render("500");
+                } 
+                console.log(`Admin ✅`);
+                return res.redirect('/admin/homepage');
+            });
+        }else{
+            console.log(`Not admin ❌`);
+            return res.redirect('/admin/dashboard');
         }
         
-        console.log(`Not admin ❌`);
-        return res.redirect('/admin/dashboard');
     }catch(e){
         console.log(e.message);
         return res.status(500).render("500-admin");
@@ -182,14 +189,13 @@ adminRouters.get('/categories/:categoryId/delete' , isAdmin , async(req , res)=>
 });
 
 adminRouters.get('/users/roles' , isAdmin , async(req , res)=>{
-
     try{
         const users = await getAllUsers();
-        const roles = await getUsersRoles();
-
+        const sql = "select role_id , role_name from roles where role_id != 1";
+        const [result] = await db.pool.execute(sql);
         return res.render("admin-users-roles" , {
             users : users,
-            roles : roles
+            roles : result
         });
     }catch(e){
         console.log(e.message);

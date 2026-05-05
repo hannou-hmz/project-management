@@ -1,41 +1,152 @@
-body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+/* ============================================================
+   TeamMatch — 404.css
+   Full-page error screen · consistent design system
+   ============================================================ */
 
-        .container {
-            text-align: center;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        h1 {
-            font-size: 80px;
-            margin: 0;
-            color: #0b1a33;
-        }
+:root {
+  --navy:    #0a0f1e;
+  --accent:  #2563ff;
+  --accent2: #0ea5e9;
+  --white:   #ffffff;
+  --muted:   rgba(255,255,255,0.45);
+  --line:    rgba(255,255,255,0.08);
+}
 
-        h2 {
-            margin: 10px 0;
-        }
+html, body {
+  height: 100%;
+  font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
 
-        p {
-            color: #555;
-        }
+/* ── Full-page dark canvas ── */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #050a18 0%, #0a1428 40%, #0f1f45 70%, #0a2060 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
 
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background: #0b1a33;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
+/* Mesh grid overlay */
+.page::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(37,99,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,255,0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+}
 
-        a:hover {
-            background: #1e2f50;
-        }
+/* Decorative radial orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(37,99,255,0.14) 0%, transparent 65%);
+  top: -180px; right: -120px;
+}
+.orb-2 {
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 65%);
+  bottom: -100px; left: 10%;
+}
+
+/* ── Centered card ── */
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* ── Error code ── */
+.error-code {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(6rem, 20vw, 9rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -6px;
+
+  /* Gradient text — same as homepage hero em */
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Subtle outer glow */
+  filter: drop-shadow(0 0 40px rgba(37,99,255,0.3));
+
+  margin-bottom: 24px;
+  user-select: none;
+}
+
+/* ── Divider ── */
+.divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 1px;
+  margin-bottom: 24px;
+}
+
+/* ── Heading ── */
+.error-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+/* ── Sub-message ── */
+.error-message {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 360px;
+  margin-bottom: 36px;
+}
+
+/* ── CTA button ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  padding: 13px 28px;
+  border-radius: 11px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37,99,255,0.4);
+  transition: transform .18s, box-shadow .18s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,99,255,0.52);
+}
+.btn:active { transform: translateY(0); }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .error-code { letter-spacing: -4px; margin-bottom: 20px; }
+  .error-message { font-size: 0.88rem; margin-bottom: 28px; }
+}

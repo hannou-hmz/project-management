@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title><%= title || "404 - Page Not Found" %></title>
-    <link rel="stylesheet" href="/styling/404.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || "404 - Page Not Found" %></title>
+  <link rel="stylesheet" href="/auth-styling/404.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
-<div class="container">
-    <h1><%= errorCode || 404 %></h1>
-    <h2>Page Not Found</h2>
+<div class="page">
 
-    <p>
-        <%= message || "The page you are looking for does not exist." %>
+  <!-- Decorative orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="container">
+
+    <!-- Error code -->
+    <div class="error-code"><%= errorCode || 404 %></div>
+
+    <!-- Divider line -->
+    <div class="divider"></div>
+
+    <!-- Heading + message -->
+    <h1 class="error-title">Page Not Found</h1>
+    <p class="error-message">
+      <%= message || "The page you are looking for does not exist or has been moved." %>
     </p>
 
-    <a href="/" class="btn">Go Back Home</a>
+    <!-- CTA -->
+    <a href="/" class="btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Go Back Home
+    </a>
+
+  </div>
+
 </div>
 
 </body>

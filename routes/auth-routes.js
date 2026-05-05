@@ -3,6 +3,7 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 const authRoutes = express.Router();
 const db = require('../mysql/db');
+const nodemailer = require('nodemailer');
 const {getAdvisors , createAdvisorRow} = require('../mysql/advisors');
 const {createUser , getUser , resetPassword} = require('../mysql/users');
 const {createStudentRow} = require('../mysql/students');
@@ -94,11 +95,23 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
         else{
             if(user && userRole === 3){
                 req.session.studentId = user.user_id;
-                return res.redirect('/student/homepage');
+                req.session.save((err) => {
+                    if (err){
+                        console.log(err.message);
+                        return res.status(500).render("500");
+                    } 
+                    return res.redirect('/student/homepage');
+                });
             }
             else if(user && userRole === 2){
                 req.session.advisorId = user.user_id;
-                return res.redirect('/advisor/dashboard');
+                req.session.save((err) => {
+                    if (err){
+                        console.log(err.message);
+                        return res.status(500).render("500");  
+                    } 
+                    return res.redirect('/advisor/dashboard');
+                });
             }
             else{
                 console.log('Wrong credentials');
@@ -112,34 +125,6 @@ authRoutes.post('/login' , loginLimiter , async (req , res)=>{
     }
  
 });
-
-// authRoutes.patch('/forget-password' , async(req , res)=> {
-//     try{
-//         const {password , email} = req.body;
-//         if(!email || typeof email !== 'string' || !password || typeof password !== 'string'){
-
-//             console.log('Suspicious attempt to reset password .');
-
-//             return res.status(400).render("400" , {
-//                 error: "Invalid request",
-//                 message: "Missing required field: email"
-//             });
-//         }
-
-//         const reset = await resetPassword(password , email);
-//            if(!reset){
-//               return res.status(400).render("400" , {
-//                  error: "Invalid request",
-//                  message: "Missing required field: email"
-//              });
-//            } 
-
-//         return res.status(302).redirect('/login'); // 302 => found : temp redirect 
-//     }catch(e){
-//         console.log();
-//         return res.status(500).render("500");
-//     }
-// });
 
 authRoutes.get('/signup' , async(req , res)=>{
     try{

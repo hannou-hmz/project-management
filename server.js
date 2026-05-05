@@ -5,13 +5,18 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const {pool , testConnection} = require('./mysql/db');
 const methodOverride = require('method-override');
-const nodemailer = require('nodemailer');
 const path = require('path');
 const adminRouters = require('./routes/admin-routes');
 const studentRoutes = require('./routes/student-routes');
 const advisorRouters = require('./routes/advisor-routes');
 const authRoutes = require('./routes/auth-routes');
 const sessionStore = new MySQLStore({}, pool);
+
+sessionStore.onReady().then(() => {
+    console.log('✅ Session store ready');
+}).catch(err => {
+    console.error('❌ Session store failed:', err.message);
+});
 
 app.set("view engine" , "ejs");
 
@@ -27,7 +32,7 @@ app.use(session({
     saveUninitialized : false,
     store : sessionStore,
     cookie : {
-        secure : true,
+        secure : false,
         httpOnly : true,
         maxAge : 1000 * 60 * 60 * 2
     }

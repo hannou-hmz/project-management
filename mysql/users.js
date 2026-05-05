@@ -33,6 +33,7 @@ async function getAdmin(email , password){
         
     }
     catch(e){
+        console.log(e.message);
         throw e;
     }
     
